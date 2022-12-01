@@ -1,0 +1,6 @@
+package org.firstinspires.ftc.teamcode.CompetitionUtils;
+
+public class VuforiaConstants {
+    public static final String LicenseKey = "AWOWj97/////AAABmbW0caGyUEYMnnWEf0PXnRc4NNVD1gQsL8GKMVQX+f0oPNiwz0Da91X+JV9Ce1ExbQQcSVfpOEd7Dl9S+HqgRaO6aKq06HaWVXQNfyx0Z6Wb3Q49RYrn9AnwcOsxA23o9ShoKr/Fnuz4qwmIMXdXb0SIjAluJqI+msfX35EdPZ6k0jaWnot59zphtGMqe5P2gv7SkjBwDseSY/JaWDkW93jtQ+qgNdYZDVQALpfjPchAdMqZVUYZHSw0TLYlacT/8OtAKCbZOEhmriOsOjOmwRLuj0/wWuKGJcJaVNMDR7FIxcevtmMzsE5Vc6D9UQDgUgbidbM+mwuZdPMiNqlGwqbWBztGqPdxLdrb6joIma5v";
+
+}
