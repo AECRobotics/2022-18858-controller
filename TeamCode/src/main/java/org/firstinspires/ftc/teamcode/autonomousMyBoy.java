@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import java.util.Random;
 
-@Autonomous(name="autonomous My Boy", group="Robot")
+@Autonomous(name="Outdated My Boy", group="Robot")
 public class autonomousMyBoy extends OpMode{
     private Random r = new Random();
     private int autoThingsCount = 0;

@@ -20,8 +20,8 @@ public class irrativeTelop extends OpMode{
         rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright");
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
     }
@@ -33,9 +33,9 @@ public class irrativeTelop extends OpMode{
     }
     @Override
     public void loop(){
-        double drive = -gamepad1.left_stick_y;
-        double turn  =  gamepad1.right_stick_x;
-        double strafe = gamepad1.left_stick_x;
+        double drive = gamepad1.left_stick_y;
+        double turn  =  -gamepad1.right_stick_x;
+        double strafe = -gamepad1.left_stick_x;
 
 
         double lbPow = drive - strafe + turn;
@@ -43,7 +43,7 @@ public class irrativeTelop extends OpMode{
         double lfPow = drive + strafe + turn;
         double rfPow = drive - strafe - turn;
         double divisor = Math.max(Math.max(lfPow, lbPow), Math.max(rfPow, rbPow));
-        if(divisor > 1.0)
+        if(divisor > 0.7)
         {
             lbPow/=divisor;
             rbPow/=divisor;

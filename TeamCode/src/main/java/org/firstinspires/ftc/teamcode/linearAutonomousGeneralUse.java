@@ -20,15 +20,15 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
     public ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 28.0;
     static final double DRIVE_GEAR_REDUCTION = 20.0;
-    static final double WHEEL_DIAMETER_MM = 96.0;
-    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_MM * Math.PI);
+    static final double WHEEL_DIAMETER_IN = 3.78;
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_IN * Math.PI);
     @Override
     public void runOpMode(){
         telemetry.addData("Status","Initialized");
-        leftBackDrive =hardwareMap.get(DcMotor .class,"backleft");
-        leftFrontDrive =hardwareMap.get(DcMotor .class,"frontleft");
-        rightBackDrive =hardwareMap.get(DcMotor .class,"backright");
-        rightFrontDrive =hardwareMap.get(DcMotor .class,"frontright");
+        leftBackDrive =hardwareMap.get(DcMotor.class,"backleft");
+        leftFrontDrive =hardwareMap.get(DcMotor.class,"frontleft");
+        rightBackDrive =hardwareMap.get(DcMotor.class,"backright");
+        rightFrontDrive =hardwareMap.get(DcMotor.class,"frontright");
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -45,13 +45,14 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
         leftFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
-        imu =hardwareMap.get(BNO055IMU .class,"imu");
+        imu =hardwareMap.get(BNO055IMU.class,"imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.mode =BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit =BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit =BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled =false;
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
         imu.initialize(parameters);
+        telemetry.addData("gyro crap", imu.isGyroCalibrated());
 
         waitForStart();
         /*pseudocode for terminal red start
@@ -66,7 +67,9 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
 
         if we start away from terminal this doesn't apply :)
          */
-
+        encoderDrive(1.0,39.37,39.37,39.37,39.37);
+        //sleep(1000);
+        /*
         if(getConePosition() == 0){
             encoderDrive(1.0,1.0,1.0,1.0,metersToInches(1),5.0);
             encoderDrive(-1.0,1.0,1.0,-1.0,metersToInches(0.93),5.0);
@@ -77,6 +80,7 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
             encoderDrive(1.0,-1.0,-1.0,1.0,metersToInches(0.93),5.0);
         }
         sleep(1000);
+         */
     }
     private Random r = new Random();
     public int getConePosition() {
@@ -92,29 +96,25 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
         rightFrontDrive.setPower(speed);
     }
 
-    public void encoderDrive(double speedlf, double speedlb, double speedrf, double speedrb, double inches, double timeoutS){
-        if(opModeIsActive()){
-            leftFrontDrive.setTargetPosition(leftFrontDrive.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH));
-            leftBackDrive.setTargetPosition(leftBackDrive.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH));
-            rightFrontDrive.setTargetPosition(rightFrontDrive.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH));
-            rightBackDrive.setTargetPosition(rightBackDrive.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH));
+    public void encoderDrive(double speed, double inchesLF, double inchesLB, double inchesRF, double inchesRB){
+        //if(opModeIsActive()){
+            leftFrontDrive.setTargetPosition(leftFrontDrive.getCurrentPosition() + (int)(inchesLF * COUNTS_PER_INCH));
+            leftBackDrive.setTargetPosition(leftBackDrive.getCurrentPosition() + (int)(inchesLB * COUNTS_PER_INCH));
+            rightFrontDrive.setTargetPosition(rightFrontDrive.getCurrentPosition() + (int)(inchesRF * COUNTS_PER_INCH));
+            rightBackDrive.setTargetPosition(rightBackDrive.getCurrentPosition() + (int)(inchesRB * COUNTS_PER_INCH));
 
-            leftFrontDrive.setMode(RunMode.RUN_TO_POSITION);
-            leftBackDrive.setMode(RunMode.RUN_TO_POSITION);
-            rightFrontDrive.setMode(RunMode.RUN_TO_POSITION);
-            rightBackDrive.setMode(RunMode.RUN_TO_POSITION);
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
             runtime.reset();
-            leftFrontDrive.setPower(speedlf);
-            leftBackDrive.setPower(speedlb);
-            rightFrontDrive.setPower(speedrf);
-            rightBackDrive.setPower(speedrb);
-        }
-        motorSpeed(0);
-        leftFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
-        leftBackDrive.setMode(RunMode.RUN_USING_ENCODER);
-        rightFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
-        rightBackDrive.setMode(RunMode.RUN_USING_ENCODER);
-        sleep(1000);
+            motorSpeed(Math.abs(speed));
+        // }
+
+
+
+
     }
     public boolean motorBusyCheck(){
         if (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && leftBackDrive.isBusy() && rightBackDrive.isBusy()){

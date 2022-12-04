@@ -106,8 +106,8 @@ public class encoderAutoRubyAndSofee extends OpMode{
         double MotorAngleCompensationFactor = 1/((Math.sin((Math.atan(7/6.5))*Math.sin(Math.PI/4)+(Math.cos((Math.atan(7/6.5)))*Math.cos(Math.PI/4)))));
         MotorAngleCompensationFactor*=(1.276143212);//MotorAngleCompensationFactor*0.75
         double inchValue = (Math.sqrt(7.0*7.0 + 6.5*6.5)*(2*Math.PI)/4)*MotorAngleCompensationFactor;
-        //encoderDrive(1, 39.37, 39.37); //can change num values
-        encoderDrive(1.0, inchValue, -inchValue);
+        encoderDrive(1, 39.37, 39.37); //can change num values
+        //encoderDrive(1.0, inchValue, -inchValue);
         telemetry.addData("gyro", this.imu.getAngularOrientation().firstAngle);
     }
     @Override
