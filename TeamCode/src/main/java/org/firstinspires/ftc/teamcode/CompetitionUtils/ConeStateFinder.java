@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
 import java.util.HashMap;
 
 public class ConeStateFinder {
-    enum ConeState {
+    public enum ConeState {
         LEFT,
         MIDDLE,
         RIGHT

@@ -8,6 +8,10 @@ import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
+import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
+
 import java.util.Random;
 @Autonomous(name="autonomous My Boy", group="Robot")
 public class linearAutonomousGeneralUse extends LinearOpMode {
@@ -20,17 +24,19 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
     static final double DRIVE_GEAR_REDUCTION = 20.0;
     static final double WHEEL_DIAMETER_IN = 3.78;
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_IN * Math.PI);
+    RobotWebcam webcam = null;
     @Override
     public void runOpMode(){
         telemetry.addData("Status","Initialized");
-        leftBackDrive =hardwareMap.get(DcMotor.class,"backleft");
-        leftFrontDrive =hardwareMap.get(DcMotor.class,"frontleft");
-        rightBackDrive =hardwareMap.get(DcMotor.class,"backright");
-        rightFrontDrive =hardwareMap.get(DcMotor.class,"frontright");
+        leftBackDrive =hardwareMap.get(DcMotor.class,"backleft"); //1
+        leftFrontDrive =hardwareMap.get(DcMotor.class,"frontleft"); //0
+        rightBackDrive =hardwareMap.get(DcMotor.class,"backright"); //4
+        rightFrontDrive =hardwareMap.get(DcMotor.class,"frontright"); //2
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        webcam = new RobotWebcam(hardwareMap.get(WebcamName.class, "webcam"));
         telemetry.addData("Status","Ready to run");
         telemetry.update();
 
@@ -81,13 +87,24 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
         while(opModeIsActive()){}
         */
     }
-    private Random r = new Random();
-    public int getConePosition() {
+    //private Random r = new Random();
+    public int getConePosition(){
         //0 = left most
         //1 = middle
         //2 = right most
-        return (int)Math.floor(r.nextDouble()*3.0);
+        //return (int)Math.floor(r.nextDouble()*3.0);
+        switch (ConeStateFinder.getConeState(webcam)) {
+            case LEFT:
+                return 0;
+            case MIDDLE:
+                return 1;
+            case RIGHT:
+                return 2;
+            default:
+                return -1;
+        }
     }
+
     public void motorSpeed(double speed){
         leftBackDrive.setPower(speed);
         leftFrontDrive.setPower(speed);
