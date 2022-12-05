@@ -4,13 +4,17 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="Teleop My Boy", group="Robot")
-public class irrativeTelop extends OpMode{
+public class irrativeTeleop extends OpMode{
     public DcMotor leftBackDrive = null;
     public DcMotor rightBackDrive = null;
     public DcMotor leftFrontDrive = null;
     public DcMotor rightFrontDrive = null;
+    public DcMotor spoolMotor = null;
+    public Servo rightClaw = null;
+    public Servo leftClaw = null;
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
@@ -18,10 +22,14 @@ public class irrativeTelop extends OpMode{
         leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft");
         rightBackDrive = hardwareMap.get(DcMotor.class, "backright");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright");
+        spoolMotor = hardwareMap.get(DcMotor.class, "spoolmotor");
+        rightClaw = hardwareMap.get(Servo.class, "rightclaw");
+        leftClaw = hardwareMap.get(Servo.class, "leftclaw");
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
     }

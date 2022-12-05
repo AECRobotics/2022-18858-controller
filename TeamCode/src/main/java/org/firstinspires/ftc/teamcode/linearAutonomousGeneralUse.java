@@ -1,23 +1,21 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-//import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 import java.util.Random;
-@TeleOp(name="autonomous My Boy", group="Robot")
+@Autonomous(name="autonomous My Boy", group="Robot")
 public class linearAutonomousGeneralUse extends LinearOpMode {
     public DcMotor leftBackDrive = null;
     public DcMotor rightBackDrive = null;
     public DcMotor leftFrontDrive = null;
     public DcMotor rightFrontDrive = null;
     public BNO055IMU imu = null;
-    public ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 28.0;
     static final double DRIVE_GEAR_REDUCTION = 20.0;
     static final double WHEEL_DIAMETER_IN = 3.78;
@@ -55,6 +53,9 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
         telemetry.addData("gyro crap", imu.isGyroCalibrated());
 
         waitForStart();
+        encoderDrive(1.0,39.37,39.37,39.37,39.37);
+        telemetry.addLine("end of call to encoder drive");
+        while(opModeIsActive()){}
         /*pseudocode for terminal red start
         encoderDrive(-1,1,1,-1,metersToInches(~0.8),timeoutS);
         open claw and drop cone
@@ -67,8 +68,6 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
 
         if we start away from terminal this doesn't apply :)
          */
-        encoderDrive(1.0,39.37,39.37,39.37,39.37);
-        //sleep(1000);
         /*
         if(getConePosition() == 0){
             encoderDrive(1.0,1.0,1.0,1.0,metersToInches(1),5.0);
@@ -79,8 +78,8 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
             encoderDrive(1.0,1.0,1.0,1.0,metersToInches(1),5.0);
             encoderDrive(1.0,-1.0,-1.0,1.0,metersToInches(0.93),5.0);
         }
-        sleep(1000);
-         */
+        while(opModeIsActive()){}
+        */
     }
     private Random r = new Random();
     public int getConePosition() {
@@ -97,7 +96,7 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
     }
 
     public void encoderDrive(double speed, double inchesLF, double inchesLB, double inchesRF, double inchesRB){
-        //if(opModeIsActive()){
+        if(opModeIsActive()){
             leftFrontDrive.setTargetPosition(leftFrontDrive.getCurrentPosition() + (int)(inchesLF * COUNTS_PER_INCH));
             leftBackDrive.setTargetPosition(leftBackDrive.getCurrentPosition() + (int)(inchesLB * COUNTS_PER_INCH));
             rightFrontDrive.setTargetPosition(rightFrontDrive.getCurrentPosition() + (int)(inchesRF * COUNTS_PER_INCH));
@@ -108,13 +107,15 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            runtime.reset();
             motorSpeed(Math.abs(speed));
-        // }
-
-
-
-
+        }
+        telemetry.addLine("END OF IF STATEMENT IN ENCODERDRIVE");
+        motorSpeed(0);
+        leftBackDrive.setMode(RunMode.RUN_USING_ENCODER);
+        leftFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
+        rightBackDrive.setMode(RunMode.RUN_USING_ENCODER);
+        rightFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
+        telemetry.addLine("end of encoder drive");
     }
     public boolean motorBusyCheck(){
         if (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && leftBackDrive.isBusy() && rightBackDrive.isBusy()){
