@@ -8,16 +8,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 //import org.firstinspires.ftc.robotcore.external.Func;
 //import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 //import org.firstinspires.ftc.robotcore.external.navigation.Position;
 //import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 
-@TeleOp(name="Robot: Auto with sensor My Boy", group="Robot")
-public class sensorsTestRubSof extends OpMode{
+//@TeleOp(name="Robot: Auto with sensor My Boy", group="Robot")
+public class sensorTestAutonomous extends OpMode{
     public int count = 0;
     int hasRun = 0;
 

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="Teleop My Boy", group="Robot")
-public class irrativeTeleop extends OpMode{
+public class iterativeTeleop extends OpMode{
     public DcMotor leftBackDrive = null;
     public DcMotor rightBackDrive = null;
     public DcMotor leftFrontDrive = null;

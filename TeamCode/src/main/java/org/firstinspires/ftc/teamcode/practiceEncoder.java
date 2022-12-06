@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 
-@Autonomous(name="Robot: Auto with encoder My Boy", group="Robot")
-public class encoderAutoRubyAndSofee extends OpMode{
+//@Autonomous(name="Robot: Auto with encoder My Boy", group="Robot")
+public class practiceEncoder extends OpMode{
     private int autoThingsCount = 0;
     public void motorSpeed(double speed){
         leftBackDrive.setPower(speed);

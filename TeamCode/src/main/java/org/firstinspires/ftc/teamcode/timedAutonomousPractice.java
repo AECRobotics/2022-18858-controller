@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Robot: Auto My Boy", group="Robot")
-public class autoMyBoy extends OpMode{
+//@Autonomous(name="Robot: Auto My Boy", group="Robot")
+public class timedAutonomousPractice extends OpMode{
     public void motorSpeed(double speed){
         leftBackDrive.setPower(speed);
         leftFrontDrive.setPower(speed);

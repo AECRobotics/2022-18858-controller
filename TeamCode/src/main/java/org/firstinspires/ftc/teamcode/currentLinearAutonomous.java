@@ -12,9 +12,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
 
-import java.util.Random;
 @Autonomous(name="autonomous My Boy", group="Robot")
-public class linearAutonomousGeneralUse extends LinearOpMode {
+public class currentLinearAutonomous extends LinearOpMode {
     public DcMotor leftBackDrive = null;
     public DcMotor rightBackDrive = null;
     public DcMotor leftFrontDrive = null;
@@ -28,10 +27,10 @@ public class linearAutonomousGeneralUse extends LinearOpMode {
     @Override
     public void runOpMode(){
         telemetry.addData("Status","Initialized");
-        leftBackDrive =hardwareMap.get(DcMotor.class,"backleft"); //1
-        leftFrontDrive =hardwareMap.get(DcMotor.class,"frontleft"); //0
-        rightBackDrive =hardwareMap.get(DcMotor.class,"backright"); //4
-        rightFrontDrive =hardwareMap.get(DcMotor.class,"frontright"); //2
+        leftBackDrive = hardwareMap.get(DcMotor.class,"backleft"); //1
+        leftFrontDrive = hardwareMap.get(DcMotor.class,"frontleft"); //0
+        rightBackDrive = hardwareMap.get(DcMotor.class,"backright"); //4
+        rightFrontDrive = hardwareMap.get(DcMotor.class,"frontright"); //2
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
