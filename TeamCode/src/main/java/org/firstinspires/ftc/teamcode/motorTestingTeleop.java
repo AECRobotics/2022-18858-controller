@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-@TeleOp(name="All Function Teleop", group="Robot")
-public class fullyFunctionalTeleop extends OpMode{
+@TeleOp(name="Motor Testing Teleop", group="Robot")
+public class motorTestingTeleop extends OpMode{
     public DcMotor leftBackDrive = null;
     public DcMotor rightBackDrive = null;
     public DcMotor leftFrontDrive = null;
@@ -31,8 +31,8 @@ public class fullyFunctionalTeleop extends OpMode{
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
         spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spoolMotor.setTargetPosition(0);
@@ -48,53 +48,51 @@ public class fullyFunctionalTeleop extends OpMode{
     @Override
     public void start(){
     }
+
+    enum Motors {
+        LF,
+        LB,
+        RF,
+        RB
+    }
+
+    Motors curMotor = Motors.LF;
+
     @Override
     public void loop(){
-        double drive = gamepad1.left_stick_y;
-        double turn  =  -gamepad1.right_stick_x;
-        double strafe = -gamepad1.left_stick_x;
 
-
-        double lbPow = drive + strafe + turn;
-        double rbPow = drive + strafe - turn;
-        double lfPow = drive - strafe + turn;
-        double rfPow = drive - strafe - turn;
-        double divisor = Math.max(Math.max(lfPow, lbPow), Math.max(rfPow, rbPow));
-        if(divisor > 0.7)
-        {
-            lbPow/=divisor;
-            rbPow/=divisor;
-            lfPow/=divisor;
-            rfPow/=divisor;
-        }
         if(gamepad1.a) {
-            clawOpen = true;
-        } else if(gamepad1.b) {
-            clawOpen = false;
+            curMotor = Motors.LF;
         }
-        if(clawOpen) {
-            leftClaw.setPosition(1.0);
-            rightClaw.setPosition(0.45);
-        } else {
-            leftClaw.setPosition(1.0);
-            rightClaw.setPosition(0.36);
+        if(gamepad1.b) {
+            curMotor = Motors.LB;
         }
-        int increment = 30;
-        if(gamepad1.dpad_up) {
-            spoolMotor.setPower(1.0);
-            //spoolMotor.setTargetPosition(spoolMotor.getCurrentPosition()+increment);
-            telemetry.addLine("debug1");
-        } else if(gamepad1.dpad_down) {
-            spoolMotor.setPower(1.0);
-            //spoolMotor.setTargetPosition(spoolMotor.getCurrentPosition()+increment);
-            telemetry.addLine("debug2");
+        if(gamepad1.x) {
+            curMotor = Motors.RF;
         }
-        leftFrontDrive.setPower(lfPow);
-        leftBackDrive.setPower(lbPow);
-        rightFrontDrive.setPower(rfPow);
-        rightBackDrive.setPower(rbPow);
-        telemetry.addLine("A to open claw, B to close");
-        telemetry.addLine("Dpad up and down to bring arm up and down");
+        if(gamepad1.y) {
+            curMotor = Motors.RB;
+        }
+        double power = gamepad1.left_stick_y;
+        telemetry.addLine("power: " + power);
+        telemetry.addLine("testing motor: " + curMotor.name());
+        switch(curMotor) {
+            case LB:
+                leftBackDrive.setPower(1.0);
+                break;
+            case LF:
+                leftFrontDrive.setPower(1.0);
+                break;
+            case RB:
+                rightBackDrive.setPower(1.0);
+                break;
+            case RF:
+                rightFrontDrive.setPower(1.0);
+                break;
+            default:
+                break;
+        }
+
     }
     @Override
     public void stop(){

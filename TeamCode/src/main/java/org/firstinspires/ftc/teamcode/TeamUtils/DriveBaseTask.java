@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeamUtils;
 
+import java.util.HashMap;
+
 public class DriveBaseTask {
     public enum TaskType {
         DRIVE_TO_POSITION,
@@ -20,10 +22,16 @@ public class DriveBaseTask {
 
     private TaskType type;
     private TaskState state;
+    private HashMap<String, Double> parameters;
 
-    public DriveBaseTask(TaskType type) {
+    public DriveBaseTask(TaskType type, HashMap<String, Double> parameters) {
         this.type = type;
         this.state = TaskState.EXISTING;
+        this.parameters = parameters;
+    }
+
+    public HashMap<String, Double> getParameters() {
+        return this.parameters;
     }
 
     public TaskType getTaskType() {

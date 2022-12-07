@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeamUtils;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class HolonomicDriveBase extends DriveBase {
     public HolonomicDriveBase(Wheel fr, Wheel br, Wheel fl, Wheel bl, CHubIMU imu) {
@@ -30,23 +31,82 @@ public class HolonomicDriveBase extends DriveBase {
 
     @Override
     public boolean isTaskComplete() {
+        if(this.getTask().getState() == DriveBaseTask.TaskState.EXISTING) {
+            return false;
+        } else if(this.getTask().getState() == DriveBaseTask.TaskState.FINISHED) {
+            return true;
+        } else {
+            boolean output = false;
+            switch(this.getTask().getTaskType()) {
+                case DRIVE_TO_POSITION:
+                    output = this.allMotorsReachedTarget();
+                    break;
+                case STRAFE_TO_POSITION:
+                    output = this.allMotorsReachedTarget();
+                    break;
+                default:
+                    throw new RuntimeException("Task type not implemented in this drivebase");
+            }
+            if(output) {
+                this.getTask().finishTask();
+            }
+            return output;
+        }
+    }
+
+    public void forward() {
+        double distanceInMeters = this.getTask().getParameters().get("meters");
+        double power = Math.abs(this.getTask().getParameters().get("speed"));
+        power = Math.abs(distanceInMeters)*power/distanceInMeters;
+        this.setMotorPower(power);
+        this.turnMotorsDistance(distanceInMeters);
+    }
+
+    public void strafe() {
+        double distanceInMeters = this.getTask().getParameters().get("meters");
+        double power = Math.abs(this.getTask().getParameters().get("speed"));
+        power = Math.abs(distanceInMeters)*power/distanceInMeters;
+        this.fl.setPower(power);
+        this.br.setPower(power);
+        this.fr.setPower(-power);
+        this.bl.setPower(-power);
+        this.turnMotorsDistance(distanceInMeters);
+    }
+
+    public void startTask() {
+        this.getTask().startTask();
         switch(this.getTask().getTaskType()) {
             case DRIVE_TO_POSITION:
-
+                break;
             case STRAFE_TO_POSITION:
+                break;
+            default:
+                throw new RuntimeException("Task type not implemented in this drivebase");
+        }
+    }
+
+    public void doTask() {
+        switch(this.getTask().getTaskType()) {
+            case DRIVE_TO_POSITION:
+                this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
+                this.forward();
+            case STRAFE_TO_POSITION:
+                this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
+                this.forward();
             default:
                 throw new RuntimeException("Task type not implemented in this drivebase");
         }
     }
 
     @Override
-    public void doTask() {
-        switch(this.getTask().getTaskType()) {
-            case DRIVE_TO_POSITION:
-
-            case STRAFE_TO_POSITION:
-            default:
-                throw new RuntimeException("Task type not implemented in this drivebase");
+    public void doTasks() {
+        if(this.getTask().getState() == DriveBaseTask.TaskState.EXISTING) {
+            startTask();
+        } else if(this.getTask().getState() == DriveBaseTask.TaskState.STARTED) {
+            doTask();
+        } else if(this.getTask().getState() == DriveBaseTask.TaskState.FINISHED) {
+            return;
         }
+        return;
     }
 }

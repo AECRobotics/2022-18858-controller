@@ -1,0 +1,105 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
+import org.firstinspires.ftc.teamcode.CompetitionUtils.myBoyDrivebase;
+import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
+import org.firstinspires.ftc.teamcode.TeamUtils.DriveBaseTask;
+import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
+
+import java.util.HashMap;
+
+@Autonomous(name="Backup cone finder autonomous", group="Robot")
+public class backupIterativeAutonomous extends OpMode {
+    public DcMotor leftBackDrive = null;
+    public DcMotor rightBackDrive = null;
+    public DcMotor leftFrontDrive = null;
+    public DcMotor rightFrontDrive = null;
+    public CHubIMU imu = null;
+    RobotWebcam webcam = null;
+    myBoyDrivebase drive = null;
+    ConeStateFinder.ConeState coneState = null;
+    @Override
+    public void init() {
+        telemetry.addData("Status", "Initialized");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "backleft"); //1
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft"); //0
+        rightBackDrive = hardwareMap.get(DcMotor.class, "backright"); //4
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright"); //2
+        leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        webcam = new RobotWebcam(hardwareMap.get(WebcamName.class, "webcam"));
+        telemetry.addData("Status", "Ready to run");
+        telemetry.update();
+
+        leftBackDrive.setMode(RunMode.STOP_AND_RESET_ENCODER);
+        leftFrontDrive.setMode(RunMode.STOP_AND_RESET_ENCODER);
+        rightBackDrive.setMode(RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontDrive.setMode(RunMode.STOP_AND_RESET_ENCODER);
+
+        leftBackDrive.setMode(RunMode.RUN_USING_ENCODER);
+        leftFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
+        rightBackDrive.setMode(RunMode.RUN_USING_ENCODER);
+        rightFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
+        BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
+        imu = new CHubIMU(imub);
+        drive = new myBoyDrivebase(rightFrontDrive, leftFrontDrive, rightBackDrive, leftBackDrive, imu);
+    }
+    @Override
+    public void init_loop() {
+        telemetry.addLine("Gyro: " + imu.getGyroCalibrationStatus());
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void loop() {
+        if(coneState == null) {
+            coneState = getConePosition();
+        }
+        if(drive.isTaskComplete()) {
+            HashMap<String, Double> parameters = new HashMap<String, Double>();
+            switch(drive.getTaskCount()) {
+                case 0:
+                    parameters.put("speed", coneState == ConeStateFinder.ConeState.LEFT ? -0.5 : 0.5);
+                    parameters.put("meters", coneState == ConeStateFinder.ConeState.MIDDLE ? 0.0 : 0.3);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_TO_POSITION, parameters));
+                    break;
+                case 1:
+                    parameters.put("speed", 0.5);
+                    parameters.put("meters", 0.6);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_TO_POSITION, parameters));
+                    break;
+            }
+        }
+        drive.doTask();
+    }
+
+    public ConeStateFinder.ConeState getConePosition(){
+        //0 = left most
+        //1 = middle
+        //2 = right most
+        //return (int)Math.floor(r.nextDouble()*3.0);
+        return ConeStateFinder.getConeState(webcam);
+    }
+
+    public void motorSpeed(double speed){
+        leftBackDrive.setPower(speed);
+        leftFrontDrive.setPower(speed);
+        rightBackDrive.setPower(speed);
+        rightFrontDrive.setPower(speed);
+    }
+}

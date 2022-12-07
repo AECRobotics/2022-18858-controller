@@ -27,6 +27,19 @@ public class Motor {
         return rads/(2*Math.PI)*this.ticksPerRev;
     }
 
+    public void setMode(DcMotor.RunMode mode) {
+        this.getMotor().setMode(mode);
+    }
+    public void setPower(double power) {
+        this.getMotor().setPower(power);
+    }
+    public void setTargetPosition(int target) {
+        this.getMotor().setTargetPosition(target);
+    }
+    public int getTargetPosition() {
+        return this.getMotor().getTargetPosition();
+    }
+
     public boolean isBusy() {
         return this.motor.isBusy();
     }

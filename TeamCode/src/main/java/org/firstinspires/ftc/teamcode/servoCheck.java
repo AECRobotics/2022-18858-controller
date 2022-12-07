@@ -58,6 +58,7 @@ public class servoCheck extends OpMode{
         telemetry.addData("right:", rightClaw.getPosition());
         telemetry.addData("left", leftClaw.getPosition());
     }
+
     public void stop(){
 
     }
