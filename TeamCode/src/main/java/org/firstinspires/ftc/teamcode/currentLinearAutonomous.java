@@ -18,6 +18,7 @@ public class currentLinearAutonomous extends LinearOpMode {
     public DcMotor rightBackDrive = null;
     public DcMotor leftFrontDrive = null;
     public DcMotor rightFrontDrive = null;
+    int thing = -1;
     public BNO055IMU imu = null;
     static final double COUNTS_PER_MOTOR_REV = 28.0;
     static final double DRIVE_GEAR_REDUCTION = 20.0;
@@ -48,7 +49,7 @@ public class currentLinearAutonomous extends LinearOpMode {
         leftFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
-        imu =hardwareMap.get(BNO055IMU.class,"imu");
+        imu = hardwareMap.get(BNO055IMU.class,"imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode = BNO055IMU.SensorMode.IMU;
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -60,7 +61,11 @@ public class currentLinearAutonomous extends LinearOpMode {
         waitForStart();
         encoderDrive(1.0,39.37,39.37,39.37,39.37);
         telemetry.addLine("end of call to encoder drive");
-        while(opModeIsActive()){}
+        while(opModeIsActive()){
+            telemetry.addLine("debug 1");
+        }
+        thing = getConePosition();
+        telemetry.addLine("cone position" + thing);
         /*pseudocode for terminal red start
         encoderDrive(-1,1,1,-1,metersToInches(~0.8),timeoutS);
         open claw and drop cone
@@ -125,13 +130,13 @@ public class currentLinearAutonomous extends LinearOpMode {
 
             motorSpeed(Math.abs(speed));
         }
-        telemetry.addLine("END OF IF STATEMENT IN ENCODERDRIVE");
+        /*telemetry.addLine("END OF IF STATEMENT IN ENCODERDRIVE");
         motorSpeed(0);
         leftBackDrive.setMode(RunMode.RUN_USING_ENCODER);
         leftFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
-        telemetry.addLine("end of encoder drive");
+        telemetry.addLine("end of encoder drive");*/
     }
     public boolean motorBusyCheck(){
         if (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && leftBackDrive.isBusy() && rightBackDrive.isBusy()){
