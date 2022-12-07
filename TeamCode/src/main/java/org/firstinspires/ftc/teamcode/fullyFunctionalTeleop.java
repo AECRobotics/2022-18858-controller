@@ -35,6 +35,7 @@ public class fullyFunctionalTeleop extends OpMode{
         rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        spoolMotor.setTargetPosition(0);
         spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         telemetry.addData("Status", "Ready to run");
@@ -53,9 +54,9 @@ public class fullyFunctionalTeleop extends OpMode{
         double strafe = -gamepad1.left_stick_x;
 
 
-        double lbPow = drive - strafe + turn;
+        double lbPow = drive + strafe + turn;
         double rbPow = drive + strafe - turn;
-        double lfPow = drive + strafe + turn;
+        double lfPow = drive - strafe + turn;
         double rfPow = drive - strafe - turn;
         double divisor = Math.max(Math.max(lfPow, lbPow), Math.max(rfPow, rbPow));
         if(divisor > 0.7)
@@ -77,12 +78,12 @@ public class fullyFunctionalTeleop extends OpMode{
             leftClaw.setPosition(1.0);
             rightClaw.setPosition(0.36);
         }
-        int increment = 4;
+        int increment = 30;
         if(gamepad1.dpad_up) {
-            spoolMotor.setPower(-0.1);
+            spoolMotor.setPower(-0.5);
             spoolMotor.setTargetPosition(spoolMotor.getCurrentPosition()+increment);
         } else if(gamepad1.dpad_down) {
-            spoolMotor.setPower(0.1);
+            spoolMotor.setPower(0.5);
             spoolMotor.setTargetPosition(spoolMotor.getCurrentPosition()+increment);
         }
         leftFrontDrive.setPower(lfPow);
