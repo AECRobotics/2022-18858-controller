@@ -6,13 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-<<<<<<<< HEAD:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/iterativeTeleop.java
-@TeleOp(name="Teleop My Boy", group="Robot")
-public class iterativeTeleop extends OpMode{
-========
+
 @TeleOp(name="All Function Teleop", group="Robot")
-public class allFunctionTeleop extends OpMode{
->>>>>>>> 188858_code:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/allFunctionTeleop.java
+public class fullyFunctionalTeleop extends OpMode{
     public DcMotor leftBackDrive = null;
     public DcMotor rightBackDrive = null;
     public DcMotor leftFrontDrive = null;
