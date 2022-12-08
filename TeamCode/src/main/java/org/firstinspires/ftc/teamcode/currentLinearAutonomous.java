@@ -19,6 +19,7 @@ public class currentLinearAutonomous extends LinearOpMode {
     public DcMotor leftFrontDrive = null;
     public DcMotor rightFrontDrive = null;
     int thing = -1;
+    int autoThingCount = 0;
     public BNO055IMU imu = null;
     static final double COUNTS_PER_MOTOR_REV = 28.0;
     static final double DRIVE_GEAR_REDUCTION = 20.0;
@@ -59,11 +60,6 @@ public class currentLinearAutonomous extends LinearOpMode {
         telemetry.addData("gyro crap", imu.isGyroCalibrated());
 
         waitForStart();
-        encoderDrive(.7,39.37,39.37,39.37,39.37);
-        telemetry.addLine("end of call to encoder drive");
-        while(opModeIsActive()){
-            telemetry.addLine("debug 1");
-        }
         thing = getConePosition();
         telemetry.addLine("cone position" + thing);
         /*pseudocode for terminal red start
@@ -80,16 +76,20 @@ public class currentLinearAutonomous extends LinearOpMode {
          */
         /*
         if(getConePosition() == 0){
-            encoderDrive(1.0,1.0,1.0,1.0,metersToInches(1),5.0);
-            encoderDrive(-1.0,1.0,1.0,-1.0,metersToInches(0.93),5.0);
+            autoThingCount = 1;
+            encoderDrive(0.5,metersToInches(1),metersToInches(1),metersToInches(1),metersToInches(1));
+            encoderDrive(0.5,metersToInches(-0.93),metersToInches(0.93),metersToInches(0.93),metersToInches(-0.93));
         }else if(getConePosition() == 1){
-            encoderDrive(1.0,1.0,1.0,1.0,metersToInches(1),5.0);
+            autoThingCount = 2;
+            encoderDrive(0.5,metersToInches(1),metersToInches(1),metersToInches(1),metersToInches(1));
         }else if(getConePosition() == 2){
-            encoderDrive(1.0,1.0,1.0,1.0,metersToInches(1),5.0);
+            autoThingCount = 3;
+            encoderDrive(0.5,metersToInches(1),metersToInches(1),metersToInches(1),metersToInches(1));
             encoderDrive(1.0,-1.0,-1.0,1.0,metersToInches(0.93),5.0);
         }
-        while(opModeIsActive()){}
-        */
+        while(opModeIsActive()){telemetry.addLine("debug 1");}
+
+         */
     }
     //private Random r = new Random();
     public int getConePosition(){
