@@ -18,6 +18,12 @@ public class fullyFunctionalTeleop extends OpMode{
     public Servo leftClaw = null;
 
     boolean clawOpen = false;
+    double spoolPosition;
+
+    boolean isLastGamepadDpadRight = false;
+    boolean lastGamepadDpadLeft = false;
+    boolean lastGamepadDpadUp = false;
+    boolean lastGamepadDpadDown = false;
 
     @Override
     public void init() {
@@ -31,7 +37,7 @@ public class fullyFunctionalTeleop extends OpMode{
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -50,7 +56,7 @@ public class fullyFunctionalTeleop extends OpMode{
     }
     @Override
     public void loop(){
-        double drive = gamepad1.left_stick_y;
+         double drive = gamepad1.left_stick_y;
         double turn  =  -gamepad1.right_stick_x;
         double strafe = -gamepad1.left_stick_x;
 
@@ -60,7 +66,7 @@ public class fullyFunctionalTeleop extends OpMode{
         double lfPow = drive - strafe + turn;
         double rfPow = drive - strafe - turn;
         double divisor = Math.max(Math.max(lfPow, lbPow), Math.max(rfPow, rbPow));
-        if(divisor > 0.7)
+        if(divisor > 0.5)
         {
             lbPow/=divisor;
             rbPow/=divisor;
@@ -79,15 +85,17 @@ public class fullyFunctionalTeleop extends OpMode{
             leftClaw.setPosition(1.0);
             rightClaw.setPosition(0.36);
         }
-        int increment = 30;
-        if(gamepad1.dpad_up) {
+        if(gamepad1.dpad_right && !isLastGamepadDpadRight) {
+            spoolMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        if(gamepad1.dpad_left && !lastGamepadDpadLeft) {
+            spoolMotor.setPower(0.0);
+        }
+        if(gamepad1.dpad_up && !lastGamepadDpadUp) {
             spoolMotor.setPower(1.0);
-            //spoolMotor.setTargetPosition(spoolMotor.getCurrentPosition()+increment);
-            telemetry.addLine("debug1");
-        } else if(gamepad1.dpad_down) {
-            spoolMotor.setPower(1.0);
-            //spoolMotor.setTargetPosition(spoolMotor.getCurrentPosition()+increment);
-            telemetry.addLine("debug2");
+        }
+        if(gamepad1.dpad_down && !lastGamepadDpadDown) {
+            spoolMotor.setPower(-1.0);
         }
         leftFrontDrive.setPower(lfPow);
         leftBackDrive.setPower(lbPow);

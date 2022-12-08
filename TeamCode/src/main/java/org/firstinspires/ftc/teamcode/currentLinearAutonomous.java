@@ -34,7 +34,7 @@ public class currentLinearAutonomous extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class,"frontright"); //2
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         webcam = new RobotWebcam(hardwareMap.get(WebcamName.class, "webcam"));
         telemetry.addData("Status","Ready to run");
@@ -59,7 +59,7 @@ public class currentLinearAutonomous extends LinearOpMode {
         telemetry.addData("gyro crap", imu.isGyroCalibrated());
 
         waitForStart();
-        encoderDrive(1.0,39.37,39.37,39.37,39.37);
+        encoderDrive(.7,39.37,39.37,39.37,39.37);
         telemetry.addLine("end of call to encoder drive");
         while(opModeIsActive()){
             telemetry.addLine("debug 1");
