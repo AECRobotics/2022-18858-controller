@@ -12,7 +12,8 @@ public class DriveBaseTask {
         STRAFE_TO_DISTANCE_SENSOR_LESS_THAN,
         DRIVE_TO_DISTANCE,
         STRAFE_TO_DISTANCE,
-        WAIT_FOR
+        WAIT_FOR,
+        PLACEHOLDER
     }
     public enum TaskState {
         EXISTING,

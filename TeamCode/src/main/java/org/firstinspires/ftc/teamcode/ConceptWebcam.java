@@ -1,8 +1,33 @@
-package org.firstinspires.ftc.teamcode.TeamUtils;
+/* Copyright (c) 2020 FIRST. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XZY;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
+package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
@@ -10,13 +35,12 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
-import com.vuforia.Image;
-import com.vuforia.PIXEL_FORMAT;
-import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.android.util.Size;
 import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
@@ -29,34 +53,33 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraException;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraFrame;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraManager;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.internal.collections.EvictingBlockingQueue;
 import org.firstinspires.ftc.robotcore.internal.network.CallbackLooper;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.robotcore.internal.system.ContinuationSynchronizer;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
-import org.firstinspires.ftc.teamcode.CompetitionUtils.VuforiaConstants;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public class RobotWebcam {
-    /*VuforiaLocalizer.Parameters parameters;
-    VuforiaTrackables targets;
-    VuforiaLocalizer vuforia;*/
+/**
+ * This OpMode illustrates how to open a webcam and retrieve images from it. It requires a configuration
+ * containing a webcam with the default name ("Webcam 1"). When the opmode runs, pressing the 'A' button
+ * will cause a frame from the camera to be written to a file on the device, which can then be retrieved
+ * by various means (e.g.: Device File Explorer in Android Studio; plugging the device into a PC and
+ * using Media Transfer; ADB; etc)
+ */
+@TeleOp(name="Concept: Webcam", group ="Concept")
+//@Disabled
+public class ConceptWebcam extends LinearOpMode {
+
+    //----------------------------------------------------------------------------------------------
+    // State
+    //----------------------------------------------------------------------------------------------
 
     private static final String TAG = "Webcam Sample";
 
@@ -83,58 +106,67 @@ public class RobotWebcam {
      * if you're curious): no knowledge of multi-threading is needed here. */
     private Handler callbackHandler;
 
+    //----------------------------------------------------------------------------------------------
+    // Main OpMode entry
+    //----------------------------------------------------------------------------------------------
 
-    private WebcamName webcamName;
-    public RobotWebcam(WebcamName webcamName) {
-        this.webcamName = webcamName;
+    @Override public void runOpMode() {
 
-        //this.initializeVuforia();
-        this.setupWebcam();
-    }
-
-    public Bitmap getWebcamFrame() {
-        Bitmap bmp = frameQueue.poll();
-        if (bmp != null) {
-            return bmp;
-        } else {
-            return null;
-        }
-    }
-
-    public void setupWebcam() {
         callbackHandler = CallbackLooper.getDefault().getHandler();
 
         cameraManager = ClassFactory.getInstance().getCameraManager();
-        cameraName = this.webcamName;
+        cameraName = hardwareMap.get(WebcamName.class, "webcam");
 
         initializeFrameQueue(2);
         AppUtil.getInstance().ensureDirectoryExists(captureDirectory);
 
         try {
             openCamera();
-            if (camera == null) {
-                return;
-            }
+            if (camera == null) return;
 
             startCamera();
-            if (cameraCaptureSession == null) {
-                return;
-            }
+            if (cameraCaptureSession == null) return;
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            telemetry.addData(">", "Press Play to start");
+            telemetry.update();
+            waitForStart();
+            telemetry.clear();
+            telemetry.addData(">", "Started...Press 'A' to capture frame");
+
+            boolean buttonPressSeen = false;
+            boolean captureWhenAvailable = false;
+            while (opModeIsActive()) {
+
+                boolean buttonIsPressed = gamepad1.a;
+                if (buttonIsPressed && !buttonPressSeen) {
+                    captureWhenAvailable = true;
+                }
+                buttonPressSeen = buttonIsPressed;
+
+                if (captureWhenAvailable) {
+                    Bitmap bmp = frameQueue.poll();
+                    if (bmp != null) {
+                        captureWhenAvailable = false;
+                        onNewFrame(bmp);
+                    }
+                }
+
+                telemetry.update();
+            }
+        } finally {
+            closeCamera();
         }
     }
 
-    //----------------------------------------------------------------------------------------------
-    // Main OpMode entry
-    //----------------------------------------------------------------------------------------------
-
     /** Do something with the frame */
     private void onNewFrame(Bitmap frame) {
-        //saveBitmap(frame);
+        saveBitmap(frame);
         frame.recycle(); // not strictly necessary, but helpful
     }
+
+    //----------------------------------------------------------------------------------------------
+    // Camera operations
+    //----------------------------------------------------------------------------------------------
 
     private void initializeFrameQueue(int capacity) {
         /** The frame queue will automatically throw away bitmap frames if they are not processed
@@ -202,7 +234,7 @@ public class RobotWebcam {
                                 })
                         );
                         synchronizer.finish(session);
-                    } catch (CameraException |RuntimeException e) {
+                    } catch (CameraException|RuntimeException e) {
                         RobotLog.ee(TAG, e, "exception starting capture");
                         error("exception starting capture");
                         session.close();
@@ -235,7 +267,7 @@ public class RobotWebcam {
         }
     }
 
-    public void closeCamera() {
+    private void closeCamera() {
         stopCamera();
         if (camera != null) {
             camera.close();
@@ -243,13 +275,17 @@ public class RobotWebcam {
         }
     }
 
+    //----------------------------------------------------------------------------------------------
+    // Utilities
+    //----------------------------------------------------------------------------------------------
+
     private void error(String msg) {
-        //telemetry.log().add(msg);
-        //telemetry.update();
+        telemetry.log().add(msg);
+        telemetry.update();
     }
     private void error(String format, Object...args) {
-        //telemetry.log().add(format, args);
-        //telemetry.update();
+        telemetry.log().add(format, args);
+        telemetry.update();
     }
 
     private boolean contains(int[] array, int value) {
@@ -259,106 +295,16 @@ public class RobotWebcam {
         return false;
     }
 
-    private void initializeVuforia() {
-        /*this.parameters = new VuforiaLocalizer.Parameters();
-        this.parameters.vuforiaLicenseKey = VuforiaConstants.LicenseKey;
-        this.parameters.cameraName = this.webcamName;
-        this.parameters.useExtendedTracking = false;
-        this.vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        /*this.targets = this.vuforia.loadTrackablesFromAsset("PowerPlay");
-        List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
-        allTrackables.addAll(targets);
-        identifyTarget(0, "Red Audience Wall",   -halfField,  -oneAndHalfTile, mmTargetHeight, 90, 0,  90);
-        identifyTarget(1, "Red Rear Wall",        halfField,  -oneAndHalfTile, mmTargetHeight, 90, 0, -90);
-        identifyTarget(2, "Blue Audience Wall",  -halfField,   oneAndHalfTile, mmTargetHeight, 90, 0,  90);
-        identifyTarget(3, "Blue Rear Wall",       halfField,   oneAndHalfTile, mmTargetHeight, 90, 0, -90);
-
-        final float CAMERA_FORWARD_DISPLACEMENT  = 0.0f * (float)UnitConversion.MMPERINCH;   // eg: Enter the forward distance from the center of the robot to the camera lens
-        final float CAMERA_VERTICAL_DISPLACEMENT = 6.0f * (float)UnitConversion.MMPERINCH;   // eg: Camera is 6 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT     = 0.0f * (float)UnitConversion.MMPERINCH;   // eg: Enter the left distance from the center of the robot to the camera lens
-
-        OpenGLMatrix cameraLocationOnRobot = OpenGLMatrix
-                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XZY, DEGREES, 90, 90, 0));
-
-        for (VuforiaTrackable trackable : allTrackables) {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(parameters.cameraName, cameraLocationOnRobot);
-        }*/
-    }
-
-    /*public Bitmap getWebcamFrame() {
-        VuforiaLocalizer.CloseableFrame frame;
+    private void saveBitmap(Bitmap bitmap) {
+        File file = new File(captureDirectory, String.format(Locale.getDefault(), "webcam-frame-%d.jpg", captureCounter++));
         try {
-            frame = this.vuforia.getFrameQueue().take();
-        } catch(Exception e){
-            e.printStackTrace();
-            return null;
-        }
-        Image rgb = null;
-        long numImages = frame.getNumImages();
-        for (int i = 0; i < numImages; i++) {
-            if (frame.getImage(i).getFormat() == PIXEL_FORMAT.RGB565) {
-                rgb = frame.getImage(i);
-                break;
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                telemetry.log().add("captured %s", file.getName());
             }
+        } catch (IOException e) {
+            RobotLog.ee(TAG, e, "exception in saveBitmap()");
+            error("exception saving %s", file.getName());
         }
-        if(rgb == null) {
-            return null;
-        }
-
-        Bitmap bm = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565);
-        bm.copyPixelsFromBuffer(rgb.getPixels());
-
-        frame.close();
-
-        return bm;
-
-        //put the image into a MAT for OpenCV
-
-        //close the frame, prevents memory leaks and crashing
     }
-
-    /*public Bitmap getWebcamFrame(Telemetry telemetry) {
-        VuforiaLocalizer.CloseableFrame frame;
-        try {
-            frame = this.vuforia.getFrameQueue().take();
-        } catch(Exception e){
-            try (StringWriter sw = new StringWriter();
-                 PrintWriter pw = new PrintWriter(sw))
-            {
-                e.printStackTrace(pw);
-                telemetry.addLine(sw.toString());
-            }
-            catch (IOException ioe)
-            {
-                throw new IllegalStateException(ioe);
-            }
-            e.printStackTrace();
-            telemetry.addLine("debug1");
-            return null;
-        }
-        Image rgb = null;
-        long numImages = frame.getNumImages();
-        for (int i = 0; i < numImages; i++) {
-            if (frame.getImage(i).getFormat() == PIXEL_FORMAT.RGB565) {
-                rgb = frame.getImage(i);
-                break;
-            }
-        }
-        if(rgb == null) {
-            telemetry.addLine("debug2");
-            return null;
-        }
-
-        telemetry.addLine("debug3");
-        Bitmap bm = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565);
-        bm.copyPixelsFromBuffer(rgb.getPixels());
-
-        frame.close();
-        return bm;
-
-        //put the image into a MAT for OpenCV
-
-        //close the frame, prevents memory leaks and crashing
-    }*/
 }

@@ -6,12 +6,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
+import java.util.HashMap;
+
 public abstract class DriveBase {
     Wheel fr,br,fl,bl;
     CHubIMU imu;
 
     private DriveBaseTask previousTask;
-    private DriveBaseTask currentTask;
+    private DriveBaseTask currentTask = new DriveBaseTask(DriveBaseTask.TaskType.PLACEHOLDER, new HashMap<String, Double>());
     private int taskCount = 0;
     private boolean taskComplete = true;
     private DriveBaseState stateAtAssignmentOfTask;
@@ -78,18 +80,25 @@ public abstract class DriveBase {
     }
 
     public void turnMotorsDistance(double distance) {
-        this.fr.setTargetPosition(this.fr.getTargetPosition()+this.fr.convertMToEncoderTicks(distance));
-        this.fl.setTargetPosition(this.fl.getTargetPosition()+this.fl.convertMToEncoderTicks(distance));
-        this.br.setTargetPosition(this.br.getTargetPosition()+this.br.convertMToEncoderTicks(distance));
-        this.bl.setTargetPosition(this.bl.getTargetPosition()+this.bl.convertMToEncoderTicks(distance));
+        this.fr.setTargetPosition(this.stateAtAssignmentOfTask.frTarget+this.fr.convertMToEncoderTicks(distance));
+        this.fl.setTargetPosition(this.stateAtAssignmentOfTask.flTarget+this.fl.convertMToEncoderTicks(distance));
+        this.br.setTargetPosition(this.stateAtAssignmentOfTask.brTarget+this.br.convertMToEncoderTicks(distance));
+        this.bl.setTargetPosition(this.stateAtAssignmentOfTask.blTarget+this.bl.convertMToEncoderTicks(distance));
     }
 
     public boolean anyMotorBusy() {
         return this.fr.isBusy() || this.br.isBusy() || this.fl.isBusy() || this.bl.isBusy();
     }
 
-    public boolean allMotorsReachedTarget() {
-        return !this.fr.isBusy() && !this.br.isBusy() && !this.fl.isBusy() && !this.bl.isBusy();
+    public boolean allMotorsNotBusy() {
+        return !(this.fr.isBusy() || this.br.isBusy() || this.fl.isBusy() || this.bl.isBusy());
     }
 
+    public boolean allMotorsReachedTarget() {
+        boolean atTarget = (Math.abs(this.fr.getTargetPosition()-this.fr.getCurrentPosition()) < 10) &&
+                (Math.abs(this.br.getTargetPosition()-this.br.getCurrentPosition()) < 10) &&
+                (Math.abs(this.fl.getTargetPosition()-this.fl.getCurrentPosition()) < 10) &&
+                (Math.abs(this.bl.getTargetPosition()-this.bl.getCurrentPosition()) < 10);
+        return atTarget;
+    }
 }

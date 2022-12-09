@@ -70,7 +70,10 @@ public class backupIterativeAutonomous extends OpMode {
         if(coneState == null) {
             coneState = getConePosition();
         }
-        if(drive.isTaskComplete()) {
+        telemetry.addLine(drive.getTask().getTaskType().name());
+        telemetry.addLine(drive.isTaskComplete() + "");
+        telemetry.addLine(drive.getTask().getState() + "");
+        if(drive.isTaskComplete() && coneState != null) {
             HashMap<String, Double> parameters = new HashMap<String, Double>();
             switch(drive.getTaskCount()) {
                 case 0:
@@ -85,7 +88,7 @@ public class backupIterativeAutonomous extends OpMode {
                     break;
             }
         }
-        drive.doTask();
+        drive.doTasks();
         telemetry.addLine(coneState.name());
     }
 
@@ -102,5 +105,6 @@ public class backupIterativeAutonomous extends OpMode {
         leftFrontDrive.setPower(speed);
         rightBackDrive.setPower(speed);
         rightFrontDrive.setPower(speed);
+        webcam.closeCamera();
     }
 }

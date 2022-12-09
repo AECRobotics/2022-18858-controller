@@ -39,8 +39,8 @@ public class Motor {
     public int getTargetPosition() {
         return this.getMotor().getTargetPosition();
     }
-
+    public int getCurrentPosition() { return this.getMotor().getCurrentPosition(); }
     public boolean isBusy() {
-        return this.motor.isBusy();
+        return this.getMotor().isBusy();
     }
 }

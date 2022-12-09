@@ -3,9 +3,17 @@ package org.firstinspires.ftc.teamcode.TeamUtils;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class HolonomicDriveBase extends DriveBase {
     public HolonomicDriveBase(Wheel fr, Wheel br, Wheel fl, Wheel bl, CHubIMU imu) {
         super(fr,br,fl,bl,imu);
+    }
+
+    public Telemetry telemetry = null;
+
+    public void setTelemetry(Telemetry telemetry) {
+        this.telemetry = telemetry;
     }
 
     public void drive(double speed, double angle, double turn) {
@@ -39,10 +47,13 @@ public class HolonomicDriveBase extends DriveBase {
             boolean output = false;
             switch(this.getTask().getTaskType()) {
                 case DRIVE_TO_POSITION:
-                    output = this.allMotorsReachedTarget();
+                    output = this.allMotorsReachedTarget() && this.allMotorsNotBusy();
                     break;
                 case STRAFE_TO_POSITION:
-                    output = this.allMotorsReachedTarget();
+                    output = this.allMotorsReachedTarget() && this.allMotorsNotBusy();
+                    break;
+                case PLACEHOLDER:
+                    output = true;
                     break;
                 default:
                     throw new RuntimeException("Task type not implemented in this drivebase");
@@ -74,11 +85,14 @@ public class HolonomicDriveBase extends DriveBase {
     }
 
     public void startTask() {
+        //telemetry.addLine("debug2");
         this.getTask().startTask();
         switch(this.getTask().getTaskType()) {
             case DRIVE_TO_POSITION:
                 break;
             case STRAFE_TO_POSITION:
+                break;
+            case PLACEHOLDER:
                 break;
             default:
                 throw new RuntimeException("Task type not implemented in this drivebase");
@@ -90,9 +104,13 @@ public class HolonomicDriveBase extends DriveBase {
             case DRIVE_TO_POSITION:
                 this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
                 this.forward();
+                break;
             case STRAFE_TO_POSITION:
                 this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
-                this.forward();
+                this.strafe();
+                break;
+            case PLACEHOLDER:
+                break;
             default:
                 throw new RuntimeException("Task type not implemented in this drivebase");
         }
@@ -101,6 +119,7 @@ public class HolonomicDriveBase extends DriveBase {
     @Override
     public void doTasks() {
         if(this.getTask().getState() == DriveBaseTask.TaskState.EXISTING) {
+            //telemetry.addLine("debug1");
             startTask();
         } else if(this.getTask().getState() == DriveBaseTask.TaskState.STARTED) {
             doTask();

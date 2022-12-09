@@ -54,6 +54,7 @@ public class fullyFunctionalTeleop extends OpMode{
     @Override
     public void start(){
     }
+
     @Override
     public void loop(){
          double drive = gamepad1.left_stick_y;
@@ -83,7 +84,7 @@ public class fullyFunctionalTeleop extends OpMode{
             rightClaw.setPosition(0.45);
         } else {
             leftClaw.setPosition(1.0);
-            rightClaw.setPosition(0.36);
+            rightClaw.setPosition(0.28);
         }
         if(gamepad1.dpad_right && !isLastGamepadDpadRight) {
             spoolMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
