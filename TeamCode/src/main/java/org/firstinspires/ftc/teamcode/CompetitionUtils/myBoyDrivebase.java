@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.TeamUtils.HolonomicDriveBase;
 import org.firstinspires.ftc.teamcode.TeamUtils.Wheel;
 
 public class myBoyDrivebase extends HolonomicDriveBase {
-    public static double WHEEL_RADIUS = 48;
+    public static double WHEEL_RADIUS = 48; //mm
     public static double GEAR_RATIO = 20;
     public static int TICKS_PER_RAW_REV = 28;
     public myBoyDrivebase(DcMotor fr, DcMotor br, DcMotor fl, DcMotor bl, CHubIMU imu) {

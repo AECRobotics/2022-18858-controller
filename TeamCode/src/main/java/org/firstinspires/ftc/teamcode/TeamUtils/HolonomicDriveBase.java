@@ -67,39 +67,27 @@ public class HolonomicDriveBase extends DriveBase {
 
     public void forward() {
         double distanceInMeters = this.getTask().getParameters().get("meters");
-        double power = Math.abs(this.getTask().getParameters().get("speed"));
-        power = Math.abs(distanceInMeters)*power/distanceInMeters;
+        double power = this.getTask().getParameters().get("speed");
         this.setMotorPower(power);
         this.turnMotorsDistance(distanceInMeters);
     }
 
     public void strafe() {
         double distanceInMeters = this.getTask().getParameters().get("meters");
-        double power = Math.abs(this.getTask().getParameters().get("speed"));
-        power = Math.abs(distanceInMeters)*power/distanceInMeters;
+        double power = this.getTask().getParameters().get("speed");
         this.fl.setPower(power);
         this.br.setPower(power);
-        this.fr.setPower(-power);
-        this.bl.setPower(-power);
-        this.turnMotorsDistance(distanceInMeters);
+        this.fr.setPower(power);
+        this.bl.setPower(power);
+        this.fl.turnWheelDistance(distanceInMeters);
+        this.br.turnWheelDistance(distanceInMeters);
+        this.fr.turnWheelDistance(-distanceInMeters);
+        this.bl.turnWheelDistance(-distanceInMeters);
     }
 
-    public void startTask() {
+    private void startTask() {
         //telemetry.addLine("debug2");
         this.getTask().startTask();
-        switch(this.getTask().getTaskType()) {
-            case DRIVE_TO_POSITION:
-                break;
-            case STRAFE_TO_POSITION:
-                break;
-            case PLACEHOLDER:
-                break;
-            default:
-                throw new RuntimeException("Task type not implemented in this drivebase");
-        }
-    }
-
-    public void doTask() {
         switch(this.getTask().getTaskType()) {
             case DRIVE_TO_POSITION:
                 this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
@@ -108,6 +96,19 @@ public class HolonomicDriveBase extends DriveBase {
             case STRAFE_TO_POSITION:
                 this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
                 this.strafe();
+                break;
+            case PLACEHOLDER:
+                break;
+            default:
+                throw new RuntimeException("Task type not implemented in this drivebase");
+        }
+    }
+
+    private void doTask() {
+        switch(this.getTask().getTaskType()) {
+            case DRIVE_TO_POSITION:
+                break;
+            case STRAFE_TO_POSITION:
                 break;
             case PLACEHOLDER:
                 break;

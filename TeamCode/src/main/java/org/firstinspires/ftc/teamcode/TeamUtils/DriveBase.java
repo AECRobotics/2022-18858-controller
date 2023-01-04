@@ -65,25 +65,11 @@ public abstract class DriveBase {
         this.bl.setPower(power);
     }
 
-    public void setMotorTargets(int target) {
-        this.fr.setTargetPosition(target);
-        this.fl.setTargetPosition(target);
-        this.br.setTargetPosition(target);
-        this.bl.setTargetPosition(target);
-    }
-
-    public void addToMotorTargets(int ticks) {
-        this.fr.setTargetPosition(this.fr.getTargetPosition()+ticks);
-        this.fl.setTargetPosition(this.fl.getTargetPosition()+ticks);
-        this.br.setTargetPosition(this.br.getTargetPosition()+ticks);
-        this.bl.setTargetPosition(this.bl.getTargetPosition()+ticks);
-    }
-
     public void turnMotorsDistance(double distance) {
-        this.fr.setTargetPosition(this.stateAtAssignmentOfTask.frTarget+this.fr.convertMToEncoderTicks(distance));
-        this.fl.setTargetPosition(this.stateAtAssignmentOfTask.flTarget+this.fl.convertMToEncoderTicks(distance));
-        this.br.setTargetPosition(this.stateAtAssignmentOfTask.brTarget+this.br.convertMToEncoderTicks(distance));
-        this.bl.setTargetPosition(this.stateAtAssignmentOfTask.blTarget+this.bl.convertMToEncoderTicks(distance));
+        this.fr.turnWheelDistance(distance);
+        this.fl.turnWheelDistance(distance);
+        this.br.turnWheelDistance(distance);
+        this.bl.turnWheelDistance(distance);
     }
 
     public boolean anyMotorBusy() {

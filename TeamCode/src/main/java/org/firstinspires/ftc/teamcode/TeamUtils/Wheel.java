@@ -23,4 +23,16 @@ public class Wheel extends Motor {
     public double convertRotationsToEncoderTicks(double rotations) {
         return rotations*super.getTicksPerRev();
     }
+
+    public void addToWheelTarget(int ticks) {
+        this.setTargetPosition(this.getTargetPosition()+ticks);
+    }
+
+    public void turnWheelDistance(double distance) {
+        this.turnWheelDistance(distance, this.getTargetPosition());
+    }
+
+    public void turnWheelDistance(double distance, int from) {
+        this.setTargetPosition(from+convertMToEncoderTicks(distance));
+    }
 }
