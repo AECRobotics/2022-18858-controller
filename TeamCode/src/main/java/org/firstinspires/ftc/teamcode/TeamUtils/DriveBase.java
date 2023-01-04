@@ -51,6 +51,23 @@ public abstract class DriveBase {
 
     public abstract void doTasks();
 
+    public Wheel getFr() {
+        return this.fr;
+    }
+
+    public Wheel getFl() {
+        return this.fl;
+    }
+
+    public Wheel getBr() {
+        return this.br;
+    }
+
+    public Wheel getBl() {
+        return this.bl;
+    }
+
+
     public void setMotorModes(DcMotor.RunMode mode) {
         this.fr.setMode(mode);
         this.fl.setMode(mode);

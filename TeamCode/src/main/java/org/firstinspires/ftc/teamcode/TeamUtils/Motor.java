@@ -28,19 +28,19 @@ public class Motor {
     }
 
     public void setMode(DcMotor.RunMode mode) {
-        this.getMotor().setMode(mode);
+        this.motor.setMode(mode);
     }
     public void setPower(double power) {
-        this.getMotor().setPower(power);
+        this.motor.setPower(power);
     }
     public void setTargetPosition(int target) {
-        this.getMotor().setTargetPosition(target);
+        this.motor.setTargetPosition(target);
     }
     public int getTargetPosition() {
-        return this.getMotor().getTargetPosition();
+        return this.motor.getTargetPosition();
     }
-    public int getCurrentPosition() { return this.getMotor().getCurrentPosition(); }
+    public int getCurrentPosition() { return this.motor.getCurrentPosition(); }
     public boolean isBusy() {
-        return this.getMotor().isBusy();
+        return this.motor.isBusy();
     }
 }
