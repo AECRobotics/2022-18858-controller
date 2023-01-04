@@ -73,6 +73,9 @@ public class backupIterativeAutonomous extends OpMode {
         telemetry.addLine(drive.getTask().getTaskType().name());
         telemetry.addLine(drive.isTaskComplete() + "");
         telemetry.addLine(drive.getTask().getState() + "");
+        telemetry.addLine(drive.allMotorsReachedTarget() + "");
+        telemetry.addLine(drive.allMotorsNotBusy() + "");
+        telemetry.addLine(drive.getFr().getCurrentPosition() + ", " + drive.getFr().getTargetPosition());
         if(drive.isTaskComplete() && coneState != null) {
             HashMap<String, Double> parameters = new HashMap<String, Double>();
             switch(drive.getTaskCount()) {
