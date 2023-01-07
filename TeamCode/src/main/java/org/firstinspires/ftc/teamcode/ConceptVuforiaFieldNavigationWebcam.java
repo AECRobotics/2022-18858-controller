@@ -77,7 +77,7 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.VuforiaConstants;
  */
 
 @TeleOp(name="Vuforia Field Nav Webcam", group ="Concept")
-//@Disabled
+@Disabled
 public class ConceptVuforiaFieldNavigationWebcam extends LinearOpMode {
 
     /*

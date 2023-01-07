@@ -100,11 +100,12 @@ public class backupIterativeAutonomous extends OpMode {
         return ConeStateFinder.getConeState(webcam);
     }
 
-    public void motorSpeed(double speed){
-        leftBackDrive.setPower(speed);
-        leftFrontDrive.setPower(speed);
-        rightBackDrive.setPower(speed);
-        rightFrontDrive.setPower(speed);
+    @Override
+    public void stop(){
+        leftBackDrive.setPower(0.0);
+        leftFrontDrive.setPower(0.0);
+        rightBackDrive.setPower(0.0);
+        rightFrontDrive.setPower(0.0);
         webcam.closeCamera();
     }
 }
