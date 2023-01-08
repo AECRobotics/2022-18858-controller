@@ -80,6 +80,7 @@ public class servoCheck extends OpMode{
         telemetry.addData("thing",String.format("left: %.2f, right: %.2f", position1, position2));
         telemetry.addData("motor pos:", spoolMotor.getCurrentPosition());
         telemetry.addData("left", leftClaw.getPosition());
+        telemetry.addLine("right: " + rightClaw.getPosition());
     }
 
     public void stop(){

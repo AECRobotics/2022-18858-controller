@@ -88,10 +88,10 @@ public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
             leftFrontDrive.setPower(-1);
             rightBackDrive.setPower(1);
             rightFrontDrive.setPower(-1);
-        }else if (runtime.seconds() <= 2.5){
+        /*}else if (runtime.seconds() <= 2.5){
             leftClaw.setPosition(1.0);
             rightClaw.setPosition(0.45);
-        }else if (runtime.seconds() <= 4.0) { //strafe back
+        */}else if (runtime.seconds() <= 4.0) { //strafe back
             leftBackDrive.setPower(-1);
             leftFrontDrive.setPower(1);
             rightBackDrive.setPower(-1);

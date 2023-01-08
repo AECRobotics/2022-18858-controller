@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
+
 
 @TeleOp(name="All Function Teleop", group="Robot")
 public class fullyFunctionalTeleop extends OpMode{
@@ -90,11 +92,11 @@ public class fullyFunctionalTeleop extends OpMode{
             clawOpen = false;
         }
         if(clawOpen) { //need to configure new servo
-            leftClaw.setPosition(1.0);
-            rightClaw.setPosition(0.45);
+            leftClaw.setPosition(ClawPositions.leftServoOpen);
+            rightClaw.setPosition(ClawPositions.rightServoOpen);
         } else {
-            leftClaw.setPosition(1.0);
-            rightClaw.setPosition(0.28);
+            leftClaw.setPosition(ClawPositions.leftServoClosed);
+            rightClaw.setPosition(ClawPositions.rightServoClosed);
         }
        if(gamepad1.a){
             //bottom
@@ -153,8 +155,8 @@ public class fullyFunctionalTeleop extends OpMode{
         }
         leftFrontDrive.setPower(lfPow);
         leftBackDrive.setPower(lbPow);
-        rightFrontDrive.setPower(rfPow);
-        rightBackDrive.setPower(rbPow);
+        rightFrontDrive.setPower(-rfPow);
+        rightBackDrive.setPower(-rbPow);
         telemetry.addLine("Left Bumper to open claw, Right Bumper to close");
         telemetry.addLine("Dpad controls: up-adjust target pos inc, down-adjust target pos dec");
         telemetry.addLine("left-nothing, right-makes the arm go to position set at half speed");
