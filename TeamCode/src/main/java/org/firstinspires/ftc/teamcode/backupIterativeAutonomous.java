@@ -19,10 +19,6 @@ import java.util.HashMap;
 
 @Autonomous(name="Backup cone finder autonomous", group="Robot")
 public class backupIterativeAutonomous extends OpMode {
-    public DcMotor leftBackDrive = null;
-    public DcMotor rightBackDrive = null;
-    public DcMotor leftFrontDrive = null;
-    public DcMotor rightFrontDrive = null;
     public CHubIMU imu = null;
     RobotWebcam webcam = null;
     myBoyDrivebase drive = null;
@@ -30,14 +26,11 @@ public class backupIterativeAutonomous extends OpMode {
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "backleft"); //1
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft"); //0
-        rightBackDrive = hardwareMap.get(DcMotor.class, "backright"); //4
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright"); //2
-        leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        DcMotor leftBackDrive = hardwareMap.get(DcMotor.class, "backleft"); //1
+        DcMotor leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft"); //0
+        DcMotor rightBackDrive = hardwareMap.get(DcMotor.class, "backright"); //4
+        DcMotor rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright"); //2
+
         webcam = new RobotWebcam(hardwareMap.get(WebcamName.class, "webcam"));
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
@@ -53,7 +46,7 @@ public class backupIterativeAutonomous extends OpMode {
         rightFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
         BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
         imu = new CHubIMU(imub);
-        drive = new myBoyDrivebase(rightFrontDrive, leftFrontDrive, rightBackDrive, leftBackDrive, imu);
+        drive = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imu);
     }
     @Override
     public void init_loop() {
@@ -73,16 +66,20 @@ public class backupIterativeAutonomous extends OpMode {
         telemetry.addLine(drive.getTask().getTaskType().name());
         telemetry.addLine(drive.isTaskComplete() + "");
         telemetry.addLine(drive.getTask().getState() + "");
+        telemetry.addLine(drive.allMotorsReachedTarget() + "");
+        telemetry.addLine(drive.allMotorsNotBusy() + "");
+        telemetry.addLine(drive.getFr().getCurrentPosition() + ", " + drive.getFr().getTargetPosition());
+        telemetry.addLine(drive.getBr().getCurrentPosition() + ", " + drive.getBr().getTargetPosition());
         if(drive.isTaskComplete() && coneState != null) {
             HashMap<String, Double> parameters = new HashMap<String, Double>();
             switch(drive.getTaskCount()) {
-                case 0:
-                    parameters.put("speed", coneState == ConeStateFinder.ConeState.LEFT ? -0.5 : 0.5);
+                /*case 0:
+                    parameters.put("speed", coneState == ConeStateFinder.ConeState.LEFT ? -0.1 : 0.1);
                     parameters.put("meters", coneState == ConeStateFinder.ConeState.MIDDLE ? 0.0 : 0.7);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_TO_POSITION, parameters));
-                    break;
-                case 1:
-                    parameters.put("speed", 0.5);
+                    break;*/
+                case 0:
+                    parameters.put("speed", 0.1);
                     parameters.put("meters", 1.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_TO_POSITION, parameters));
                     break;
@@ -93,19 +90,13 @@ public class backupIterativeAutonomous extends OpMode {
     }
 
     public ConeStateFinder.ConeState getConePosition(){
-        //0 = left most
-        //1 = middle
-        //2 = right most
         //return (int)Math.floor(r.nextDouble()*3.0);
         return ConeStateFinder.getConeState(webcam);
     }
 
     @Override
     public void stop(){
-        leftBackDrive.setPower(0.0);
-        leftFrontDrive.setPower(0.0);
-        rightBackDrive.setPower(0.0);
-        rightFrontDrive.setPower(0.0);
+        drive.setMotorPower(0.0);
         webcam.closeCamera();
     }
 }

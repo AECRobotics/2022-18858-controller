@@ -16,7 +16,7 @@ public abstract class DriveBase {
     private DriveBaseTask currentTask = new DriveBaseTask(DriveBaseTask.TaskType.PLACEHOLDER, new HashMap<String, Double>());
     private int taskCount = 0;
     private boolean taskComplete = true;
-    private DriveBaseState stateAtAssignmentOfTask;
+    public DriveBaseState stateAtAssignmentOfTask;
     //private double
 
 
@@ -51,6 +51,23 @@ public abstract class DriveBase {
 
     public abstract void doTasks();
 
+    public Wheel getFr() {
+        return this.fr;
+    }
+
+    public Wheel getFl() {
+        return this.fl;
+    }
+
+    public Wheel getBr() {
+        return this.br;
+    }
+
+    public Wheel getBl() {
+        return this.bl;
+    }
+
+
     public void setMotorModes(DcMotor.RunMode mode) {
         this.fr.setMode(mode);
         this.fl.setMode(mode);
@@ -65,25 +82,11 @@ public abstract class DriveBase {
         this.bl.setPower(power);
     }
 
-    public void setMotorTargets(int target) {
-        this.fr.setTargetPosition(target);
-        this.fl.setTargetPosition(target);
-        this.br.setTargetPosition(target);
-        this.bl.setTargetPosition(target);
-    }
-
-    public void addToMotorTargets(int ticks) {
-        this.fr.setTargetPosition(this.fr.getTargetPosition()+ticks);
-        this.fl.setTargetPosition(this.fl.getTargetPosition()+ticks);
-        this.br.setTargetPosition(this.br.getTargetPosition()+ticks);
-        this.bl.setTargetPosition(this.bl.getTargetPosition()+ticks);
-    }
-
     public void turnMotorsDistance(double distance) {
-        this.fr.setTargetPosition(this.stateAtAssignmentOfTask.frTarget+this.fr.convertMToEncoderTicks(distance));
-        this.fl.setTargetPosition(this.stateAtAssignmentOfTask.flTarget+this.fl.convertMToEncoderTicks(distance));
-        this.br.setTargetPosition(this.stateAtAssignmentOfTask.brTarget+this.br.convertMToEncoderTicks(distance));
-        this.bl.setTargetPosition(this.stateAtAssignmentOfTask.blTarget+this.bl.convertMToEncoderTicks(distance));
+        this.fr.turnWheelDistance(distance);
+        this.fl.turnWheelDistance(distance);
+        this.br.turnWheelDistance(distance);
+        this.bl.turnWheelDistance(distance);
     }
 
     public boolean anyMotorBusy() {

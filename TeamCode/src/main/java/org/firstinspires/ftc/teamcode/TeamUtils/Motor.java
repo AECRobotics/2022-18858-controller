@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeamUtils;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Motor {
     private final DcMotor motor;
@@ -13,6 +14,11 @@ public class Motor {
         this.ticksPerRawRev = ticksPerRawRev;
         this.maximumBacklash = maximumBacklash;
         this.ticksPerRev = this.ticksPerRawRev * this.gearRatio;
+        this.motor.setTargetPosition(0);
+    }
+
+    public void setDirection(DcMotor.Direction direction) {
+        this.motor.setDirection(direction);
     }
 
     public DcMotor getMotor() {
@@ -28,19 +34,19 @@ public class Motor {
     }
 
     public void setMode(DcMotor.RunMode mode) {
-        this.getMotor().setMode(mode);
+        this.motor.setMode(mode);
     }
     public void setPower(double power) {
-        this.getMotor().setPower(power);
+        this.motor.setPower(power);
     }
     public void setTargetPosition(int target) {
-        this.getMotor().setTargetPosition(target);
+        this.motor.setTargetPosition(target);
     }
     public int getTargetPosition() {
-        return this.getMotor().getTargetPosition();
+        return this.motor.getTargetPosition();
     }
-    public int getCurrentPosition() { return this.getMotor().getCurrentPosition(); }
+    public int getCurrentPosition() { return this.motor.getCurrentPosition(); }
     public boolean isBusy() {
-        return this.getMotor().isBusy();
+        return this.motor.isBusy();
     }
 }
