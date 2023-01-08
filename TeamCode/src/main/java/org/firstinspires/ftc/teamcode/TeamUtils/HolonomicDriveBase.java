@@ -16,8 +16,8 @@ public class HolonomicDriveBase extends DriveBase {
         this.telemetry = telemetry;
     }
 
-    public void drive(double speed, double angle, double turn) {
-        double powabr = (Math.sin(angle+(Math.PI/4.0))*speed);
+    public void drive(double forward, double strafe, double turn) {
+        /*double powabr = (Math.sin(angle+(Math.PI/4.0))*speed);
         double powabl = (Math.sin(angle-(Math.PI/4.0))*speed);
         double divisor = Math.max(Math.abs(powabr+turn), Math.abs(powabl+turn));
         divisor = Math.max(divisor, 1.0);
@@ -34,7 +34,24 @@ public class HolonomicDriveBase extends DriveBase {
         this.bl.getMotor().setPower(powabl-turn);
 
         this.fl.getMotor().setPower(-(powabr+turn));
-        this.br.getMotor().setPower(-(powabr-turn));
+        this.br.getMotor().setPower(-(powabr-turn));*/
+
+        double lbPow = forward + strafe + turn;
+        double rbPow = forward + strafe - turn;
+        double lfPow = forward - strafe + turn;
+        double rfPow = forward - strafe - turn;
+        double divisor = Math.max(Math.max(lfPow, lbPow), Math.max(rfPow, rbPow));
+        if(divisor > 0.5)
+        {
+            lbPow/=divisor;
+            rbPow/=divisor;
+            lfPow/=divisor;
+            rfPow/=divisor;
+        }
+        this.bl.setPower(lfPow);
+        this.br.setPower(rbPow);
+        this.fl.setPower(lfPow);
+        this.fr.setPower(rfPow);
     }
 
     @Override
@@ -68,8 +85,14 @@ public class HolonomicDriveBase extends DriveBase {
     public void forward() {
         double distanceInMeters = this.getTask().getParameters().get("meters");
         double power = this.getTask().getParameters().get("speed");
-        this.setMotorPower(power);
-        this.turnMotorsDistance(distanceInMeters);
+        this.fl.setPower(power);
+        this.bl.setPower(power);
+        this.fr.setPower(power);
+        this.br.setPower(power);
+        this.fl.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
+        this.bl.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
+        this.fr.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
+        this.br.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
     }
 
     public void strafe() {

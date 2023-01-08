@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeamUtils;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Motor {
     private final DcMotor motor;
@@ -13,6 +14,11 @@ public class Motor {
         this.ticksPerRawRev = ticksPerRawRev;
         this.maximumBacklash = maximumBacklash;
         this.ticksPerRev = this.ticksPerRawRev * this.gearRatio;
+        this.motor.setTargetPosition(0);
+    }
+
+    public void setDirection(DcMotor.Direction direction) {
+        this.motor.setDirection(direction);
     }
 
     public DcMotor getMotor() {

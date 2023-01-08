@@ -16,7 +16,7 @@ public abstract class DriveBase {
     private DriveBaseTask currentTask = new DriveBaseTask(DriveBaseTask.TaskType.PLACEHOLDER, new HashMap<String, Double>());
     private int taskCount = 0;
     private boolean taskComplete = true;
-    private DriveBaseState stateAtAssignmentOfTask;
+    public DriveBaseState stateAtAssignmentOfTask;
     //private double
 
 

@@ -12,6 +12,14 @@ public class Wheel extends Motor {
         this.circumference = 2*Math.PI*radius;
     }
 
+    public double getRadius() {
+        return this.radius;
+    }
+
+    public double getCircumference() {
+        return this.circumference;
+    }
+
     public int convertMToEncoderTicks(double dist) {
         return this.convertMMToEncoderTicks(dist*1000);
     }
@@ -33,6 +41,10 @@ public class Wheel extends Motor {
     }
 
     public void turnWheelDistance(double distance, int from) {
-        this.setTargetPosition(from+convertMToEncoderTicks(distance));
+        this.turnWheelTicks(convertMToEncoderTicks(distance), from);
+    }
+
+    public void turnWheelTicks(int ticks, int from) {
+        this.setTargetPosition(from+ticks);
     }
 }

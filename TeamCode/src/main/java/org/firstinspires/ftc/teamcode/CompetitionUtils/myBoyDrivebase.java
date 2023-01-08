@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.CompetitionUtils;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
 import org.firstinspires.ftc.teamcode.TeamUtils.HolonomicDriveBase;
@@ -17,5 +18,9 @@ public class myBoyDrivebase extends HolonomicDriveBase {
                 new Wheel(fl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.0),
                 new Wheel(bl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.0),
         imu);
+        this.getBl().setDirection(DcMotorSimple.Direction.FORWARD);
+        this.getFl().setDirection(DcMotorSimple.Direction.FORWARD);
+        this.getBr().setDirection(DcMotorSimple.Direction.FORWARD);
+        this.getFr().setDirection(DcMotorSimple.Direction.REVERSE);
     }
 }
