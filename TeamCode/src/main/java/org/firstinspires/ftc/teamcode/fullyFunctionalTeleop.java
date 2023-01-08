@@ -19,7 +19,7 @@ public class fullyFunctionalTeleop extends OpMode{
 
     boolean clawOpen = false;
     static final double COUNTS_PER_MOTOR_REV = 1680.0;
-    static final double SPOOL_GEAR_REDUCTION = 1/60;
+    static final double SPOOL_GEAR_REDUCTION = 1.0/60.0;
     static final double SPOOL_DIAMETER = 23.0; //mm
     static final double SPOOL_CIRCUMFERENCE = 2 * Math.PI * (SPOOL_DIAMETER/2);
     static final double COUNTS_PER_MM = (COUNTS_PER_MOTOR_REV * SPOOL_GEAR_REDUCTION)/(SPOOL_DIAMETER * Math.PI); //HOW MUCH MM PER TICK
@@ -99,22 +99,22 @@ public class fullyFunctionalTeleop extends OpMode{
        if(gamepad1.a){
             //bottom
            spoolTarget = 0; //mm
-           spoolMotor.setTargetPosition((int) mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
+           spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
         }
         if(gamepad1.b){ //add condition to check for height
             // low
             spoolTarget = 470; //mm
-            spoolMotor.setTargetPosition((int) mmtoTicks(spoolTarget + 20)); //sets new target pos to height (mm) in ticks
+            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget + 20)); //sets new target pos to height (mm) in ticks
         }
         if(gamepad1.x){
             //medium
             spoolTarget = 725; //mm
-            spoolMotor.setTargetPosition((int) mmtoTicks(spoolTarget + 20)); //sets new target pos to height (mm) in ticks
+            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget + 20)); //sets new target pos to height (mm) in ticks
         }
         if(gamepad1.y){
             //high
             spoolTarget = 980; //mm
-            spoolMotor.setTargetPosition((int) mmtoTicks(spoolTarget + 20)); //sets new target pos to height (mm) in ticks
+            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget + 20)); //sets new target pos to height (mm) in ticks
         }
         /*
 
