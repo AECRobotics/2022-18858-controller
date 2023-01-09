@@ -154,14 +154,20 @@ public class fullyFunctionalTeleop extends OpMode{
          */
         if(gamepad1.dpad_up) {
             spoolMotor.setTargetPosition(spoolMotor.getTargetPosition() + 1);
-        }
-        if(gamepad1.dpad_down) {
-            spoolMotor.setTargetPosition(spoolMotor.getTargetPosition() - 1);
-        }
-        if (gamepad1.dpad_right && spoolMotor.getTargetPosition()<=maxHeight){
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             spoolMotor.setPower(0.5);
         }
+        if(gamepad1.dpad_down) {
+            spoolMotor.setTargetPosition(spoolMotor.getTargetPosition() - 1);
+            spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            spoolMotor.setPower(0.5);
+        }
+        /*if (gamepad1.dpad_right && spoolMotor.getTargetPosition()<=maxHeight){
+            spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            spoolMotor.setPower(0.5);
+        }
+
+         */
 
         leftFrontDrive.setPower(lfPow);
         leftBackDrive.setPower(lbPow);
