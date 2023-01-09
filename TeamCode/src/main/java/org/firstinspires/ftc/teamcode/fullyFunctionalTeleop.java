@@ -52,7 +52,7 @@ public class fullyFunctionalTeleop extends OpMode{
         leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        spoolMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        spoolMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spoolMotor.setTargetPosition(0);
@@ -109,7 +109,7 @@ public class fullyFunctionalTeleop extends OpMode{
         if(gamepad1.b){
             // low
             spoolTarget = 470; //mm
-            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
+            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget + 20)); //sets new target pos to height (mm) in ticks
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             spoolMotor.setPower(0.5);
         }
