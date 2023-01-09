@@ -66,6 +66,7 @@ public class fullyFunctionalTeleop extends OpMode{
     }
     @Override
     public void start(){
+        spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     @Override
