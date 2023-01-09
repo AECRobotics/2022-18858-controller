@@ -67,9 +67,11 @@ public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
 
+
     }
     @Override
     public void init_loop(){
+
     }
     @Override
     public void start(){

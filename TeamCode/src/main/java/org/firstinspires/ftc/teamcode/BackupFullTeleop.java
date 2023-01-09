@@ -64,11 +64,12 @@ public class BackupFullTeleop extends OpMode{
 
     @Override
     public void init() {
+        //values here are supposed to be millimeters but are not actually consistent with reality because me bad at math
         armPositionHeights.put(ArmPosition.GROUND, 0.0);
         armPositionHeights.put(ArmPosition.HOLDING, 100.0);
-        armPositionHeights.put(ArmPosition.LOW, 360.0); //low junction is at 343 mm
-        armPositionHeights.put(ArmPosition.MIDDLE, 610.0); //middle junction is at 597 mm
-        armPositionHeights.put(ArmPosition.HIGH, 860.0); // high junction is at 851 mm
+        armPositionHeights.put(ArmPosition.LOW, 370.0); //low junction is at 343 mm
+        armPositionHeights.put(ArmPosition.MIDDLE, 625.0); //middle junction is at 597 mm
+        armPositionHeights.put(ArmPosition.HIGH, 880.0); // high junction is at 851 mm
         DcMotor leftBackDrive = hardwareMap.get(DcMotor.class, "backleft"); //1
         DcMotor leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft"); //0
         DcMotor rightBackDrive = hardwareMap.get(DcMotor.class, "backright"); //4
@@ -112,9 +113,9 @@ public class BackupFullTeleop extends OpMode{
 
     @Override
     public void loop(){
-        double forward = gamepad1.left_stick_y;
-        double turn  =  -gamepad1.right_stick_x;
-        double strafe = -gamepad1.left_stick_x;
+        double forward = -gamepad1.left_stick_y;
+        double turn  =    gamepad1.right_stick_x;
+        double strafe =   gamepad1.left_stick_x;
         drive.drive(forward, strafe, turn);
 
         if(gamepad1.a) {

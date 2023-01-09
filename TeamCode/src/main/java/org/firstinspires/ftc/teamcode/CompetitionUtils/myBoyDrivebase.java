@@ -18,9 +18,9 @@ public class myBoyDrivebase extends HolonomicDriveBase {
                 new Wheel(fl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.0),
                 new Wheel(bl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.0),
         imu);
-        this.getBl().setDirection(DcMotorSimple.Direction.FORWARD);
-        this.getFl().setDirection(DcMotorSimple.Direction.FORWARD);
-        this.getBr().setDirection(DcMotorSimple.Direction.REVERSE);
-        this.getFr().setDirection(DcMotorSimple.Direction.FORWARD);
+        this.getBl().setDirection(DcMotorSimple.Direction.REVERSE);
+        this.getFl().setDirection(DcMotorSimple.Direction.REVERSE);
+        this.getBr().setDirection(DcMotorSimple.Direction.FORWARD);
+        this.getFr().setDirection(DcMotorSimple.Direction.REVERSE);
     }
 }

@@ -90,9 +90,9 @@ public class HolonomicDriveBase extends DriveBase {
         this.fr.setPower(power);
         this.br.setPower(power);
         this.fl.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
-        this.bl.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
-        this.fr.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
-        this.br.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
+        this.bl.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.blTarget);
+        this.fr.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.frTarget);
+        this.br.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.brTarget);
     }
 
     public void strafe() {
@@ -102,10 +102,10 @@ public class HolonomicDriveBase extends DriveBase {
         this.br.setPower(power);
         this.fr.setPower(power);
         this.bl.setPower(power);
-        this.fl.turnWheelDistance(distanceInMeters);
-        this.br.turnWheelDistance(distanceInMeters);
-        this.fr.turnWheelDistance(-distanceInMeters);
-        this.bl.turnWheelDistance(-distanceInMeters);
+        this.fl.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
+        this.br.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.blTarget);
+        this.fr.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.frTarget);
+        this.bl.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.brTarget);
     }
 
     private void startTask() {
