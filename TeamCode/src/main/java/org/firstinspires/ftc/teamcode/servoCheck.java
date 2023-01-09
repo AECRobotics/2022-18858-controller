@@ -53,7 +53,6 @@ public class servoCheck extends OpMode{
         if(gamepad1.b && !lastGamepadB) {
             rightClaw.setPosition(position2);
         }
-
          */
 
         lastGamepadA = gamepad1.a;
@@ -65,7 +64,7 @@ public class servoCheck extends OpMode{
 
         spoolPosition = spoolMotor.getCurrentPosition();
         //telemetry.addData("thing",String.format("left: %.2f, right: %.2f", position1, position2));
-        telemetry.addData("motor pos:", spoolMotor.getCurrentPosition());
+        //telemetry.addData("motor pos:", spoolMotor.getCurrentPosition());
         //telemetry.addData("left", leftClaw.getPosition());
     }
 
