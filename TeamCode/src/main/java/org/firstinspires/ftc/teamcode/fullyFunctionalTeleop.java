@@ -66,7 +66,6 @@ public class fullyFunctionalTeleop extends OpMode{
     }
     @Override
     public void start(){
-        spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     @Override
@@ -93,7 +92,7 @@ public class fullyFunctionalTeleop extends OpMode{
         } else if(gamepad1.right_bumper) {
             clawOpen = false;
         }
-        if(clawOpen) { //need to configure new servo
+        if(clawOpen) {
             leftClaw.setPosition(ClawPositions.leftServoOpen);
             rightClaw.setPosition(ClawPositions.rightServoOpen);
         } else {
@@ -104,21 +103,29 @@ public class fullyFunctionalTeleop extends OpMode{
             //bottom
            spoolTarget = 0; //mm
            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
+           spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+           spoolMotor.setPower(0.5);
         }
-        if(gamepad1.b){ //add condition to check for height
+        if(gamepad1.b){
             // low
             spoolTarget = 470; //mm
             spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
+            spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            spoolMotor.setPower(0.5);
         }
         if(gamepad1.x){
             //medium
             spoolTarget = 725; //mm
             spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget + 20)); //sets new target pos to height (mm) in ticks
+            spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            spoolMotor.setPower(0.5);
         }
         if(gamepad1.y){
             //high
             spoolTarget = 980; //mm
             spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget + 20)); //sets new target pos to height (mm) in ticks
+            spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            spoolMotor.setPower(0.5);
         }
         /*
 
@@ -151,18 +158,18 @@ public class fullyFunctionalTeleop extends OpMode{
         if(gamepad1.dpad_down) {
             spoolMotor.setTargetPosition(spoolMotor.getTargetPosition() - 1);
         }
-/*        if (gamepad1.dpad_right && spoolMotor.getTargetPosition()<=maxHeight){
+        if (gamepad1.dpad_right && spoolMotor.getTargetPosition()<=maxHeight){
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             spoolMotor.setPower(0.5);
         }
 
- */
         leftFrontDrive.setPower(lfPow);
         leftBackDrive.setPower(lbPow);
         rightFrontDrive.setPower(-rfPow);
         rightBackDrive.setPower(-rbPow);
         telemetry.addLine("Left Bumper to open claw, Right Bumper to close");
         telemetry.addLine("Dpad controls: up-adjust target pos inc, down-adjust target pos dec");
+        telemetry.addData("target:",spoolMotor.getTargetPosition());
         //telemetry.addLine("left-nothing, right-makes the arm go to position set at half speed");
     }
     @Override
