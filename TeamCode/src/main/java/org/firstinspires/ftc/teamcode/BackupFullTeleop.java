@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.myBoyDrivebase;
 import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
 import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
@@ -28,6 +29,7 @@ public class BackupFullTeleop extends OpMode{
 
     enum ArmPosition {
         GROUND,
+        HOLDING,
         LOW,
         MIDDLE,
         HIGH
@@ -38,10 +40,12 @@ public class BackupFullTeleop extends OpMode{
             case 1:
                 return ArmPosition.GROUND;
             case 2:
-                return ArmPosition.LOW;
+                return ArmPosition.HOLDING;
             case 3:
-                return ArmPosition.MIDDLE;
+                return ArmPosition.LOW;
             case 4:
+                return ArmPosition.MIDDLE;
+            case 5:
                 return ArmPosition.HIGH;
             default:
                 return ArmPosition.GROUND;
@@ -52,7 +56,6 @@ public class BackupFullTeleop extends OpMode{
 
     boolean clawOpen = false;
     int spoolLevel = 1;
-    double spoolPosition;
 
     boolean isLastGamepadDpadRight = false;
     boolean lastGamepadDpadLeft = false;
@@ -62,9 +65,10 @@ public class BackupFullTeleop extends OpMode{
     @Override
     public void init() {
         armPositionHeights.put(ArmPosition.GROUND, 0.0);
-        armPositionHeights.put(ArmPosition.LOW, 200.0);
-        armPositionHeights.put(ArmPosition.MIDDLE, 400.0);
-        armPositionHeights.put(ArmPosition.HIGH, 600.0);
+        armPositionHeights.put(ArmPosition.HOLDING, 100.0);
+        armPositionHeights.put(ArmPosition.LOW, 360.0); //low junction is at 343 mm
+        armPositionHeights.put(ArmPosition.MIDDLE, 610.0); //middle junction is at 597 mm
+        armPositionHeights.put(ArmPosition.HIGH, 860.0); // high junction is at 851 mm
         DcMotor leftBackDrive = hardwareMap.get(DcMotor.class, "backleft"); //1
         DcMotor leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft"); //0
         DcMotor rightBackDrive = hardwareMap.get(DcMotor.class, "backright"); //4
@@ -82,18 +86,14 @@ public class BackupFullTeleop extends OpMode{
         BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
         imu = new CHubIMU(imub);
         drive = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imu);
-        spoolMotor = new Spool(hardwareMap.get(DcMotor.class, "spoolmotor"), 11.5, 60.0, 28.0, 0.0, 23.0, 50.0, 15.0, 0.907);
+        spoolMotor = new Spool(hardwareMap.get(DcMotor.class, "spoolmotor"), 60.0, 28.0, 0.0, 23.0, 15.0, 0.907, 1.5);
         rightClaw = hardwareMap.get(Servo.class, "rightclaw");
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
-        leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        spoolMotor.setTargetPosition(0);
+        spoolMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        spoolMotor.setPower(0.3);
         //spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
@@ -106,7 +106,7 @@ public class BackupFullTeleop extends OpMode{
     }
 
     public void setSpoolPosition() {
-        this.spoolMotor.setTargetPosition(this.spoolMotor.convertMMToEncoderPosition(
+        spoolMotor.setTargetPosition(this.spoolMotor.convertMMToEncoderPosition(
                 armPositionHeights.get(levelToArmPos(spoolLevel))));
     }
 
@@ -123,21 +123,21 @@ public class BackupFullTeleop extends OpMode{
             clawOpen = false;
         }
         if(clawOpen) {
-            leftClaw.setPosition(1.0);
-            rightClaw.setPosition(0.45);
+            leftClaw.setPosition(ClawPositions.leftServoOpen);
+            rightClaw.setPosition(ClawPositions.rightServoOpen);
         } else {
-            leftClaw.setPosition(1.0);
-            rightClaw.setPosition(0.28);
+            leftClaw.setPosition(ClawPositions.rightServoClosed);
+            rightClaw.setPosition(ClawPositions.rightServoClosed);
         }
 
         if(gamepad1.dpad_up && !lastGamepadDpadUp) {
-            if(spoolLevel < 4) {
+            if(spoolLevel < 5) {
                 spoolLevel++;
                 setSpoolPosition();
             }
         }
         if(gamepad1.dpad_down && !lastGamepadDpadDown) {
-            if(spoolLevel > 2) {
+            if(spoolLevel > 1) {
                 spoolLevel--;
                 setSpoolPosition();
             }
@@ -151,8 +151,16 @@ public class BackupFullTeleop extends OpMode{
             setSpoolPosition();
         }
 
+        lastGamepadDpadDown = gamepad1.dpad_down;
+        lastGamepadDpadUp = gamepad1.dpad_up;
+        lastGamepadDpadLeft = gamepad1.dpad_left;
+        isLastGamepadDpadRight = gamepad1.dpad_right;
+
         telemetry.addLine("A to open claw, B to close");
         telemetry.addLine("Dpad up and down to bring arm up and down");
+        telemetry.addLine("Arm Position: " + levelToArmPos(spoolLevel).name());
+        telemetry.addLine(""+spoolMotor.getTargetPosition());
+        telemetry.addLine(""+this.spoolMotor.convertMMToEncoderPosition(100.0));
     }
     @Override
     public void stop(){

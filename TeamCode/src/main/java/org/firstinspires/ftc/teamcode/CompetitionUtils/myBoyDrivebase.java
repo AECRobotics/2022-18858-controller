@@ -20,7 +20,7 @@ public class myBoyDrivebase extends HolonomicDriveBase {
         imu);
         this.getBl().setDirection(DcMotorSimple.Direction.FORWARD);
         this.getFl().setDirection(DcMotorSimple.Direction.FORWARD);
-        this.getBr().setDirection(DcMotorSimple.Direction.FORWARD);
-        this.getFr().setDirection(DcMotorSimple.Direction.REVERSE);
+        this.getBr().setDirection(DcMotorSimple.Direction.REVERSE);
+        this.getFr().setDirection(DcMotorSimple.Direction.FORWARD);
     }
 }

@@ -9,10 +9,15 @@ public class Spool extends Motor {
     private double packingFactor;
     private double threadDiameter;
 
-    public Spool(DcMotor motor, double gearRatio, double ticksPerRawRev, double maximumBacklash, double spoolInnerRadius, double spoolOuterRadius, double spoolInnerWidth, double packingFactor, double threadDiameter) {
+    public Spool(DcMotor motor, double gearRatio, double ticksPerRawRev, double maximumBacklash, double spoolInnerRadius, double spoolInnerWidth, double packingFactor, double threadDiameter) {
         super(motor, gearRatio, ticksPerRawRev, maximumBacklash);
+        motor.setTargetPosition(0);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.spoolInnerRadius = spoolInnerRadius;
+        this.spoolInnerWidth = spoolInnerWidth;
+        this.packingFactor = packingFactor;
+        this.threadDiameter = threadDiameter;
     }
 
     public int convertMMToEncoderPosition(double dist) {

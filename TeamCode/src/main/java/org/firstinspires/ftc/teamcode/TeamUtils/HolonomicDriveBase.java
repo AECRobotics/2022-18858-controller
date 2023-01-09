@@ -48,7 +48,7 @@ public class HolonomicDriveBase extends DriveBase {
             lfPow/=divisor;
             rfPow/=divisor;
         }
-        this.bl.setPower(lfPow);
+        this.bl.setPower(lbPow);
         this.br.setPower(rbPow);
         this.fl.setPower(lfPow);
         this.fr.setPower(rfPow);
@@ -91,8 +91,8 @@ public class HolonomicDriveBase extends DriveBase {
         this.br.setPower(power);
         this.fl.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
         this.bl.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
-        this.fr.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
-        this.br.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
+        this.fr.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
+        this.br.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
     }
 
     public void strafe() {
