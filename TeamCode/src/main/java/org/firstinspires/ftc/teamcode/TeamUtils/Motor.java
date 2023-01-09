@@ -15,6 +15,8 @@ public class Motor {
         this.maximumBacklash = maximumBacklash;
         this.ticksPerRev = this.ticksPerRawRev * this.gearRatio;
         this.motor.setTargetPosition(0);
+        this.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void setDirection(DcMotor.Direction direction) {
