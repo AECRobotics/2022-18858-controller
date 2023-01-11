@@ -14,7 +14,7 @@ public class servoCheck extends OpMode{
     double position2 = 0.0;
     double spoolPosition;
 
-    boolean isLastGamepadDpadRight = false;
+    boolean lastGamepadDpadRight = false;
     boolean lastGamepadDpadLeft = false;
     boolean lastGamepadA = false;
     boolean lastGamepadY = false;
@@ -35,7 +35,7 @@ public class servoCheck extends OpMode{
 
     }
     public void loop(){
-        if(gamepad1.dpad_right && !isLastGamepadDpadRight) {
+        /*if(gamepad1.dpad_right && !isLastGamepadDpadRight) {
             spoolMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         if(gamepad1.dpad_left && !lastGamepadDpadLeft) {
@@ -46,26 +46,41 @@ public class servoCheck extends OpMode{
         }
         if(gamepad1.dpad_down && !lastGamepadDpadDown) {
             spoolMotor.setPower(-0.5);
+        }*/
+        if(gamepad1.dpad_left && !lastGamepadDpadLeft) {
+            position1-=0.01;
         }
-        /*if(gamepad1.x && !lastGamepadX) {
+        if(gamepad1.dpad_up && !lastGamepadDpadUp) {
+            position2+=0.01;
+        }
+        if(gamepad1.dpad_down && !lastGamepadDpadDown) {
+            position2-=0.01;
+        }
+        if(gamepad1.dpad_right && !lastGamepadDpadRight) {
+            position1+=0.01;
+        }
+        if(gamepad1.x && !lastGamepadX) {
             leftClaw.setPosition(position1);
         }
         if(gamepad1.b && !lastGamepadB) {
             rightClaw.setPosition(position2);
         }
-         */
+
 
         lastGamepadA = gamepad1.a;
         lastGamepadY = gamepad1.y;
+        lastGamepadDpadRight = gamepad1.dpad_right;
+        lastGamepadDpadLeft = gamepad1.dpad_left;
         lastGamepadDpadUp = gamepad1.dpad_up;
         lastGamepadDpadDown = gamepad1.dpad_down;
         lastGamepadX = gamepad1.x;
         lastGamepadB = gamepad1.b;
 
         spoolPosition = spoolMotor.getCurrentPosition();
-        //telemetry.addData("thing",String.format("left: %.2f, right: %.2f", position1, position2));
-        //telemetry.addData("motor pos:", spoolMotor.getCurrentPosition());
-        //telemetry.addData("left", leftClaw.getPosition());
+        telemetry.addData("thing",String.format("left: %.2f, right: %.2f", position1, position2));
+        telemetry.addData("motor pos:", spoolMotor.getCurrentPosition());
+        telemetry.addData("left", leftClaw.getPosition());
+        telemetry.addLine("right: " + rightClaw.getPosition());
     }
 
     public void stop(){

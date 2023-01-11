@@ -32,7 +32,7 @@ public class motorTestingTeleop extends OpMode{
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spoolMotor.setTargetPosition(0);
@@ -58,6 +58,9 @@ public class motorTestingTeleop extends OpMode{
 
     Motors curMotor = Motors.LF;
 
+    public boolean testingPower = false;
+    public boolean testingTarget = false;
+    public boolean hasRun = false;
     @Override
     public void loop(){
 
@@ -73,26 +76,46 @@ public class motorTestingTeleop extends OpMode{
         if(gamepad1.y) {
             curMotor = Motors.RB;
         }
+        if(gamepad1.dpad_up) {
+            testingTarget = false;
+        }
+        if(gamepad1.dpad_down && !testingTarget) {
+            testingTarget = true;
+            hasRun = false;
+        }
         double power = gamepad1.left_stick_y;
         telemetry.addLine("power: " + power);
         telemetry.addLine("testing motor: " + curMotor.name());
-        switch(curMotor) {
-            case LB:
-                leftBackDrive.setPower(1.0);
-                break;
-            case LF:
-                leftFrontDrive.setPower(1.0);
-                break;
-            case RB:
-                rightBackDrive.setPower(1.0);
-                break;
-            case RF:
-                rightFrontDrive.setPower(1.0);
-                break;
-            default:
-                break;
+        telemetry.addLine("current position" + getCurMotor().getCurrentPosition());
+        telemetry.addLine("target position" + getCurMotor().getTargetPosition());
+        if(testingPower) {
+            if(!hasRun) {
+                getCurMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                hasRun = true;
+            }
+            getCurMotor().setPower(power);
+        } else if(testingTarget && !hasRun) {
+            getCurMotor().setTargetPosition(1000);
+            getCurMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            getCurMotor().setPower(0.1);
+            hasRun = true;
         }
+        spoolMotor.setPower(gamepad1.left_stick_y);
 
+    }
+
+    public DcMotor getCurMotor() {
+        switch (curMotor) {
+            case LB:
+                return leftBackDrive;
+            case LF:
+                return leftFrontDrive;
+            case RB:
+                return rightBackDrive;
+            case RF:
+                return rightFrontDrive;
+        }
+        return null;
     }
     @Override
     public void stop(){
