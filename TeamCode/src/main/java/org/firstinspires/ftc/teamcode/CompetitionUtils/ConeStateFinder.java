@@ -19,18 +19,18 @@ public class ConeStateFinder {
         RIGHT
     }
 
-    private static double checkAreaWidth = 0.5;
-    private static double checkAreaHeight = 0.5;
+    //private static double checkAreaWidth = 0.5;
+    //private static double checkAreaHeight = 0.5;
     @ColorInt
     private static int s1Color = 0xff65a7bd; //printed #65a7bd real #42f5ef 0xff42f5ef left
     @ColorInt
-    private static int s2Color = 0xff5c8158; //printed #5c8158 real #90f542 0xff90f542 middle
+    private static int s2Color = 0xffacc573; //printed #5c8158 real #90f542 0xff90f542 middle
     @ColorInt
-    private static int s3Color = 0xff8c537c; //printed #8c537c real #f542bf 0xfff542bf right
+    private static int s3Color = 0xffbf5c7e; //printed #8c537c real #f542bf 0xfff542bf right
 
-    private static double colorDistSimilarityThreshold = 10.0*10.0;
-    private static double colorDotProdSimilaryThreshold = 0.01;
-    private static double colorMagnitudeSimilarityThreshold = 20*20;
+    private static double colorDistSimilarityThreshold = 23.0*23.0;
+    private static double colorDotProdSimilaryThreshold = 0.98;
+    private static double colorMagnitudeSimilarityThreshold = 7.0*7.0;
 
     public static String debugOutput = "";
 
@@ -95,7 +95,7 @@ public class ConeStateFinder {
         ArrayList<Double> nc2 = ConeStateFinder.normalizeColor(c2);
         //debugOutput+=("dot: " + dotProduct(nc1, nc2) + ", ");
         //debugOutput+=("mag: " + getColorMagnitude(c1) + "," + getColorMagnitude(c2) + ",");
-        boolean dotProductMatches = dotProduct(nc1, nc2) <= colorDotProdSimilaryThreshold;
+        boolean dotProductMatches = dotProduct(nc1, nc2) >= colorDotProdSimilaryThreshold;
         if(dotProductMatches) {
             if(Math.abs(getColorMagnitude(c1) - getColorMagnitude(c2)) < colorMagnitudeSimilarityThreshold) {
                 return true;
