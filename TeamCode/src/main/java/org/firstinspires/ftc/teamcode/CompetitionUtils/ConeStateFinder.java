@@ -29,8 +29,8 @@ public class ConeStateFinder {
     private static int s3Color = 0xffbf5c7e; //printed #8c537c real #f542bf 0xfff542bf right
 
     private static double colorDistSimilarityThreshold = 23.0*23.0;
-    private static double colorDotProdSimilaryThreshold = 0.98;
-    private static double colorMagnitudeSimilarityThreshold = 7.0*7.0;
+    private static double colorDotProdSimilaryThreshold = 0.99;
+    private static double colorMagnitudeSimilarityThreshold = 15.0*15.0;
 
     public static String debugOutput = "";
 
@@ -127,23 +127,23 @@ public class ConeStateFinder {
         double s1Count = 0;
         double s2Count = 0;
         double s3Count = 0;
-        HashMap<Integer, Integer> colorMatchDict = new HashMap<>();
+        //HashMap<Integer, Integer> colorMatchDict = new HashMap<>();
         for(Integer key : colorOccurences.keySet()) {
             if(matchesColor(key, s1Color)) {
-                //s1Count+=colorOccurences.get(key);
-                colorMatchDict.put(key, 1);
+                s1Count+=colorOccurences.get(key);
+                //colorMatchDict.put(key, 1);
             } else if(matchesColor(key, s2Color)) {
-                //s2Count+=colorOccurences.get(key);
-                colorMatchDict.put(key, 2);
+                s2Count+=colorOccurences.get(key);
+                //colorMatchDict.put(key, 2);
             } else if(matchesColor(key, s3Color)) {
-                //s3Count+=colorOccurences.get(key);
-                colorMatchDict.put(key, 3);
+                s3Count+=colorOccurences.get(key);
+                //colorMatchDict.put(key, 3);
             } else {
-                colorMatchDict.put(key, 0);
+                //colorMatchDict.put(key, 0);
             }
         }
 
-        for(int x = (int)(width*0.25); x < (int)(width*0.75); x++) {
+        /*for(int x = (int)(width*0.25); x < (int)(width*0.75); x++) {
             for(int y = (int)(height*0.25); y < (int)(height*0.75); y++) {
                 int c = frame.getPixel(x,y);
                 int match = colorMatchDict.get(c);
@@ -162,7 +162,7 @@ public class ConeStateFinder {
                         break;
                 }
             }
-        }
+        }*/
         debugOutput+=("left:" + Math.floor(s1Count) + " middle: " + Math.floor(s2Count) + " right: " + Math.floor(s3Count) + ", ");
         if(s1Count < s2Count) {
             if(s2Count < s3Count) {
