@@ -124,19 +124,46 @@ public class ConeStateFinder {
                 colorOccurences.put(c, colorOccurences.containsKey(c) ? colorOccurences.get(c)+1 : 1);
             }
         }
-        int s1Count = 0;
-        int s2Count = 0;
-        int s3Count = 0;
+        double s1Count = 0;
+        double s2Count = 0;
+        double s3Count = 0;
+        HashMap<Integer, Integer> colorMatchDict = new HashMap<>();
         for(Integer key : colorOccurences.keySet()) {
             if(matchesColor(key, s1Color)) {
-                s1Count+=colorOccurences.get(key);
+                //s1Count+=colorOccurences.get(key);
+                colorMatchDict.put(key, 1);
             } else if(matchesColor(key, s2Color)) {
-                s2Count+=colorOccurences.get(key);
+                //s2Count+=colorOccurences.get(key);
+                colorMatchDict.put(key, 2);
             } else if(matchesColor(key, s3Color)) {
-                s3Count+=colorOccurences.get(key);
+                //s3Count+=colorOccurences.get(key);
+                colorMatchDict.put(key, 3);
+            } else {
+                colorMatchDict.put(key, 0);
             }
         }
-        debugOutput+=("left:" + s1Count + " middle: " + s2Count + " right: " + s3Count + ", ");
+
+        for(int x = (int)(width*0.25); x < (int)(width*0.75); x++) {
+            for(int y = (int)(height*0.25); y < (int)(height*0.75); y++) {
+                int c = frame.getPixel(x,y);
+                int match = colorMatchDict.get(c);
+                int dcx = Math.abs((x-(width/2)));
+                int dcy = Math.abs((y-(height/2)));
+                double dist = ((double)(dcx+dcy))/((double)(width+height)/2);
+                switch(match) {
+                    case 1:
+                        s1Count+=dist;
+                        break;
+                    case 2:
+                        s2Count+=dist;
+                        break;
+                    case 3:
+                        s3Count+=dist;
+                        break;
+                }
+            }
+        }
+        debugOutput+=("left:" + Math.floor(s1Count) + " middle: " + Math.floor(s2Count) + " right: " + Math.floor(s3Count) + ", ");
         if(s1Count < s2Count) {
             if(s2Count < s3Count) {
                 return ConeState.RIGHT; //color 3
