@@ -28,9 +28,12 @@ public class ConeStateFinder {
     @ColorInt
     private static int s3Color = 0xffbf5c7e; //printed #8c537c real #f542bf 0xfff542bf right
 
-    private static double colorDistSimilarityThreshold = 23.0*23.0;
-    private static double colorDotProdSimilaryThreshold = 0.98;
-    private static double colorMagnitudeSimilarityThreshold = 7.0*7.0;
+    private static double colorDistSimilarityThreshold = 45.0*45.0;
+    private static double colorDotProdSimilaryThreshold = 0.99;
+    private static double colorMagnitudeSimilarityThreshold = 249.0*249.0;
+    private static double colorHueSimilarityThreshold = 21.0;
+    private static double colorSatSimilarityThreshold = 26.0;
+    private static double colorValSimilarityThreshold = 36.0;
 
     public static String debugOutput = "";
 
@@ -75,19 +78,56 @@ public class ConeStateFinder {
         return output;
     }
 
-    public static double getColorMagnitude(int c) {
+    public static double getColorMagnitudeSqrd(int c) {
         double a = (c&0xff000000)>>24;
         double r = (c&0x00ff0000)>>16;
         double g = (c&0x0000ff00)>>8;
         double b = (c&0x000000ff);
-        return Math.sqrt(a*a+r*r+g*g+b*b);
+        return a*a+r*r+g*g+b*b;
+    }
+
+    public static double[] getHSV(int c) {
+        double r = (c&0x00ff0000)>>16;
+        double g = (c&0x0000ff00)>>8;
+        double b = (c&0x000000ff);
+        r/=255;
+        g/=255;
+        b/=255;
+        double maxc = Math.max(r, Math.max(g, b));
+        double minc = Math.min(r, Math.min(g, b));
+        double v = maxc;
+        if (minc == maxc) {
+            //output.add(0,.0,0.0,v);
+            return new double[]{0.0, 0.0, v};
+        }
+        double s = (maxc-minc) / maxc;
+        double rc = (maxc-r) / (maxc-minc);
+        double gc = (maxc-g) / (maxc-minc);
+        double bc = (maxc-b) / (maxc-minc);
+        double h;
+        if (r == maxc) {
+            h = 0.0+bc-gc;
+        }
+        else if (g == maxc) {
+            h = 2.0+rc-bc;
+        }
+        else {
+            h = 4.0+gc-rc;
+        }
+        h = (h/6.0) % 1.0;
+        h*=360;
+        s*=100;
+        v*=100;
+        return new double[]{h, s, v};
     }
 
     public static boolean matchesColor(int c1, int c2) {
+        int matchCount = 0;
         boolean sqrtDistMatches = sqrdColorDistance(c1, c2) <= colorDistSimilarityThreshold;
         //debugOutput+=("dist: " + sqrdColorDistance(c1, c2) + ", ");
         if(sqrtDistMatches) {
-            return true;
+            matchCount++;
+            //return true;
         } else {
             //return false;
         }
@@ -97,9 +137,27 @@ public class ConeStateFinder {
         //debugOutput+=("mag: " + getColorMagnitude(c1) + "," + getColorMagnitude(c2) + ",");
         boolean dotProductMatches = dotProduct(nc1, nc2) >= colorDotProdSimilaryThreshold;
         if(dotProductMatches) {
-            if(Math.abs(getColorMagnitude(c1) - getColorMagnitude(c2)) < colorMagnitudeSimilarityThreshold) {
-                return true;
+            if(Math.abs(getColorMagnitudeSqrd(c1) - getColorMagnitudeSqrd(c2)) < colorMagnitudeSimilarityThreshold) {
+                matchCount++;
+                //return true;
             }
+        }
+        double[] hc1 = getHSV(c1);
+        double[] hc2 = getHSV(c2);
+        boolean hueMatches = Math.abs(hc1[0]-hc2[0]) <= colorHueSimilarityThreshold;
+        boolean satMatches = Math.abs(hc1[1]-hc2[1]) <= colorSatSimilarityThreshold;
+        boolean valMatches = Math.abs(hc1[2]-hc2[2]) <= colorValSimilarityThreshold;
+        //console.log(h1 + ", " + h2);
+        if(hueMatches) {
+            if(satMatches) {
+                if(valMatches) {
+                    matchCount++;
+                    //return true;
+                }
+            }
+        }
+        if(matchCount >= 2) {
+            return true;
         }
         return false;
     }
@@ -127,23 +185,23 @@ public class ConeStateFinder {
         double s1Count = 0;
         double s2Count = 0;
         double s3Count = 0;
-        HashMap<Integer, Integer> colorMatchDict = new HashMap<>();
+        //HashMap<Integer, Integer> colorMatchDict = new HashMap<>();
         for(Integer key : colorOccurences.keySet()) {
             if(matchesColor(key, s1Color)) {
-                //s1Count+=colorOccurences.get(key);
-                colorMatchDict.put(key, 1);
+                s1Count+=colorOccurences.get(key);
+                //colorMatchDict.put(key, 1);
             } else if(matchesColor(key, s2Color)) {
-                //s2Count+=colorOccurences.get(key);
-                colorMatchDict.put(key, 2);
+                s2Count+=colorOccurences.get(key);
+                //colorMatchDict.put(key, 2);
             } else if(matchesColor(key, s3Color)) {
-                //s3Count+=colorOccurences.get(key);
-                colorMatchDict.put(key, 3);
+                s3Count+=colorOccurences.get(key);
+                //colorMatchDict.put(key, 3);
             } else {
-                colorMatchDict.put(key, 0);
+                //colorMatchDict.put(key, 0);
             }
         }
 
-        for(int x = (int)(width*0.25); x < (int)(width*0.75); x++) {
+        /*for(int x = (int)(width*0.25); x < (int)(width*0.75); x++) {
             for(int y = (int)(height*0.25); y < (int)(height*0.75); y++) {
                 int c = frame.getPixel(x,y);
                 int match = colorMatchDict.get(c);
@@ -162,7 +220,7 @@ public class ConeStateFinder {
                         break;
                 }
             }
-        }
+        }*/
         debugOutput+=("left:" + Math.floor(s1Count) + " middle: " + Math.floor(s2Count) + " right: " + Math.floor(s3Count) + ", ");
         if(s1Count < s2Count) {
             if(s2Count < s3Count) {
