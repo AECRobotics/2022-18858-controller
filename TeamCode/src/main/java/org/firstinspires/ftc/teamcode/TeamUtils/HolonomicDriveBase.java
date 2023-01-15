@@ -103,9 +103,9 @@ public class HolonomicDriveBase extends DriveBase {
         this.fr.setPower(power);
         this.bl.setPower(power);
         this.fl.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.flTarget);
-        this.br.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.blTarget);
-        this.fr.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.frTarget);
-        this.bl.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.brTarget);
+        this.br.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.brTarget);
+        this.fr.turnWheelDistance(distanceInMeters, this.stateAtAssignmentOfTask.frTarget);
+        this.bl.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.blTarget);
     }
 
     private void startTask() {

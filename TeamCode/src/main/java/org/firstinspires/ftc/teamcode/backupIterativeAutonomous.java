@@ -63,13 +63,14 @@ public class backupIterativeAutonomous extends OpMode {
         if(coneState == null) {
             coneState = getConePosition();
         }
-        telemetry.addLine(drive.getTask().getTaskType().name());
-        telemetry.addLine(drive.isTaskComplete() + "");
-        telemetry.addLine(drive.getTask().getState() + "");
-        telemetry.addLine(drive.allMotorsReachedTarget() + "");
-        telemetry.addLine(drive.allMotorsNotBusy() + "");
-        telemetry.addLine(drive.getFr().getCurrentPosition() + ", " + drive.getFr().getTargetPosition());
-        telemetry.addLine(drive.getBr().getCurrentPosition() + ", " + drive.getBr().getTargetPosition());
+        //telemetry.addLine(ConeStateFinder.debugOutput);
+        //telemetry.addLine(drive.getTask().getTaskType().name());
+        //telemetry.addLine(drive.isTaskComplete() + "");
+        //telemetry.addLine(drive.getTask().getState() + "");
+        //telemetry.addLine(drive.allMotorsReachedTarget() + "");
+        //telemetry.addLine(drive.allMotorsNotBusy() + "");
+        //telemetry.addLine(drive.getFr().getCurrentPosition() + ", " + drive.getFr().getTargetPosition());
+        //telemetry.addLine(drive.getBr().getCurrentPosition() + ", " + drive.getBr().getTargetPosition());
         if(drive.isTaskComplete() && coneState != null) {
             HashMap<String, Double> parameters = new HashMap<String, Double>();
             switch(drive.getTaskCount()) {

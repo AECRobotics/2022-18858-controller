@@ -23,4 +23,9 @@ android {
     namespace = 'com.qualcomm.ftcrobotcontroller'
 }
 
+dependencies {
+    implementation 'org.openftc:apriltag:1.1.1'
+    implementation 'org.openftc:easyopencv:1.5.3'
+}
+
 apply from: '../build.dependencies.gradle'
