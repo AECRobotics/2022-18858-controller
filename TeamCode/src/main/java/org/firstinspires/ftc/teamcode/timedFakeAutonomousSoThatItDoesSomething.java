@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.myBoyDrivebase;
 import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
+import org.firstinspires.ftc.teamcode.TeamUtils.HolonomicDriveBase;
 import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -23,7 +25,7 @@ public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
         rightFrontDrive.setPower(speed);
     }
 
-
+    public myBoyDrivebase drive = null;
     public CHubIMU imu = null;
     RobotWebcam webcam = null;
     public DcMotor leftBackDrive = null;
@@ -34,6 +36,7 @@ public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
     public Servo leftClaw = null;
     public int conePosition;
     boolean clawOpen = false;
+
 
     public int getConePosition() {
         //0 = left most
@@ -73,8 +76,12 @@ public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
         telemetry.update();
 
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
+        imu = new CHubIMU(imub);
+        drive = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imu);
     }
     @Override
     public void init_loop(){
@@ -83,51 +90,57 @@ public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
     }
     @Override
     public void start(){
-        conePosition = getConePosition();
         runtime.reset();
+        conePosition = getConePosition();
+        resetRuntime();
     }
     @Override
     public void loop() {
         telemetry.addData("time:", getRuntime());
+        telemetry.addData("cone:", conePosition);
+        /*Autonomous including useless strafe left to terminal and "drop" cone (then pick it up again)
         //strafe left to put in cone
-        if (runtime.seconds() <= 1.5) {
-            leftBackDrive.setPower(0.75);
-            leftFrontDrive.setPower(-0.25);
-            rightBackDrive.setPower(0.25);
-            rightFrontDrive.setPower(-0.35);
+        if (runtime.seconds() <= 3) {
+            drive.drive(0.0,-0.25,0.0);
             telemetry.addData("time:", getRuntime());
-        }else if (runtime.seconds() <= 4.0){
+        }else if (runtime.seconds() <= 7.0){
+            motorSpeed(0);
             leftClaw.setPosition(ClawPositions.leftServoOpen);
             rightClaw.setPosition(ClawPositions.rightServoOpen);
             telemetry.addData("time:", getRuntime());
-        }else if (runtime.seconds() <= 7.0) { //strafe back
+        }else if (runtime.seconds() <= 9.0) { //strafe back
             telemetry.addData("time:", getRuntime());
+            drive.drive(0.0, 0.25, 0.0);
             leftClaw.setPosition(ClawPositions.leftServoClosed);
             rightClaw.setPosition(ClawPositions.rightServoClosed);
-            leftBackDrive.setPower(-0.75);
-            leftFrontDrive.setPower(0.25);
-            rightBackDrive.setPower(-0.25);
-            rightFrontDrive.setPower(0.35);
             telemetry.addData("time:", getRuntime());
-        } else if (conePosition == 0 && runtime.seconds() <= 9.0) { //left cone
-            motorSpeed(0.25); //forward
-            if (runtime.seconds() <= 10.0) { //strafe left
-                leftBackDrive.setPower(0.75);
-                leftFrontDrive.setPower(-0.25);
-                rightBackDrive.setPower(0.25);
-                rightFrontDrive.setPower(-0.35);
-            }
-        }else if (conePosition == 1 && runtime.seconds() <= 9) { //middle cone
-            motorSpeed(0.25); //forward
-        }else if (conePosition == 2 && runtime.seconds() <= 9){ //right cone
-            motorSpeed(0.25); //forward
-            if(runtime.seconds() <= 8.0){ //strafe right
-                leftBackDrive.setPower(-0.75);
-                leftFrontDrive.setPower(0.25);
-                rightBackDrive.setPower(-0.25);
-                rightFrontDrive.setPower(0.35);
-            }
+        } else if (conePosition == 0 && runtime.seconds() <= 11.25) { //left cone
+            drive.drive(0.25, 0.0, 0.0); //forward
+        }else if (conePosition == 0 && runtime.seconds() <= 13.75) { //strafe left
+            drive.drive(0.0,-0.25, 0.0);
+        }else if (conePosition == 1 && runtime.seconds() <= 11.25) { //middle cone
+            drive.drive(0.25, 0.0, 0.0); //forward
+        }else if (conePosition == 2 && runtime.seconds() <= 11.25) {//right cone
+            drive.drive(0.25, 0.0, 0.0); //forward
+        }else if(conePosition == 2 && runtime.seconds() <= 13.75){ //strafe right
+            drive.drive(0.0, 0.25, 0.0);
         }else{ //stop
+            motorSpeed(0);
+            telemetry.addData("Path", "Complete");
+            telemetry.update();
+        }
+    } */
+        if (conePosition == 0 && runtime.seconds() <= 2.25) { //left cone
+            drive.drive(0.25, 0.0, 0.0); //drive forward
+        } else if (conePosition == 0 && runtime.seconds() <= 4.75) {
+            drive.drive(0.0, -0.25, 0.0); //strafe left
+        } else if (conePosition == 1 && runtime.seconds() <= 2.25) { //middle cone
+            drive.drive(0.25, 0.0, 0.0); //drive forward
+        } else if (conePosition == 2 && runtime.seconds() <= 2.25) { //right cone
+            drive.drive(0.25, 0.0, 0.0); //drive forward
+        } else if (conePosition == 2 && runtime.seconds() <= 4.75) {
+            drive.drive(0.0, 0.25, 0.0); //strafe right
+        } else { //stop
             motorSpeed(0);
             telemetry.addData("Path", "Complete");
             telemetry.update();
