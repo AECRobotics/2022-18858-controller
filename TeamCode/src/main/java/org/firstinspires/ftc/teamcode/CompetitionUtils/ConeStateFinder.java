@@ -6,7 +6,9 @@ import android.graphics.Color;
 import androidx.annotation.ColorInt;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.TeamUtils.AprilTagDetectionWebcam;
 import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
+import org.openftc.apriltag.AprilTagDetection;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.HashMap;
 
 public class ConeStateFinder {
     public enum ConeState {
+        UNKNOWN,
         LEFT,
         MIDDLE,
         RIGHT
@@ -21,6 +24,10 @@ public class ConeStateFinder {
 
     //private static double checkAreaWidth = 0.5;
     //private static double checkAreaHeight = 0.5;
+    static int leftTagID = 5;
+    static int middleTagID = 10;
+    static int rightTagID = 15;
+
     @ColorInt
     private static int s1Color = 0xff65a7bd; //printed #65a7bd real #42f5ef 0xff42f5ef left
     @ColorInt
@@ -29,7 +36,7 @@ public class ConeStateFinder {
     private static int s3Color = 0xffbf5c7e; //printed #8c537c real #f542bf 0xfff542bf right
 
     private static double colorDistSimilarityThreshold = 45.0*45.0;
-    private static double colorDotProdSimilaryThreshold = 0.99;
+    private static double colorDotProdSimilarityThreshold = 0.99;
     private static double colorMagnitudeSimilarityThreshold = 249.0*249.0;
     private static double colorHueSimilarityThreshold = 21.0;
     private static double colorSatSimilarityThreshold = 26.0;
@@ -135,7 +142,7 @@ public class ConeStateFinder {
         ArrayList<Double> nc2 = ConeStateFinder.normalizeColor(c2);
         //debugOutput+=("dot: " + dotProduct(nc1, nc2) + ", ");
         //debugOutput+=("mag: " + getColorMagnitude(c1) + "," + getColorMagnitude(c2) + ",");
-        boolean dotProductMatches = dotProduct(nc1, nc2) >= colorDotProdSimilaryThreshold;
+        boolean dotProductMatches = dotProduct(nc1, nc2) >= colorDotProdSimilarityThreshold;
         if(dotProductMatches) {
             if(Math.abs(getColorMagnitudeSqrd(c1) - getColorMagnitudeSqrd(c2)) < colorMagnitudeSimilarityThreshold) {
                 matchCount++;
@@ -162,6 +169,21 @@ public class ConeStateFinder {
         return false;
     }
 
+    public static ConeState getConeStateAprilTag(AprilTagDetectionWebcam webcam) {
+        ArrayList<AprilTagDetection> currentDetections = webcam.getTags();
+
+        for(AprilTagDetection tag : currentDetections) {
+            if(tag.id == ConeStateFinder.leftTagID) {
+                return ConeState.LEFT;
+            } else if(tag.id == ConeStateFinder.middleTagID) {
+                return ConeState.MIDDLE;
+            } else if(tag.id == ConeStateFinder.rightTagID) {
+                return ConeState.RIGHT;
+            }
+        }
+        return ConeState.UNKNOWN;
+    }
+
     public static ConeState getConeState(RobotWebcam webcam) {
         debugOutput = "";
         Bitmap frame = webcam.getWebcamFrame();
@@ -170,7 +192,7 @@ public class ConeStateFinder {
         }
         int width = frame.getWidth();
         int height = frame.getHeight();
-        debugOutput+=("hex: " + String.format("%x", frame.getPixel(0,0)) + ", ");
+        //debugOutput+=("hex: " + String.format("%x", frame.getPixel(0,0)) + ", ");
         HashMap<Integer, Integer> colorOccurences = new HashMap<Integer, Integer>();
         //(0.5-(checkAreaWidth/2.0))
         //((0.5-(checkAreaWidth/2.0))
@@ -221,7 +243,7 @@ public class ConeStateFinder {
                 }
             }
         }*/
-        debugOutput+=("left:" + Math.floor(s1Count) + " middle: " + Math.floor(s2Count) + " right: " + Math.floor(s3Count) + ", ");
+        //debugOutput+=("left:" + Math.floor(s1Count) + " middle: " + Math.floor(s2Count) + " right: " + Math.floor(s3Count) + ", ");
         if(s1Count < s2Count) {
             if(s2Count < s3Count) {
                 return ConeState.RIGHT; //color 3
