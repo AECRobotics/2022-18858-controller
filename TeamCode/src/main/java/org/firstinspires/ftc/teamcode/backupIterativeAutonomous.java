@@ -24,6 +24,7 @@ public class backupIterativeAutonomous extends OpMode {
     RobotWebcam webcam = null;
     myBoyDrivebase drive = null;
     ConeStateFinder.ConeState coneState = null;
+    AprilTagDetectionWebcam aprilWebcam = null;
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
@@ -33,7 +34,7 @@ public class backupIterativeAutonomous extends OpMode {
         DcMotor rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright"); //2
 
         //webcam = new RobotWebcam(hardwareMap.get(WebcamName.class, "webcam"));
-        aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.get(WebcamName.class, "webcam"))
+        aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam"));
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
 
@@ -94,7 +95,8 @@ public class backupIterativeAutonomous extends OpMode {
 
     public ConeStateFinder.ConeState getConePosition(){
         //return (int)Math.floor(r.nextDouble()*3.0);
-        return ConeStateFinder.getConeState(webcam);
+        //return ConeStateFinder.getConeState(webcam);
+        return ConeStateFinder.getConeStateAprilTag(aprilWebcam);
     }
 
     @Override

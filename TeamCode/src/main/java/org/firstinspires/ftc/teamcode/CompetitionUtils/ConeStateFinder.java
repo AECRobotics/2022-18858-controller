@@ -24,9 +24,9 @@ public class ConeStateFinder {
 
     //private static double checkAreaWidth = 0.5;
     //private static double checkAreaHeight = 0.5;
-    static int leftTagID = 5;
-    static int middleTagID = 10;
-    static int rightTagID = 15;
+    private static int leftTagID = 5;
+    private static int middleTagID = 10;
+    private static int rightTagID = 15;
 
     @ColorInt
     private static int s1Color = 0xff65a7bd; //printed #65a7bd real #42f5ef 0xff42f5ef left
@@ -41,6 +41,11 @@ public class ConeStateFinder {
     private static double colorHueSimilarityThreshold = 21.0;
     private static double colorSatSimilarityThreshold = 26.0;
     private static double colorValSimilarityThreshold = 36.0;
+    private static double knownPitch = 0.0;
+    private static double knownRoll = 0.0;
+    private static double knownYaw = 0.0;
+    private static double knownAngleSimilarityThreshold = 1000.0;
+
 
     public static String debugOutput = "";
 
@@ -173,6 +178,9 @@ public class ConeStateFinder {
         ArrayList<AprilTagDetection> currentDetections = webcam.getTags();
 
         for(AprilTagDetection tag : currentDetections) {
+            //if(Math.abs(tag.pose.pitch-knownPitch) < knownAngleSimilarityThreshold) {
+
+            //}
             if(tag.id == ConeStateFinder.leftTagID) {
                 return ConeState.LEFT;
             } else if(tag.id == ConeStateFinder.middleTagID) {
