@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 
+import java.util.HashMap;
+
 
 @TeleOp(name="All Function Teleop", group="Robot")
 public class fullyFunctionalTeleop extends OpMode{
@@ -25,10 +27,9 @@ public class fullyFunctionalTeleop extends OpMode{
     static final double SPOOL_CIRCUMFERENCE = Math.PI * (SPOOL_DIAMETER);
     static final double COUNTS_PER_MM = (COUNTS_PER_MOTOR_REV)/(SPOOL_CIRCUMFERENCE); //HOW MUCH MM PER TICK
     //static final double SPOOL_TICKS = COUNTS_PER_MM * SPOOL_CIRCUMFERENCE;
-    double spoolTarget;
-    double maxHeight = mmtoTicks(1300);
+    int maxHeight = (int)mmtoTicks(1300);
 
-    boolean isLastGamepadDpadRight = false;
+    boolean lastGamepadDpadRight = false;
     boolean lastGamepadDpadLeft = false;
     boolean lastGamepadDpadUp = false;
     boolean lastGamepadDpadDown = false;
@@ -37,8 +38,46 @@ public class fullyFunctionalTeleop extends OpMode{
         return mm*COUNTS_PER_MM;
     }
 
+    enum ArmPosition {
+        GROUND,
+        HOLDING,
+        LOW,
+        MIDDLE,
+        HIGH
+    }
+
+    public BackupFullTeleop.ArmPosition levelToArmPos(int level) {
+        switch (level) {
+            case 1:
+                return BackupFullTeleop.ArmPosition.GROUND;
+            case 2:
+                return BackupFullTeleop.ArmPosition.HOLDING;
+            case 3:
+                return BackupFullTeleop.ArmPosition.LOW;
+            case 4:
+                return BackupFullTeleop.ArmPosition.MIDDLE;
+            case 5:
+                return BackupFullTeleop.ArmPosition.HIGH;
+            default:
+                return BackupFullTeleop.ArmPosition.GROUND;
+        }
+    }
+
+    public void setSpoolPosition() {
+        spoolMotor.setTargetPosition(Math.min((int)mmtoTicks(armPositionHeights.get(levelToArmPos(spoolLevel))), maxHeight));
+    }
+
+    public HashMap<BackupFullTeleop.ArmPosition, Double> armPositionHeights = new HashMap<BackupFullTeleop.ArmPosition, Double>();
+    int spoolLevel = 1;
+
     @Override
     public void init() {
+        armPositionHeights.put(BackupFullTeleop.ArmPosition.GROUND, 0.0);
+        armPositionHeights.put(BackupFullTeleop.ArmPosition.HOLDING, 100.0);
+        armPositionHeights.put(BackupFullTeleop.ArmPosition.LOW, 380.0); //low junction is at 343 mm
+        armPositionHeights.put(BackupFullTeleop.ArmPosition.MIDDLE, 635.0); //middle junction is at 597 mm
+        armPositionHeights.put(BackupFullTeleop.ArmPosition.HIGH, 890.0); // high junction is at 851 mm
+
         telemetry.addData("Status", "Initialized");
         leftBackDrive = hardwareMap.get(DcMotor.class, "backleft");
         leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft");
@@ -98,34 +137,33 @@ public class fullyFunctionalTeleop extends OpMode{
             leftClaw.setPosition(ClawPositions.leftServoClosed);
             rightClaw.setPosition(ClawPositions.rightServoClosed);
         }
-       if(gamepad1.a){
-            //bottom
-           spoolTarget = 0; //mm
-           spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
-           spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-           spoolMotor.setPower(0.5);
+
+
+        if(gamepad1.dpad_up && !lastGamepadDpadUp) {
+            if(spoolLevel < 5) {
+                spoolLevel++;
+                setSpoolPosition();
+            }
         }
-        if(gamepad1.b){
-            // low
-            spoolTarget = 370; //mm
-            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
-            spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            spoolMotor.setPower(0.5);
+        if(gamepad1.dpad_down && !lastGamepadDpadDown) {
+            if(spoolLevel > 1) {
+                spoolLevel--;
+                setSpoolPosition();
+            }
         }
-        if(gamepad1.x){
-            //medium
-            spoolTarget = 470; //mm
-            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
-            spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            spoolMotor.setPower(0.5);
+        if(gamepad1.dpad_left && !lastGamepadDpadLeft) {
+            armPositionHeights.put(levelToArmPos(spoolLevel), armPositionHeights.get(levelToArmPos(spoolLevel))-10.0);
+            setSpoolPosition();
         }
-        if(gamepad1.y){
-            //high
-            spoolTarget = 850; //mm
-            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
-            spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            spoolMotor.setPower(0.5);
+        if(gamepad1.dpad_right && !lastGamepadDpadRight) {
+            armPositionHeights.put(levelToArmPos(spoolLevel), armPositionHeights.get(levelToArmPos(spoolLevel))+10.0);
+            setSpoolPosition();
         }
+
+        lastGamepadDpadDown = gamepad1.dpad_down;
+        lastGamepadDpadUp = gamepad1.dpad_up;
+        lastGamepadDpadLeft = gamepad1.dpad_left;
+        lastGamepadDpadRight = gamepad1.dpad_right;
         /*
 
         4 heights

@@ -57,7 +57,7 @@ public class BackupFullTeleop extends OpMode{
     boolean clawOpen = false;
     int spoolLevel = 1;
 
-    boolean isLastGamepadDpadRight = false;
+    boolean lastGamepadDpadRight = false;
     boolean lastGamepadDpadLeft = false;
     boolean lastGamepadDpadUp = false;
     boolean lastGamepadDpadDown = false;
@@ -147,7 +147,7 @@ public class BackupFullTeleop extends OpMode{
             armPositionHeights.put(levelToArmPos(spoolLevel), armPositionHeights.get(levelToArmPos(spoolLevel))-10.0);
             setSpoolPosition();
         }
-        if(gamepad1.dpad_right && !isLastGamepadDpadRight) {
+        if(gamepad1.dpad_right && !lastGamepadDpadRight) {
             armPositionHeights.put(levelToArmPos(spoolLevel), armPositionHeights.get(levelToArmPos(spoolLevel))+10.0);
             setSpoolPosition();
         }
@@ -155,7 +155,7 @@ public class BackupFullTeleop extends OpMode{
         lastGamepadDpadDown = gamepad1.dpad_down;
         lastGamepadDpadUp = gamepad1.dpad_up;
         lastGamepadDpadLeft = gamepad1.dpad_left;
-        isLastGamepadDpadRight = gamepad1.dpad_right;
+        lastGamepadDpadRight = gamepad1.dpad_right;
 
         telemetry.addLine("A to open claw, B to close");
         telemetry.addLine("Dpad up and down to bring arm up and down");
