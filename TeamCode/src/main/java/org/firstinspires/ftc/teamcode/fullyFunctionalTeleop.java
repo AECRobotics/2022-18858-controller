@@ -139,7 +139,8 @@ public class fullyFunctionalTeleop extends OpMode{
         }
 
 
-        if(gamepad1.dpad_up && !lastGamepadDpadUp) {
+
+        /*if(gamepad1.dpad_up && !lastGamepadDpadUp) {
             if(spoolLevel < 5) {
                 spoolLevel++;
                 setSpoolPosition();
@@ -150,12 +151,12 @@ public class fullyFunctionalTeleop extends OpMode{
                 spoolLevel--;
                 setSpoolPosition();
             }
-        }
-        if(gamepad1.dpad_left && !lastGamepadDpadLeft) {
+        }*/
+        if(gamepad1.dpad_down && !lastGamepadDpadDown) {
             armPositionHeights.put(levelToArmPos(spoolLevel), armPositionHeights.get(levelToArmPos(spoolLevel))-10.0);
             setSpoolPosition();
         }
-        if(gamepad1.dpad_right && !lastGamepadDpadRight) {
+        if(gamepad1.dpad_up && !lastGamepadDpadUp) {
             armPositionHeights.put(levelToArmPos(spoolLevel), armPositionHeights.get(levelToArmPos(spoolLevel))+10.0);
             setSpoolPosition();
         }
@@ -189,13 +190,6 @@ public class fullyFunctionalTeleop extends OpMode{
         dpad - I
         abxy - III
          */
-        if(gamepad1.dpad_up) {
-            spoolMotor.setPower(0.3);
-        } else if(gamepad1.dpad_down) {
-            spoolMotor.setPower(-0.3);
-        } else {
-            spoolMotor.setPower(0.0);
-        }
         /*if (gamepad1.dpad_right && spoolMotor.getTargetPosition()<=maxHeight){
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             spoolMotor.setPower(0.5);
@@ -209,7 +203,8 @@ public class fullyFunctionalTeleop extends OpMode{
         rightBackDrive.setPower(-rbPow);
         telemetry.addLine("Left Bumper to open claw, Right Bumper to close");
         telemetry.addLine("Dpad controls: up-adjust target pos inc, down-adjust target pos dec");
-        telemetry.addData("target:",spoolMotor.getTargetPosition());
+        //telemetry.addData("target:",spoolMotor.getTargetPosition());
+        telemetry.addLine("Position:" + levelToArmPos(spoolLevel).name());
         //telemetry.addLine("left-nothing, right-makes the arm go to position set at half speed");
     }
     @Override
