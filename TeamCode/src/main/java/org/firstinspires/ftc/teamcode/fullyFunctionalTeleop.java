@@ -74,9 +74,9 @@ public class fullyFunctionalTeleop extends OpMode{
     public void init() {
         armPositionHeights.put(BackupFullTeleop.ArmPosition.GROUND, 0.0);
         armPositionHeights.put(BackupFullTeleop.ArmPosition.HOLDING, 100.0);
-        armPositionHeights.put(BackupFullTeleop.ArmPosition.LOW, 380.0); //low junction is at 343 mm
-        armPositionHeights.put(BackupFullTeleop.ArmPosition.MIDDLE, 635.0); //middle junction is at 597 mm
-        armPositionHeights.put(BackupFullTeleop.ArmPosition.HIGH, 890.0); // high junction is at 851 mm
+        armPositionHeights.put(BackupFullTeleop.ArmPosition.LOW, 370.0); //low junction is at 343 mm
+        armPositionHeights.put(BackupFullTeleop.ArmPosition.MIDDLE, 470.0); //middle junction is at 597 mm
+        armPositionHeights.put(BackupFullTeleop.ArmPosition.HIGH, 850.0); // high junction is at 851 mm
 
         telemetry.addData("Status", "Initialized");
         leftBackDrive = hardwareMap.get(DcMotor.class, "backleft");
@@ -152,6 +152,22 @@ public class fullyFunctionalTeleop extends OpMode{
                 setSpoolPosition();
             }
         }*/
+        if(gamepad1.a) {
+            spoolLevel=1;
+            setSpoolPosition();
+        }
+        if(gamepad1.b) {
+            spoolLevel=3;
+            setSpoolPosition();
+        }
+        if(gamepad1.x) {
+            spoolLevel=4;
+            setSpoolPosition();
+        }
+        if(gamepad1.y) {
+            spoolLevel=5;
+            setSpoolPosition();
+        }
         if(gamepad1.dpad_down && !lastGamepadDpadDown) {
             armPositionHeights.put(levelToArmPos(spoolLevel), armPositionHeights.get(levelToArmPos(spoolLevel))-10.0);
             setSpoolPosition();
@@ -160,7 +176,6 @@ public class fullyFunctionalTeleop extends OpMode{
             armPositionHeights.put(levelToArmPos(spoolLevel), armPositionHeights.get(levelToArmPos(spoolLevel))+10.0);
             setSpoolPosition();
         }
-
         lastGamepadDpadDown = gamepad1.dpad_down;
         lastGamepadDpadUp = gamepad1.dpad_up;
         lastGamepadDpadLeft = gamepad1.dpad_left;
