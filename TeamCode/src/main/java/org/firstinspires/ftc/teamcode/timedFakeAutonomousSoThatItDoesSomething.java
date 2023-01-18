@@ -10,13 +10,14 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.myBoyDrivebase;
+import org.firstinspires.ftc.teamcode.TeamUtils.AprilTagDetectionWebcam;
 import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
 import org.firstinspires.ftc.teamcode.TeamUtils.HolonomicDriveBase;
 import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-@Autonomous(name="Robot: timed sofee event does something :')", group="Robot")
+@Autonomous(name="autonomous blue team <o/`", group="Robot")
 public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
     public void motorSpeed(double speed){
         leftBackDrive.setPower(speed);
@@ -27,7 +28,6 @@ public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
 
     public myBoyDrivebase drive = null;
     public CHubIMU imu = null;
-    RobotWebcam webcam = null;
     public DcMotor leftBackDrive = null;
     public DcMotor rightBackDrive = null;
     public DcMotor leftFrontDrive = null;
@@ -36,14 +36,13 @@ public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
     public Servo leftClaw = null;
     public int conePosition;
     boolean clawOpen = false;
+    AprilTagDetectionWebcam aprilWebcam = null;
 
-
-    public int getConePosition() {
-        //0 = left most
-        //1 = middle
-        //2 = right most
+    public int getConePosition(){
         //return (int)Math.floor(r.nextDouble()*3.0);
-        switch (ConeStateFinder.getConeState(webcam)) {
+        //return ConeStateFinder.getConeState(webcam);
+
+        switch (ConeStateFinder.getConeStateAprilTag(aprilWebcam)) {
             case LEFT:
                 return 0;
             case MIDDLE:
@@ -55,8 +54,6 @@ public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
         }
     }
 
-
-
     private ElapsedTime runtime = new ElapsedTime();
     @Override
     public void init(){
@@ -67,11 +64,11 @@ public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
         rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright");
         rightClaw = hardwareMap.get(Servo.class, "rightclaw");
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
+        aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam"));
         leftBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        webcam = new RobotWebcam(hardwareMap.get(WebcamName.class, "webcam"));
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
 

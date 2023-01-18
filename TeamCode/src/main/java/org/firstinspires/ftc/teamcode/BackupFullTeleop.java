@@ -116,6 +116,9 @@ public class BackupFullTeleop extends OpMode{
         double forward = -gamepad1.left_stick_y;
         double turn  =    gamepad1.right_stick_x;
         double strafe =   gamepad1.left_stick_x;
+        //telemetry.addLine("for: " + forward);
+        //telemetry.addLine("turn: " + turn);
+        //telemetry.addLine("strafe: " + strafe);
         drive.drive(forward, strafe, turn);
 
         if(gamepad1.a) {

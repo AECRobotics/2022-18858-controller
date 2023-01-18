@@ -32,7 +32,7 @@ public class motorTestingTeleop extends OpMode{
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
         spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spoolMotor.setTargetPosition(0);
@@ -82,6 +82,10 @@ public class motorTestingTeleop extends OpMode{
         if(gamepad1.dpad_down && !testingTarget) {
             testingTarget = true;
             hasRun = false;
+        }
+        if(gamepad1.dpad_left) {
+            getCurMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            getCurMotor().setPower(0.2);
         }
         double power = gamepad1.left_stick_y;
         telemetry.addLine("power: " + power);
