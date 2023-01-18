@@ -105,7 +105,7 @@ public class HolonomicDriveBase extends DriveBase {
     public void strafe() {
         double distanceInMeters = this.getTask().getParameters().get("meters");
         //+distance right, -distance left
-        double power = this.getTask().getParameters().get("speed");
+        double power = Math.abs(this.getTask().getParameters().get("speed"));
         this.fl.setPower(power);
         this.br.setPower(power);
         this.fr.setPower(power);

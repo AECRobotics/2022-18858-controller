@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import androidx.appcompat.app.ActionBar;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
@@ -13,6 +16,7 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
 
 @Autonomous(name="autonomous My Boy", group="Robot")
+@Disabled
 public class currentLinearAutonomous extends LinearOpMode {
     public DcMotor leftBackDrive = null;
     public DcMotor rightBackDrive = null;

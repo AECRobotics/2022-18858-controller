@@ -78,12 +78,15 @@ public class backupIterativeAutonomous extends OpMode {
             HashMap<String, Double> parameters = new HashMap<String, Double>();
             switch(drive.getTaskCount()) {
                 case 0:
-                    parameters.put("speed", coneState == ConeStateFinder.ConeState.LEFT ? -0.1 : 0.1);
-                    parameters.put("meters", coneState == ConeStateFinder.ConeState.MIDDLE ? 0.0 : 0.7);
+                    if(coneState == ConeStateFinder.ConeState.UNKNOWN) {
+                        break;
+                    }
+                    parameters.put("speed", 0.5);
+                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.6 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.6 : 0.0));
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_TO_POSITION, parameters));
                     break;
                 case 1:
-                    parameters.put("speed", 0.1);
+                    parameters.put("speed", 0.5);
                     parameters.put("meters", 1.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_TO_POSITION, parameters));
                     break;
