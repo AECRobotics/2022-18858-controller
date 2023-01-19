@@ -37,6 +37,10 @@ public class fullyFunctionalTeleop extends OpMode{
         return mm*COUNTS_PER_MM;
     }
 
+    public double ticksToMM(int ticks) {
+        return ((double)ticks)/COUNTS_PER_MM;
+    }
+
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
@@ -74,9 +78,9 @@ public class fullyFunctionalTeleop extends OpMode{
 
     @Override
     public void loop(){
-        double drive = -gamepad1.left_stick_y;
-        double turn  =  gamepad1.right_stick_x;
-        double strafe = gamepad1.left_stick_x;
+        double drive = -gamepad1.left_stick_y*Math.abs(gamepad1.left_stick_y);
+        double turn  =  gamepad1.right_stick_x*Math.abs(gamepad1.right_stick_x);
+        double strafe = gamepad1.left_stick_x*Math.abs(gamepad1.left_stick_x);
         telemetry.addData("left stick", gamepad1.left_stick_y);
 
         double lbPow = drive - strafe + turn;
@@ -158,13 +162,16 @@ public class fullyFunctionalTeleop extends OpMode{
          */
         if(gamepad1.dpad_up) {
             spoolMotor.setPower(0.3);
-            spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            spoolTarget = spoolMotor.getCurrentPosition();
+            spoolTarget=ticksToMM(spoolMotor.getCurrentPosition())+3;
+            //spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget));
         } else if(gamepad1.dpad_down) {
-            spoolMotor.setPower(-0.3);
-            spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            spoolTarget = spoolMotor.getCurrentPosition();
+            spoolMotor.setPower(0.3);
+            spoolTarget=ticksToMM(spoolMotor.getCurrentPosition())-3;
+            //spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget));
         }else{
+            spoolMotor.setPower(0.7);
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
 
