@@ -127,16 +127,16 @@ public class timedFakeAutonomousSoThatItDoesSomething extends OpMode{
             telemetry.update();
         }
     } */
-        if (conePosition == 0 && runtime.seconds() <= 2.25) { //left cone
-            drive.drive(0.25, 0.0, 0.0); //drive forward
-        } else if (conePosition == 0 && runtime.seconds() <= 4.75) {
+        if (conePosition == 0 && runtime.seconds() <= 2.5) { //left cone
             drive.drive(0.0, -0.25, 0.0); //strafe left
-        } else if (conePosition == 1 && runtime.seconds() <= 2.25) { //middle cone
+        } else if (conePosition == 0 && runtime.seconds() <= 5.0) {
             drive.drive(0.25, 0.0, 0.0); //drive forward
-        } else if (conePosition == 2 && runtime.seconds() <= 2.25) { //right cone
+        } else if (conePosition == 1 && runtime.seconds() <= 2.5) { //middle cone
             drive.drive(0.25, 0.0, 0.0); //drive forward
-        } else if (conePosition == 2 && runtime.seconds() <= 4.75) {
+        } else if (conePosition == 2 && runtime.seconds() <= 2.5) { //right cone
             drive.drive(0.0, 0.25, 0.0); //strafe right
+        } else if (conePosition == 2 && runtime.seconds() <= 5.0) {
+            drive.drive(0.25, 0.0, 0.0); //drive forward
         } else { //stop
             motorSpeed(0);
             telemetry.addData("Path", "Complete");
