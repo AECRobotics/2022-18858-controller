@@ -82,7 +82,7 @@ public class backupIterativeAutonomous extends OpMode {
                         break;
                     }
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.6 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.6 : 0.0));
+                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.67 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.67 : 0.0));
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_TO_POSITION, parameters));
                     break;
                 case 1:
