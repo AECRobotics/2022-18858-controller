@@ -2,11 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
@@ -18,8 +16,8 @@ import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
 
 import java.util.HashMap;
 
-@Autonomous(name="Backup cone finder autonomous", group="Robot")
-public class backupIterativeAutonomous extends OpMode {
+@Autonomous(name="Cone finder autonomous LEFT", group="Robot")
+public class IterativeAutonomousLeft extends OpMode {
     public CHubIMU imu = null;
     RobotWebcam webcam = null;
     myBoyDrivebase drive = null;
@@ -82,7 +80,7 @@ public class backupIterativeAutonomous extends OpMode {
                         break;
                     }
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.67 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.67 : 0.0));
+                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.59055 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.57785 : 0.0));
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_TO_POSITION, parameters));
                     break;
                 case 1:
