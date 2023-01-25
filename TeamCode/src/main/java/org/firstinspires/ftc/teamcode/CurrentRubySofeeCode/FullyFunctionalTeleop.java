@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.CurrentRubySofeeCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 
 
 @TeleOp(name="All Function Teleop", group="Robot")
-public class fullyFunctionalTeleop extends OpMode{
+public class FullyFunctionalTeleop extends OpMode{
     public DcMotor leftBackDrive = null;
     public DcMotor rightBackDrive = null;
     public DcMotor leftFrontDrive = null;

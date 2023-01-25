@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.CurrentRubySofeeCode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -7,18 +7,16 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.myBoyDrivebase;
 import org.firstinspires.ftc.teamcode.TeamUtils.AprilTagDetectionWebcam;
 import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
-import org.firstinspires.ftc.teamcode.TeamUtils.HolonomicDriveBase;
-import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
+
 import com.qualcomm.robotcore.hardware.Servo;
 
 
 @Autonomous(name="right red and blue auto <o/`", group="Robot")
-public class secondTimedAutonomousCase extends OpMode{
+public class SecondTimedAutonomousCase extends OpMode{
     public void motorSpeed(double speed){
         leftBackDrive.setPower(speed);
         leftFrontDrive.setPower(speed);

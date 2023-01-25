@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.CurrentRubySofeeCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name="spool ONLY", group="Robot")
 @Disabled
-public class spoolOnly extends OpMode{
+public class SpoolMotorCheck extends OpMode{
     public DcMotor spoolMotor = null;
     public void init() {
         spoolMotor = hardwareMap.get(DcMotor.class, "spoolmotor");
