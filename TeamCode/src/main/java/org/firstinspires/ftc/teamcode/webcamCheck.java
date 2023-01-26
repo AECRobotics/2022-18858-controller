@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.TeamUtils.AprilTagDetectionWebcam;
 import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
 
-@TeleOp(name="test webcam cone state finder", group = "Robot")
+@TeleOp(name="test webcam cone state finder ( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)", group = "Robot")
 public class webcamCheck extends OpMode{
     boolean lastGamepadB = false;
     ConeStateFinder.ConeState state = null;
