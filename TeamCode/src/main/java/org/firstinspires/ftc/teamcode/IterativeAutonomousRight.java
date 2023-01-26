@@ -80,7 +80,7 @@ public class IterativeAutonomousRight extends OpMode {
                         break;
                     }
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.57785 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.59055 : 0.0));
+                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.60785 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.70055 : 0.0));
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_TO_POSITION, parameters));
                     break;
                 case 1:

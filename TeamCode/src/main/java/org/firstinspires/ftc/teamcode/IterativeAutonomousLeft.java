@@ -80,12 +80,12 @@ public class IterativeAutonomousLeft extends OpMode {
                         break;
                     }
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.59055 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.57785 : 0.0));
+                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.64055 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.68785 : 0.0));
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_TO_POSITION, parameters));
                     break;
                 case 1:
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", 1.0);
+                    parameters.put("meters", 0.75);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_TO_POSITION, parameters));
                     break;
             }

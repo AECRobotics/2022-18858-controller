@@ -78,23 +78,33 @@ public class FullyFunctionalTeleop extends OpMode{
 
     @Override
     public void loop(){
-        double drive = -gamepad1.left_stick_y*Math.abs(gamepad1.left_stick_y);
-        double turn  =  gamepad1.right_stick_x*Math.abs(gamepad1.right_stick_x);
-        double strafe = gamepad1.left_stick_x*Math.abs(gamepad1.left_stick_x);
+        double drive = -gamepad1.left_stick_y;
+        double turn  =  gamepad1.right_stick_x;
+        double strafe = gamepad1.left_stick_x;
         //telemetry.addData("left stick", gamepad1.left_stick_y);
 
-        double lbPow = drive - strafe + turn;
-        double rbPow = drive + strafe - turn;
-        double lfPow = drive + strafe + turn;
-        double rfPow = drive - strafe - turn;
-        double divisor = Math.max(Math.max(Math.abs(lfPow), Math.abs(lbPow)), Math.max(Math.abs(rfPow), Math.abs(rbPow)));
-        if(divisor > 1.0)
-        {
-            lbPow/=divisor;
-            rbPow/=divisor;
-            lfPow/=divisor;
-            rfPow/=divisor;
+        double lbPow = 0.0;// = drive - strafe + turn;
+        double rbPow = 0.0;// = drive + strafe - turn;
+        double lfPow = 0.0;// = drive + strafe + turn;
+        double rfPow = 0.0;// = drive - strafe - turn;
+
+        if(drive >= turn && drive >= strafe) {
+            lbPow = drive;
+            rbPow = drive;
+            lfPow = drive;
+            rfPow = drive;
+        } else if(strafe > drive && strafe >= turn) {
+            lbPow = -strafe;
+            rbPow = strafe;
+            lfPow = strafe;
+            rfPow = -strafe;
+        } else if(turn > strafe) {
+            lbPow = turn;
+            rbPow = -turn;
+            lfPow = turn;
+            rfPow = -turn;
         }
+
         if(gamepad1.left_bumper) {
             clawOpen = true;
         } else if(gamepad1.right_bumper) {

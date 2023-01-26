@@ -27,17 +27,22 @@ public class SpoolMotorCheckGoBilda extends OpMode{
     }
 
     public void init() {
-        spoolMotor = hardwareMap.get(DcMotor.class, "spoolmotor");
+        spoolMotor = hardwareMap.get(DcMotor.class, "spoolmotorgobilda");
         spoolMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        spoolMotor.setTargetPosition(0);
+        spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
     }
     public void init_loop() {
 
     }
+
     public void start() {
 
     }
+
     public void loop() {
         if(gamepad1.a){
             //bottom
