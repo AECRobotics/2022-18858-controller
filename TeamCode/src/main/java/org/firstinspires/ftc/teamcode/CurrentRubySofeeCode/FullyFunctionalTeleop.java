@@ -88,17 +88,17 @@ public class FullyFunctionalTeleop extends OpMode{
         double lfPow = 0.0;// = drive + strafe + turn;
         double rfPow = 0.0;// = drive - strafe - turn;
 
-        if(drive >= turn && drive >= strafe) {
+        if(Math.abs(drive) >= Math.abs(turn) && Math.abs(drive) >= Math.abs(strafe)) {
             lbPow = drive;
             rbPow = drive;
             lfPow = drive;
             rfPow = drive;
-        } else if(strafe > drive && strafe >= turn) {
+        } else if(Math.abs(strafe) > Math.abs(drive) && Math.abs(strafe) >= Math.abs(turn)) {
             lbPow = -strafe;
             rbPow = strafe;
             lfPow = strafe;
             rfPow = -strafe;
-        } else if(turn > strafe) {
+        } else if(Math.abs(turn) > Math.abs(strafe)) {
             lbPow = turn;
             rbPow = -turn;
             lfPow = turn;

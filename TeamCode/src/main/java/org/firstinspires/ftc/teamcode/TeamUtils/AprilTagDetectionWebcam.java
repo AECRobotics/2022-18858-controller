@@ -24,7 +24,7 @@ public class AprilTagDetectionWebcam {
     double cy = 480.0/2.0;
 
     // UNITS ARE METERS
-    double tagsize = 0.037; //in meters
+    double tagsize = 0.03675;//0.02775;//0.037; //in meters
 
     public AprilTagDetectionWebcam(int cameraMonitorViewId, WebcamName webcamName) {
         //int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
