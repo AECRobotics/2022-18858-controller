@@ -76,6 +76,9 @@ public class HolonomicDriveBase extends DriveBase {
                 case STRAFE_TO_POSITION:
                     output = this.allMotorsReachedTarget() && this.allMotorsNotBusy();
                     break;
+                case WAIT_FOR:
+                    output = (this.stateAtAssignmentOfTask.timeStamp+this.getTask().getParameters().get("seconds")*UnitConversion.SECONDS_PER_NANOSECOND) > System.nanoTime();
+                    break;
                 case PLACEHOLDER:
                     output = true;
                     break;
@@ -128,6 +131,8 @@ public class HolonomicDriveBase extends DriveBase {
                 this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
                 this.strafe();
                 break;
+            case WAIT_FOR:
+                break;
             case PLACEHOLDER:
                 break;
             default:
@@ -140,6 +145,8 @@ public class HolonomicDriveBase extends DriveBase {
             case DRIVE_TO_POSITION:
                 break;
             case STRAFE_TO_POSITION:
+                break;
+            case WAIT_FOR:
                 break;
             case PLACEHOLDER:
                 break;

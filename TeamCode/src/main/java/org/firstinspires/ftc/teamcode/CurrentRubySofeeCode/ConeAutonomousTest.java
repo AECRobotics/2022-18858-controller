@@ -100,29 +100,30 @@ public class ConeAutonomousTest extends OpMode {
                     parameters.put("speed", 0.5);
                     parameters.put("meters", 0.36);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_TO_POSITION, parameters));
-                    drive.doTasks();
                     break;
                 case 1:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", 0.1);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_TO_POSITION, parameters));
-                    drive.doTasks();
                     break;
                 case 2:
                     spoolTarget = 370;
                     spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget));
                     spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     spoolMotor.setPower(1.0);
+                    parameters.put("seconds", 5.0);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
                 case 3:
                     leftClaw.setPosition(ClawPositions.leftServoOpen);
                     rightClaw.setPosition(ClawPositions.rightServoOpen);
+                    parameters.put("seconds", 1.0);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
                 case 4:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", -0.1);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_TO_POSITION, parameters));
-                    drive.doTasks();
                     break;
                 case 5:
                     leftClaw.setPosition(ClawPositions.leftServoClosed);
@@ -131,12 +132,13 @@ public class ConeAutonomousTest extends OpMode {
                     spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget));
                     spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     spoolMotor.setPower(1.0);
+                    parameters.put("seconds", 5.0);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
                 case 6:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", -0.36);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_TO_POSITION, parameters));
-                    drive.doTasks();
                     break;
                 case 7:
                     if(coneState == ConeStateFinder.ConeState.UNKNOWN) {
