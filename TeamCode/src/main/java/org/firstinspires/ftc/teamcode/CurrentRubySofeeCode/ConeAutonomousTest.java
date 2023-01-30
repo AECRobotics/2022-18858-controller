@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
 
 import java.util.HashMap;
 
-@Autonomous(name="Cone finder autonomous LEFT WITH CONE", group="Robot")
-public class IterativeAutonomousLeftWithCone extends OpMode {
+@Autonomous(name="LEFT WITH CONE", group="Robot")
+public class ConeAutonomousTest extends OpMode {
     public CHubIMU imu = null;
     RobotWebcam webcam = null;
     myBoyDrivebase drive = null;
@@ -166,6 +166,5 @@ public class IterativeAutonomousLeftWithCone extends OpMode {
     @Override
     public void stop(){
         drive.setMotorPower(0.0);
-        webcam.closeCamera();
     }
 }
