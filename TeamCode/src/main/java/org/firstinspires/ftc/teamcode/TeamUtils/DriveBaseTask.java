@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 public class DriveBaseTask {
     public enum TaskType {
-        DRIVE_TO_POSITION,
-        TURN_TO_POSITION, //I have no idea how I am going to make this work properly, probably through trial and error but through math would be very nice
-        STRAFE_TO_POSITION,
+        DRIVE_DISTANCE,
+        STRAFE_DISTANCE,
+        TURN_DEGREES, //I have no idea how I am going to make this work properly, probably through trial and error but through math would be very nice
         //COMBINED, //I have no idea how I am going to implement this but I'm sure it'll be full of spaghetti
         DRIVE_TO_DISTANCE_SENSOR_LESS_THAN,
         STRAFE_TO_DISTANCE_SENSOR_LESS_THAN,

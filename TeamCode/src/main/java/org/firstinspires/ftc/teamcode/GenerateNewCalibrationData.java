@@ -44,6 +44,7 @@ public class GenerateNewCalibrationData extends OpMode
         telemetry.addData("X", estimatedPosition.x);
         telemetry.addData("Y", estimatedPosition.y);
         telemetry.addData("Z", estimatedPosition.z);
+        telemetry.addLine("XYZ" + imu.getOrientation());
     }
 
     @Override

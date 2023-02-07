@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class HolonomicDriveBase extends DriveBase {
     public HolonomicDriveBase(Wheel fr, Wheel br, Wheel fl, Wheel bl, CHubIMU imu) {
@@ -70,15 +71,17 @@ public class HolonomicDriveBase extends DriveBase {
         } else {
             boolean output = false;
             switch(this.getTask().getTaskType()) {
-                case DRIVE_TO_POSITION:
+                case DRIVE_DISTANCE:
                     output = this.allMotorsReachedTarget() && this.allMotorsNotBusy();
                     break;
-                case STRAFE_TO_POSITION:
+                case STRAFE_DISTANCE:
                     output = this.allMotorsReachedTarget() && this.allMotorsNotBusy();
                     break;
                 case WAIT_FOR:
                     output = (this.stateAtAssignmentOfTask.timeStamp+this.getTask().getParameters().get("seconds")*UnitConversion.SECONDS_PER_NANOSECOND) > System.nanoTime();
                     break;
+                case TURN_DEGREES:
+                    output = (Math.abs(this.distanceToTurn()) <= 0.1);
                 case PLACEHOLDER:
                     output = true;
                     break;
@@ -119,20 +122,61 @@ public class HolonomicDriveBase extends DriveBase {
         this.bl.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.blTarget);
     }
 
+    public double getHeading() {
+        Orientation orientation = this.imu.getOrientation();
+        return orientation.firstAngle;
+    }
+
+    public double distanceToTurn() { //this function has absolutely no error handling, if you call it when driving instead of turning it will absolutely return invalid information and especially if you call it without setting a task first
+        double current = this.getHeading();
+        double destination = (this.getTask().getParameters().get("degrees")+this.stateAtAssignmentOfTask.heading);
+        destination%=(2*180);
+        destination-=180;
+        destination-=current;
+        //current-=current;
+        double diff = destination;//(-EulerAngle.quaternionToEuler(this.imu.getQuaternionOrientation()).y)-destination; // pi
+        double sign = diff/Math.abs(diff);
+
+        double diff1 = Math.abs(diff);
+        double diff2 = Math.abs((2*180)-Math.abs(diff));
+        if(diff2 < diff1) {
+            diff = diff2*sign*-1;
+        }
+        //diff%=Math.PI;
+        //diff*=sign;
+        return diff;
+    }
+
+    public void turn() {
+        double speed = this.getTask().getParameters().get("speed");
+        double diff = this.distanceToTurn();
+
+        speed = Math.signum(diff)*speed;
+        //telemetry.addData("debug",String.format("%.5f, %.5f, %.5f, %.5f", destination, diff, speed, current));
+        //telemetry.addData("debug2", String.format("%.5f, %.5f, %.5f", diff, DriveBase.PIDishThingMultiplier, this.task.getSpeed()));
+        this.fr.setPower(speed);
+        this.br.setPower(speed);
+        this.fl.setPower(-speed);
+        this.bl.setPower(-speed);
+
+    }
+
     private void startTask() {
         //telemetry.addLine("debug2");
         this.getTask().startTask();
         switch(this.getTask().getTaskType()) {
-            case DRIVE_TO_POSITION:
+            case DRIVE_DISTANCE:
                 this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
                 this.forward();
                 break;
-            case STRAFE_TO_POSITION:
+            case STRAFE_DISTANCE:
                 this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
                 this.strafe();
                 break;
             case WAIT_FOR:
                 break;
+            case TURN_DEGREES:
+                this.setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
             case PLACEHOLDER:
                 break;
             default:
@@ -142,11 +186,14 @@ public class HolonomicDriveBase extends DriveBase {
 
     private void doTask() {
         switch(this.getTask().getTaskType()) {
-            case DRIVE_TO_POSITION:
+            case DRIVE_DISTANCE:
                 break;
-            case STRAFE_TO_POSITION:
+            case STRAFE_DISTANCE:
                 break;
             case WAIT_FOR:
+                break;
+            case TURN_DEGREES:
+                this.turn();
                 break;
             case PLACEHOLDER:
                 break;

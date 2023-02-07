@@ -37,4 +37,8 @@ public class Spool extends Motor {
     public double convertRotationsToEncoderPosition(double rotations) {
         return rotations*super.getTicksPerRev();
     }
+
+    public void setRetractedDistance(double mm) {
+        this.setTargetPosition(this.convertMMToEncoderPosition(mm));
+    }
 }
