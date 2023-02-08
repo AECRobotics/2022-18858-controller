@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.GoBildaSpoolConstants;
@@ -65,11 +66,11 @@ public class AutonomousLeftConePlacer extends OpMode {
         rightBackDrive.setMode(RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
         BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
-        imu = new CHubIMU(imub);
+        imu = new CHubIMU(imub, AxesOrder.YXZ);
         drive = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imu);
 
 
-        spoolMotor = new Spool(hardwareMap.get(DcMotor.class, "spoolmotor"), 1.0, GoBildaSpoolConstants.TICKS_PER_REV, 0.0, GoBildaSpoolConstants.SPOOL_RADIUS, GoBildaSpoolConstants.SPOOL_WIDTH, 0.907, GoBildaSpoolConstants.THREAD_DIAMETER);
+        spoolMotor = new Spool(hardwareMap.get(DcMotor.class, "spoolmotorgobilda"), 1.0, GoBildaSpoolConstants.TICKS_PER_REV, 0.0, GoBildaSpoolConstants.SPOOL_RADIUS, GoBildaSpoolConstants.SPOOL_WIDTH, 0.907, GoBildaSpoolConstants.THREAD_DIAMETER);
         rightClaw = hardwareMap.get(Servo.class, "rightclaw");
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
         spoolMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -104,7 +105,7 @@ public class AutonomousLeftConePlacer extends OpMode {
             switch(drive.getTaskCount()) {
                 case 0:
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", -0.65);
+                    parameters.put("meters", -0.61);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
                     break;
                 case 1:
@@ -114,115 +115,120 @@ public class AutonomousLeftConePlacer extends OpMode {
                     break;
                 case 2:
                     parameters.put("speed", 0.5);
+                    parameters.put("meters", 0.05);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
+                    break;
+                case 3:
+                    parameters.put("speed", 0.5);
                     parameters.put("degrees", 45.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.TURN_DEGREES, parameters));
                     break;
-                case 3:
+                case 4:
                     spoolMotor.setRetractedDistance(370);
                     parameters.put("seconds", 5.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
-                case 4:
+                case 5:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", 0.15);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
-                case 5:
+                case 6:
                     openClaw();
                     parameters.put("seconds", 0.5);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
-                case 6:
+                case 7:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", -0.15);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
-                case 7:
+                case 8:
                     spoolMotor.setRetractedDistance(50);
                     parameters.put("seconds", 5.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
-                case 8:
+                case 9:
                     parameters.put("speed", 0.5);
                     parameters.put("degrees", -45.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.TURN_DEGREES, parameters));
                     break;
-                case 9:
+                case 10:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", 0.65);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
-                case 10:
+                case 11:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", 0.3);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
                     break;
-                case 11:
+                case 12:
                     parameters.put("speed", 0.5);
                     parameters.put("degrees", -90.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.TURN_DEGREES, parameters));
                     break;
-                case 12:
+                case 13:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", 0.4);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
-                case 13:
+                case 14:
                     closeClaw();
                     parameters.put("seconds", 0.5);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
-                case 14:
+                case 15:
                     spoolMotor.setRetractedDistance(200);
                     parameters.put("seconds", 1.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
-                case 15:
+                case 16:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", -0.65);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
-                case 16:
+                case 17:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", 135.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.TURN_DEGREES, parameters));
                     break;
-                case 17:
+                case 18:
                     spoolMotor.setRetractedDistance(870);
                     parameters.put("seconds", 5.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
-                case 18:
+                case 19:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", 0.15);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
-                case 19:
+                case 20:
                     openClaw();
                     parameters.put("seconds", 0.5);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
-                case 20:
+                case 21:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", -0.15);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
-                case 21:
+                case 22:
                     spoolMotor.setRetractedDistance(50);
                     parameters.put("seconds", 5.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
-                case 22:
+                case 23:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", -45.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.TURN_DEGREES, parameters));
                     break;
-                case 23:
+                case 24:
                     parameters.put("speed", 0.5);
                     parameters.put("meters", -0.65);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
-                case 24:
+                case 25:
                     if(coneState == ConeStateFinder.ConeState.UNKNOWN) {
                         break;
                     }

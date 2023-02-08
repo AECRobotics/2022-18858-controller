@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode.CurrentRubySofeeCode;
 
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.CompetitionUtils.GoBildaSpoolConstants;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
+import org.firstinspires.ftc.teamcode.TeamUtils.Spool;
 
 
 @TeleOp(name="All Function Teleop", group="Robot")
@@ -18,15 +21,9 @@ public class FullyFunctionalTeleop extends OpMode{
     public DcMotor spoolMotor = null;
     public Servo rightClaw = null;
     public Servo leftClaw = null;
-
+    static final double COUNTS_PER_MM = (GoBildaSpoolConstants.TICKS_PER_REV)/(112.0);
     boolean clawOpen = false;
-    static final double COUNTS_PER_MOTOR_REV = 1680.0;
-    static final double SPOOL_DIAMETER = 23.0; //mm
-    static final double SPOOL_CIRCUMFERENCE = Math.PI * (SPOOL_DIAMETER);
-    static final double COUNTS_PER_MM = (COUNTS_PER_MOTOR_REV)/(SPOOL_CIRCUMFERENCE); //HOW MUCH MM PER TICK
-    //static final double SPOOL_TICKS = COUNTS_PER_MM * SPOOL_CIRCUMFERENCE;
     double spoolTarget;
-    double maxHeight = mmtoTicks(1300);
 
     boolean isLastGamepadDpadRight = false;
     boolean lastGamepadDpadLeft = false;
@@ -49,7 +46,7 @@ public class FullyFunctionalTeleop extends OpMode{
         rightBackDrive = hardwareMap.get(DcMotor.class, "backright");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright");
 
-        spoolMotor = hardwareMap.get(DcMotor.class, "spoolmotor");
+        spoolMotor = hardwareMap.get(DcMotor.class, "spoolmotorgobilda");
         rightClaw = hardwareMap.get(Servo.class, "rightclaw");
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
         leftBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -171,12 +168,12 @@ public class FullyFunctionalTeleop extends OpMode{
         abxy - III
          */
         if(gamepad1.dpad_up) {
-            spoolMotor.setPower(0.75);
+            spoolMotor.setPower(1.0);
             spoolTarget=ticksToMM(spoolMotor.getCurrentPosition())+10;
             //spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget));
         } else if(gamepad1.dpad_down) {
-            spoolMotor.setPower(0.75);
+            spoolMotor.setPower(1.0);
             spoolTarget=ticksToMM(spoolMotor.getCurrentPosition())-10;
             //spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget));

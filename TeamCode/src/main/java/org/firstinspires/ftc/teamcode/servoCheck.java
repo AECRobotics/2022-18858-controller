@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 public class servoCheck extends OpMode{
     public Servo rightClaw = null; //closed +0.36 open +0.45
     public Servo leftClaw = null; //open and closed because weird crap +1.0
-    public DcMotor spoolMotor = null;
+    //public DcMotor spoolMotor = null;
 
     double position1 = 0.0;
     double position2 = 0.0;
@@ -26,7 +26,7 @@ public class servoCheck extends OpMode{
         telemetry.addData("Status", "Initialized");
         rightClaw = hardwareMap.get(Servo.class, "rightclaw");
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
-        spoolMotor = hardwareMap.get(DcMotor.class, "spoolmotor");
+        //spoolMotor = hardwareMap.get(DcMotor.class, "spoolmotor");
     }
     public void init_loop(){
 
@@ -76,9 +76,9 @@ public class servoCheck extends OpMode{
         lastGamepadX = gamepad1.x;
         lastGamepadB = gamepad1.b;
 
-        spoolPosition = spoolMotor.getCurrentPosition();
+        //spoolPosition = spoolMotor.getCurrentPosition();
         telemetry.addData("thing",String.format("left: %.2f, right: %.2f", position1, position2));
-        telemetry.addData("motor pos:", spoolMotor.getCurrentPosition());
+        //telemetry.addData("motor pos:", spoolMotor.getCurrentPosition());
         telemetry.addData("left", leftClaw.getPosition());
         telemetry.addLine("right: " + rightClaw.getPosition());
     }

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
 
 import java.io.File;
 
-@Disabled
+//@Disabled
 @TeleOp(name="Generate New Calibration Data", group="Calibration")
 public class GenerateNewCalibrationData extends OpMode
 {

@@ -25,7 +25,7 @@ public class CHubIMU {
     CHubIMUAccelCalibrator accelCalibrator;
     CHubIMUMagneCalibrator magneCalibrator;
     AxesOrder defaultAxesOrder = AxesOrder.XYZ;
-    public CHubIMU(BNO055IMU imu) {
+    public CHubIMU(BNO055IMU imu, AxesOrder defaultAxesOrder) {
         this.imu = imu;
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -40,11 +40,11 @@ public class CHubIMU {
         this.gyroCalibrator.start();
         this.accelCalibrator.start();
         this.magneCalibrator.start();
+        this.defaultAxesOrder = defaultAxesOrder;
     }
 
-    public CHubIMU(BNO055IMU imu, AxesOrder defaultAxesOrder) {
-        new CHubIMU(imu);
-        this.defaultAxesOrder = defaultAxesOrder;
+    public CHubIMU(BNO055IMU imu) {
+        new CHubIMU(imu, AxesOrder.XYZ);
     }
 
     public CHubIMU(BNO055IMU imu, String calibrationFile) {
