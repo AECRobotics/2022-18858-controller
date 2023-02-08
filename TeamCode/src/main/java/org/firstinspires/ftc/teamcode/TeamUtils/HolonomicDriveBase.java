@@ -82,6 +82,7 @@ public class HolonomicDriveBase extends DriveBase {
                     break;
                 case TURN_DEGREES:
                     output = (Math.abs(this.distanceToTurn()) <= 0.1);
+                    break;
                 case PLACEHOLDER:
                     output = true;
                     break;
