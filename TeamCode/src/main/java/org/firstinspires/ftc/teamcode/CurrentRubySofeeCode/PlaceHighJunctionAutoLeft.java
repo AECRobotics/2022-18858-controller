@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.TeamUtils.Spool;
 
 import java.util.HashMap;
 
-@Autonomous(name="Cone placer autonomous LEFT", group="Robot")
+@Autonomous(name="WIP", group="Robot")
 public class PlaceHighJunctionAutoLeft extends OpMode {
     public CHubIMU imu = null;
     RobotWebcam webcam = null;

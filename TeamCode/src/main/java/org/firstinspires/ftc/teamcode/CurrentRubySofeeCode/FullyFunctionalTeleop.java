@@ -142,7 +142,7 @@ public class FullyFunctionalTeleop extends OpMode{
         }
         if(gamepad1.y){
             //high
-            spoolTarget = 1000; //mm
+            spoolTarget = 1200; //mm
             spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             spoolMotor.setPower(0.8);
