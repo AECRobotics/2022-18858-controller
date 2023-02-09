@@ -31,7 +31,12 @@ public class FullyFunctionalTeleop extends OpMode{
     boolean lastGamepadDpadDown = false;
 //current target pos / spoolticks
     public double mmtoTicks(double mm){
-        return mm*COUNTS_PER_MM;
+        double ticks = mm*COUNTS_PER_MM;
+        if(ticks >= 0 && ticks <= 4400) {
+            return ticks;
+        } else {
+            return spoolMotor.getCurrentPosition();
+        }
     }
 
     public double ticksToMM(int ticks) {
@@ -114,7 +119,7 @@ public class FullyFunctionalTeleop extends OpMode{
             leftClaw.setPosition(ClawPositions.leftServoClosed);
             rightClaw.setPosition(ClawPositions.rightServoClosed);
         }
-       if(gamepad1.a){
+        if(gamepad1.a){
            //bottom
            spoolTarget = 0; //mm
            spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
@@ -123,21 +128,21 @@ public class FullyFunctionalTeleop extends OpMode{
         }
         if(gamepad1.b){
             // low
-            spoolTarget = 370; //mm
+            spoolTarget = 550; //mm
             spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             spoolMotor.setPower(1.0);
         }
         if(gamepad1.x){
             //medium
-            spoolTarget  = 580; //mm
+            spoolTarget  = 880; //mm
             spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             spoolMotor.setPower(0.9);
         }
         if(gamepad1.y){
             //high
-            spoolTarget = 790; //mm
+            spoolTarget = 1000; //mm
             spoolMotor.setTargetPosition((int)mmtoTicks(spoolTarget)); //sets new target pos to height (mm) in ticks
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             spoolMotor.setPower(0.8);

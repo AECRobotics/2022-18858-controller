@@ -11,20 +11,20 @@ public class DriveBaseState {
 
     public double heading;
 
-    public DriveBaseState(DcMotor fr, DcMotor br, DcMotor fl, DcMotor bl, CHubIMU imu) {
-        this.frTick = fr.getCurrentPosition();
-        this.brTick = br.getCurrentPosition();
-        this.flTick = fl.getCurrentPosition();
-        this.blTick = bl.getCurrentPosition();
-        this.frPow = fr.getPower();
-        this.brPow = br.getPower();
-        this.flPow = fl.getPower();
-        this.blPow = bl.getPower();
-        this.frTarget = fr.getTargetPosition();
-        this.brTarget = br.getTargetPosition();
-        this.flTarget = fl.getTargetPosition();
-        this.blTarget = bl.getTargetPosition();
-        this.heading = imu.getOrientation().firstAngle;
+    public DriveBaseState(DriveBase drive) {
+        this.frTick = drive.fr.getCurrentPosition();
+        this.brTick = drive.br.getCurrentPosition();
+        this.flTick = drive.fl.getCurrentPosition();
+        this.blTick = drive.bl.getCurrentPosition();
+        this.frPow = drive.fr.getPower();
+        this.brPow = drive.br.getPower();
+        this.flPow = drive.fl.getPower();
+        this.blPow = drive.bl.getPower();
+        this.frTarget = drive.fr.getTargetPosition();
+        this.brTarget = drive.br.getTargetPosition();
+        this.flTarget = drive.fl.getTargetPosition();
+        this.blTarget = drive.bl.getTargetPosition();
+        this.heading = drive.getHeading();
         this.timeStamp = System.nanoTime();
     }
 }

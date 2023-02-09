@@ -48,6 +48,9 @@ public class Motor {
         return this.motor.getTargetPosition();
     }
     public int getCurrentPosition() { return this.motor.getCurrentPosition(); }
+    public double getPower() {
+        return this.motor.getPower();
+    }
     public boolean isBusy() {
         return this.motor.isBusy();
     }

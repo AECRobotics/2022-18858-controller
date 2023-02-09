@@ -112,6 +112,6 @@ public class CHubIMU {
     }
 
     public Orientation getOrientation() {
-        return this.imu.getAngularOrientation(AxesReference.INTRINSIC, defaultAxesOrder, AngleUnit.DEGREES);
+        return this.imu.getAngularOrientation(AxesReference.EXTRINSIC, defaultAxesOrder, AngleUnit.DEGREES);
     }
 }

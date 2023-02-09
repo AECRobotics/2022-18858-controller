@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.util.HashMap;
@@ -29,7 +30,16 @@ public abstract class DriveBase {
     }
 
     public DriveBaseState getDriveBaseState() {
-        return new DriveBaseState(this.fr.getMotor(), this.br.getMotor(), this.fl.getMotor(), this.bl.getMotor(), this.imu);
+        return new DriveBaseState(this);
+    }
+
+    public CHubIMU getImu() {
+        return imu;
+    }
+
+    public double getHeading() {
+        Orientation orientation = this.imu.getOrientation();
+        return orientation.thirdAngle;
     }
 
     public int getTaskCount() {

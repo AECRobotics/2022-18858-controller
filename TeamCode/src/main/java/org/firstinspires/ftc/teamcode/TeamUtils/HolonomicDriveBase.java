@@ -123,14 +123,9 @@ public class HolonomicDriveBase extends DriveBase {
         this.bl.turnWheelDistance(-distanceInMeters, this.stateAtAssignmentOfTask.blTarget);
     }
 
-    public double getHeading() {
-        Orientation orientation = this.imu.getOrientation();
-        return orientation.firstAngle;
-    }
-
     public double distanceToTurn() { //this function has absolutely no error handling, if you call it when driving instead of turning it will absolutely return invalid information and especially if you call it without setting a task first
         double current = this.getHeading();
-        double destination = (this.getTask().getParameters().get("degrees")+this.stateAtAssignmentOfTask.heading);
+        double destination = (this.stateAtAssignmentOfTask.heading+(180-this.getTask().getParameters().get("degrees")));
         destination%=(2*180);
         destination-=180;
         destination-=current;
@@ -151,7 +146,11 @@ public class HolonomicDriveBase extends DriveBase {
     public void turn() {
         double speed = this.getTask().getParameters().get("speed");
         double diff = this.distanceToTurn();
-
+        if(Math.abs(diff) <= 5) {
+            speed = 0.05;
+        } else if(Math.abs(diff) <= 15) {
+            speed = 0.1;
+        }
         speed = Math.signum(diff)*speed;
         //telemetry.addData("debug",String.format("%.5f, %.5f, %.5f, %.5f", destination, diff, speed, current));
         //telemetry.addData("debug2", String.format("%.5f, %.5f, %.5f", diff, DriveBase.PIDishThingMultiplier, this.task.getSpeed()));
@@ -203,6 +202,24 @@ public class HolonomicDriveBase extends DriveBase {
         }
     }
 
+    private void finishTask() {
+        switch(this.getTask().getTaskType()) {
+            case DRIVE_DISTANCE:
+                break;
+            case STRAFE_DISTANCE:
+                break;
+            case WAIT_FOR:
+                break;
+            case TURN_DEGREES:
+                this.setMotorPower(0.0);
+                break;
+            case PLACEHOLDER:
+                break;
+            default:
+                throw new RuntimeException("Task type not implemented in this drivebase");
+        }
+    }
+
     @Override
     public void doTasks() {
         if(this.getTask().getState() == DriveBaseTask.TaskState.EXISTING) {
@@ -211,7 +228,7 @@ public class HolonomicDriveBase extends DriveBase {
         } else if(this.getTask().getState() == DriveBaseTask.TaskState.STARTED) {
             doTask();
         } else if(this.getTask().getState() == DriveBaseTask.TaskState.FINISHED) {
-            return;
+            finishTask();
         }
         return;
     }

@@ -47,7 +47,7 @@ public class TestAutonomous extends OpMode {
         rightBackDrive.setMode(RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
         BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
-        imu = new CHubIMU(imub, AxesOrder.YXZ);
+        imu = new CHubIMU(imub, AxesOrder.XYZ);
         drive = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imu);
     }
     @Override
@@ -60,25 +60,40 @@ public class TestAutonomous extends OpMode {
 
     }
 
+    private boolean debug = false;
+
     @Override
     public void loop() {
+        telemetry.addLine("" + imu.getOrientation());
         telemetry.addLine("" + drive.getHeading());
         //telemetry.addLine(ConeStateFinder.debugOutput);
         telemetry.addLine(drive.getTask().getTaskType().name());
         telemetry.addLine(drive.isTaskComplete() + "");
         telemetry.addLine(drive.getTask().getState() + "");
-        //telemetry.addLine(drive.allMotorsReachedTarget() + "");
+        telemetry.addLine(debug ? drive.distanceToTurn() + "" : "not right task");
         //telemetry.addLine(drive.allMotorsNotBusy() + "");
         //telemetry.addLine(drive.getFr().getCurrentPosition() + ", " + drive.getFr().getTargetPosition());
         //telemetry.addLine(drive.getBr().getCurrentPosition() + ", " + drive.getBr().getTargetPosition());
-        if(drive.isTaskComplete() && coneState != null) {
+        telemetry.addLine("" + drive.getTaskCount());
+
+        if(drive.isTaskComplete()) {
             HashMap<String, Double> parameters = new HashMap<String, Double>();
             switch(drive.getTaskCount()) {
                 case 0:
-                    parameters.put("speed", 0.5);
+                    debug = true;
+                    parameters.put("speed", 0.2);
+                    parameters.put("degrees", 45.0);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.TURN_DEGREES, parameters));
+                    break;
+                case 1:
+                    debug = true;
+                    parameters.put("speed", 0.2);
                     parameters.put("degrees", 90.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.TURN_DEGREES, parameters));
                     break;
+                case 2:
+                    debug = false;
+                    drive.setMotorPower(0.0);
             }
         }
         drive.doTasks();

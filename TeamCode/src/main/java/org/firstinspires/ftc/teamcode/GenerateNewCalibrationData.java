@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
@@ -22,7 +23,7 @@ public class GenerateNewCalibrationData extends OpMode
     @Override
     public void init() {
         BNO055IMU imuB = hardwareMap.get(BNO055IMU.class, "imu");
-        imu = new CHubIMU(imuB);
+        imu = new CHubIMU(imuB, AxesOrder.XYZ);
     }
 
     @Override
@@ -45,6 +46,7 @@ public class GenerateNewCalibrationData extends OpMode
         telemetry.addData("Y", estimatedPosition.y);
         telemetry.addData("Z", estimatedPosition.z);
         telemetry.addLine("XYZ" + imu.getOrientation());
+        telemetry.addLine("" + imu.getOrientation().thirdAngle);
     }
 
     @Override
