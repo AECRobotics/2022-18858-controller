@@ -66,6 +66,7 @@ public class TestAutonomous extends OpMode {
     public void loop() {
         telemetry.addLine("" + imu.getOrientation());
         telemetry.addLine("" + drive.getHeading());
+        telemetry.addLine("" + drive.getTaskCount());
         //telemetry.addLine(ConeStateFinder.debugOutput);
         telemetry.addLine(drive.getTask().getTaskType().name());
         telemetry.addLine(drive.isTaskComplete() + "");
