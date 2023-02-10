@@ -78,7 +78,7 @@ public class HolonomicDriveBase extends DriveBase {
                     output = this.allMotorsReachedTarget() && this.allMotorsNotBusy();
                     break;
                 case WAIT_FOR:
-                    output = (this.stateAtAssignmentOfTask.timeStamp+this.getTask().getParameters().get("seconds")*UnitConversion.SECONDS_PER_NANOSECOND) > System.nanoTime();
+                    output = (this.stateAtAssignmentOfTask.timeStamp+this.getTask().getParameters().get("seconds")*UnitConversion.SECONDS_PER_NANOSECOND) <= System.nanoTime();
                     break;
                 case TURN_DEGREES:
                     output = (Math.abs(this.distanceToTurn()) <= 0.1);
