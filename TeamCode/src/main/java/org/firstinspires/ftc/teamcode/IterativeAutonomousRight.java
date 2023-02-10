@@ -46,8 +46,8 @@ public class IterativeAutonomousRight extends OpMode {
         rightBackDrive.setMode(RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
         BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
-        imu = new CHubIMU(imub);
-        drive = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imu);
+        drive = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imub);
+        imu = drive.getImu();
     }
     @Override
     public void init_loop() {
