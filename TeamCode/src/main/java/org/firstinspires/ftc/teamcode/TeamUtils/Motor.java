@@ -8,7 +8,11 @@ public class Motor {
     private final double gearRatio, ticksPerRawRev, maximumBacklash;
     private final double ticksPerRev;
 
-    private double previousTargetCurrentPositionDifference = 0.0;
+    private int backlashCompensation;
+
+    private int previousInternalTargetCurrentPositionDifference = 0;
+    private int internalTarget = 0;
+    private int internalRealPositionDifference = 0;
 
     public Motor(DcMotor motor, double gearRatio, double ticksPerRawRev, double maximumBacklash) {
         this.motor = motor;
@@ -16,7 +20,11 @@ public class Motor {
         this.ticksPerRawRev = ticksPerRawRev;
         this.maximumBacklash = maximumBacklash;
         this.ticksPerRev = this.ticksPerRawRev * this.gearRatio;
+        this.backlashCompensation = (int)(this.convertRadToEncoderTicks(maximumBacklash)+0.5);
+        this.previousInternalTargetCurrentPositionDifference = this.backlashCompensation;
         this.motor.setTargetPosition(0);
+        this.internalTarget = 0;
+        this.internalRealPositionDifference = 0;
         this.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
@@ -44,12 +52,29 @@ public class Motor {
         this.motor.setPower(power);
     }
     public void setTargetPosition(int target) {
-        this.motor.setTargetPosition(target);
+        this.internalTarget = target;
+        int internalExternalTargetPositionDifference = (target-this.internalRealPositionDifference)-this.motor.getCurrentPosition();
+        int previousSign = Integer.signum(this.previousInternalTargetCurrentPositionDifference);
+        int currentSign = Integer.signum(internalExternalTargetPositionDifference);
+        int realTarget;// = currentInternalTargetCurrentPositionDifference;
+        if(previousSign == currentSign) {
+            realTarget = target-this.internalRealPositionDifference;
+        } else if(previousSign < currentSign) {
+            realTarget = (target-this.internalRealPositionDifference)+this.backlashCompensation;
+            this.internalRealPositionDifference = this.backlashCompensation;
+        } else if(previousSign > currentSign) {
+            realTarget = (target-this.internalRealPositionDifference)-this.backlashCompensation;
+            this.internalRealPositionDifference = -this.backlashCompensation;
+        } else {
+            throw new Error("May God have mercy on you, for reality clearly will not");
+        }
+        this.previousInternalTargetCurrentPositionDifference =
+        this.motor.setTargetPosition(realTarget);
     }
     public int getTargetPosition() {
-        return this.motor.getTargetPosition();
+        return this.motor.getTargetPosition()+this.internalRealPositionDifference;
     }
-    public int getCurrentPosition() { return this.motor.getCurrentPosition(); }
+    public int getCurrentPosition() { return this.motor.getCurrentPosition()+this.internalRealPositionDifference; }
     public double getPower() {
         return this.motor.getPower();
     }
