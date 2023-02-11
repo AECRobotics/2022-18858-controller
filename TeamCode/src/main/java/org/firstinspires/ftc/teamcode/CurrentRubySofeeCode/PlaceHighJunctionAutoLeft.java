@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.CompetitionUtils.ArmHeightPositions;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.GoBildaSpoolConstants;
@@ -101,14 +102,20 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
             HashMap<String, Double> parameters = new HashMap<String, Double>();
             switch(drive.getTaskCount()) {
                 case 0:
+                    closeClaw();
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", 0.60);
+                    parameters.put("meters", 0.66);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
                     break;
                 case 1:
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", 0.65);
+                    parameters.put("meters", 1.17);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
+                    break;
+                case 2:
+                    parameters.put("speed", 0.5);
+                    parameters.put("meters", -0.305);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
                     break;
                 /*case 2:
                     parameters.put("speed", 0.5);
@@ -124,15 +131,20 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                     break;
 
                  */
-                case 4:
-                    spoolMotor.setRetractedDistance(1000);
+                case 3:
+                    spoolMotor.setRetractedDistance(ArmHeightPositions.HIGH_PLACEMENT);
                     parameters.put("seconds", 5.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
-                case 5:
+                case 4:
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", 0.15);
+                    parameters.put("meters", 0.16);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
+                    break;
+                case 5:
+                    spoolMotor.setRetractedDistance(ArmHeightPositions.HIGH_PLACEMENT-20);
+                    parameters.put("seconds", 5.0);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
                 case 6:
                     openClaw();
@@ -140,16 +152,26 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
                 case 7:
-                    parameters.put("speed", 0.5);
-                    parameters.put("meters", -0.15);
-                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
-                    break;
-                case 8:
-                    spoolMotor.setRetractedDistance(50);
+                    spoolMotor.setRetractedDistance(ArmHeightPositions.HIGH_PLACEMENT);
                     parameters.put("seconds", 5.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
+                case 8:
+                    parameters.put("speed", 0.5);
+                    parameters.put("meters", -0.16);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
+                    break;
                 case 9:
+                    spoolMotor.setRetractedDistance(ArmHeightPositions.GROUND_PLACEMENT);
+                    parameters.put("seconds", 5.0);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
+                    break;
+                case 10:
+                    parameters.put("speed", 0.5);
+                    parameters.put("meters", -0.355);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
+                    break;
+                /*case 9:
                     parameters.put("speed", 0.5);
                     parameters.put("degrees", -45.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.TURN_DEGREES, parameters));
@@ -229,12 +251,14 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                     parameters.put("meters", -0.65);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
-                case 25:
+
+                 */
+                case 11:
                     if(coneState == ConeStateFinder.ConeState.UNKNOWN) {
                         break;
                     }
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.64055 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.68785 : 0.0));
+                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.6405 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.68785 : 0.0));
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
                 /*case 0:
                     if(coneState == ConeStateFinder.ConeState.UNKNOWN) {
