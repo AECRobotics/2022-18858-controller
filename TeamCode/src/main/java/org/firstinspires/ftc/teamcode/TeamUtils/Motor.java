@@ -8,6 +8,8 @@ public class Motor {
     private final double gearRatio, ticksPerRawRev, maximumBacklash;
     private final double ticksPerRev;
 
+    private double previousTargetCurrentPositionDifference = 0.0;
+
     public Motor(DcMotor motor, double gearRatio, double ticksPerRawRev, double maximumBacklash) {
         this.motor = motor;
         this.gearRatio = gearRatio;
