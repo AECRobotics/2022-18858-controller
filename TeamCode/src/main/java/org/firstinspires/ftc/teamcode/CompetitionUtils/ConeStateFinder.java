@@ -24,6 +24,8 @@ public class ConeStateFinder {
 
     //private static double checkAreaWidth = 0.5;
     //private static double checkAreaHeight = 0.5;
+    private static AprilTagDetectionWebcam aprilWebcam;
+    private static ConeStateFinderThread thread;
     private static int leftTagID = 5;
     private static int middleTagID = 10;
     private static int rightTagID = 15;
@@ -48,6 +50,40 @@ public class ConeStateFinder {
 
 
     public static String debugOutput = "";
+
+    public static AprilTagDetectionWebcam getWebcam() {
+        return ConeStateFinder.aprilWebcam;
+    }
+
+    public static void setWebcam(AprilTagDetectionWebcam webcam) {
+        ConeStateFinder.aprilWebcam = webcam;
+        thread = new ConeStateFinderThread();
+    }
+
+    public static ConeState getConeStateAprilTag() {
+        if(thread != null) {
+            return thread.detectedState;
+        } else {
+            return ConeState.UNKNOWN;
+        }
+    }
+
+    public static boolean startCheckingState() {
+        if(thread == null) {
+            thread.running = true;
+            thread.start();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static void stopCheckingState() {
+        if(thread != null) {
+            thread.running = false;
+            //thread = null;
+        }
+    }
 
     public static ArrayList<Double> normalizeColor(int c) {
         double a = (c&0xff000000)>>24;

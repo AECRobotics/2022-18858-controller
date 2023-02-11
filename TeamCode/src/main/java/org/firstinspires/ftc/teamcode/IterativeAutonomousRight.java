@@ -48,10 +48,14 @@ public class IterativeAutonomousRight extends OpMode {
         BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
         drive = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imub);
         imu = drive.getImu();
+        ConeStateFinder.setWebcam(aprilWebcam);
+        ConeStateFinder.startCheckingState();
     }
     @Override
     public void init_loop() {
         telemetry.addLine("Gyro: " + imu.getGyroCalibrationStatus());
+        telemetry.addLine("Cone State: " + getConePosition());
+
     }
 
     @Override
@@ -63,6 +67,9 @@ public class IterativeAutonomousRight extends OpMode {
     public void loop() {
         if(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN) {
             coneState = getConePosition();
+            if(!(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN)) {
+                ConeStateFinder.stopCheckingState();
+            }
         }
         //telemetry.addLine(ConeStateFinder.debugOutput);
         //telemetry.addLine(drive.getTask().getTaskType().name());
@@ -97,7 +104,7 @@ public class IterativeAutonomousRight extends OpMode {
     public ConeStateFinder.ConeState getConePosition(){
         //return (int)Math.floor(r.nextDouble()*3.0);
         //return ConeStateFinder.getConeState(webcam);
-        return ConeStateFinder.getConeStateAprilTag(aprilWebcam);
+        return ConeStateFinder.getConeStateAprilTag();
     }
 
     @Override

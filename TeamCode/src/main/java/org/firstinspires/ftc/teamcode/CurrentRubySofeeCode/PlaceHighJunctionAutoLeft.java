@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.TeamUtils.Spool;
 
 import java.util.HashMap;
 
-@Autonomous(name="WIP", group="Robot")
+@Autonomous(name="WIP LEFT", group="Robot")
 public class PlaceHighJunctionAutoLeft extends OpMode {
     public CHubIMU imu = null;
     RobotWebcam webcam = null;
@@ -73,10 +73,13 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
         spoolMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         spoolMotor.setPower(0.3);
+        ConeStateFinder.setWebcam(aprilWebcam);
+        ConeStateFinder.startCheckingState();
     }
     @Override
     public void init_loop() {
         telemetry.addLine("Gyro: " + imu.getGyroCalibrationStatus());
+        telemetry.addLine("Cone State: " + getConePosition());
     }
 
     @Override
@@ -89,6 +92,9 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
     public void loop() {
         if(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN) {
             coneState = getConePosition();
+            if(!(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN)) {
+                ConeStateFinder.stopCheckingState();
+            }
         }
 
         if(drive.isTaskComplete() && coneState != null) {
@@ -122,7 +128,7 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                     break;
                 case 5:
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", 0.13);
+                    parameters.put("meters", 0.14);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
                 case 6:
@@ -142,7 +148,7 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                     break;
                 case 9:
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", -0.13);
+                    parameters.put("meters", -0.14);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
                 case 10:
@@ -171,7 +177,7 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
     public ConeStateFinder.ConeState getConePosition(){
         //return (int)Math.floor(r.nextDouble()*3.0);
         //return ConeStateFinder.getConeState(webcam);
-        return ConeStateFinder.getConeStateAprilTag(aprilWebcam);
+        return ConeStateFinder.getConeStateAprilTag();
     }
 
     @Override
