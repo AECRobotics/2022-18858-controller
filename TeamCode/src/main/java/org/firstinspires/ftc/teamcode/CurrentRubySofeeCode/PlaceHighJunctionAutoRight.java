@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.TeamUtils.Spool;
 import java.util.HashMap;
 
 @Autonomous(name="WIP", group="Robot")
-public class PlaceHighJunctionAutoLeft extends OpMode {
+public class PlaceHighJunctionAutoRight extends OpMode {
     public CHubIMU imu = null;
     RobotWebcam webcam = null;
     myBoyDrivebase drive = null;
@@ -102,7 +102,7 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                 case 1:
                     spoolMotor.setRetractedDistance(ArmHeightPositions.GROUND_PLACEMENT+50);
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", 0.66);
+                    parameters.put("meters", -0.66);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
                     break;
                 case 2:
@@ -112,7 +112,7 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                     break;
                 case 3:
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", -0.295);
+                    parameters.put("meters", 0.295);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
                     break;
                 case 4:
@@ -152,7 +152,7 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                     break;
                 case 11:
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", -0.365);
+                    parameters.put("meters", 0.365);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
                     break;
                 case 12:
