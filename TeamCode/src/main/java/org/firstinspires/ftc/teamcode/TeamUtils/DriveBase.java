@@ -107,6 +107,10 @@ public abstract class DriveBase {
         return !(this.fr.isBusy() || this.br.isBusy() || this.fl.isBusy() || this.bl.isBusy());
     }
 
+    public int numberOfMotorsBusy() {
+        return ((this.fr.isBusy()?1:0)+(this.br.isBusy()?1:0)+(this.fl.isBusy()?1:0)+(this.bl.isBusy()?1:0));
+    }
+
     public boolean allMotorsReachedTarget() {
         boolean atTarget = (Math.abs(this.fr.getTargetPosition()-this.fr.getCurrentPosition()) < 10) &&
                 (Math.abs(this.br.getTargetPosition()-this.br.getCurrentPosition()) < 10) &&

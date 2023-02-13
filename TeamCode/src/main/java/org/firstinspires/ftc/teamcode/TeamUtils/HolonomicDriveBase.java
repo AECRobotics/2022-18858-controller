@@ -72,10 +72,10 @@ public class HolonomicDriveBase extends DriveBase {
             boolean output = false;
             switch(this.getTask().getTaskType()) {
                 case DRIVE_DISTANCE:
-                    output = this.allMotorsReachedTarget() && this.allMotorsNotBusy();
+                    output = this.allMotorsReachedTarget() && this.numberOfMotorsBusy() <= 2;
                     break;
                 case STRAFE_DISTANCE:
-                    output = this.allMotorsReachedTarget() && this.allMotorsNotBusy();
+                    output = this.allMotorsReachedTarget() && this.numberOfMotorsBusy() <= 2;
                     break;
                 case WAIT_FOR:
                     output = (this.stateAtAssignmentOfTask.timeStamp+this.getTask().getParameters().get("seconds")*UnitConversion.SECONDS_PER_NANOSECOND) <= System.nanoTime();

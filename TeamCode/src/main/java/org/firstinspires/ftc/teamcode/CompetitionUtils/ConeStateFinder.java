@@ -57,6 +57,8 @@ public class ConeStateFinder {
 
     public static void setWebcam(AprilTagDetectionWebcam webcam) {
         ConeStateFinder.aprilWebcam = webcam;
+        thread.running = false;
+        //stopCheckingState();
         thread = new ConeStateFinderThread();
     }
 
@@ -70,7 +72,7 @@ public class ConeStateFinder {
 
     public static boolean startCheckingState() {
         if(thread == null) {
-            thread.running = true;
+            //thread.running = true;
             thread.start();
             return true;
         } else {
@@ -81,6 +83,7 @@ public class ConeStateFinder {
     public static void stopCheckingState() {
         if(thread != null) {
             thread.running = false;
+            while(!thread.stopped) {}
             //thread = null;
         }
     }

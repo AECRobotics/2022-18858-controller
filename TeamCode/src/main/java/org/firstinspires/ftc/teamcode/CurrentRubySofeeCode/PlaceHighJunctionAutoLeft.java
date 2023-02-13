@@ -72,14 +72,14 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
         rightClaw = hardwareMap.get(Servo.class, "rightclaw");
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
         spoolMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        spoolMotor.setPower(0.3);
-        ConeStateFinder.setWebcam(aprilWebcam);
-        ConeStateFinder.startCheckingState();
+        spoolMotor.setPower(1.0);
+        //ConeStateFinder.setWebcam(aprilWebcam);
+        //ConeStateFinder.startCheckingState();
     }
     @Override
     public void init_loop() {
         telemetry.addLine("Gyro: " + imu.getGyroCalibrationStatus());
-        telemetry.addLine("Cone State: " + getConePosition());
+        //telemetry.addLine("Cone State: " + ConeStateFinder.getConeStateAprilTag());
     }
 
     @Override
@@ -92,9 +92,6 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
     public void loop() {
         if(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN) {
             coneState = getConePosition();
-            if(!(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN)) {
-                ConeStateFinder.stopCheckingState();
-            }
         }
 
         if(drive.isTaskComplete() && coneState != null) {
@@ -118,21 +115,21 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                     break;
                 case 3:
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", -0.295);
+                    parameters.put("meters", -0.3);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
                     break;
                 case 4:
                     spoolMotor.setRetractedDistance(ArmHeightPositions.HIGH_PLACEMENT);
-                    parameters.put("seconds", 5.0);
+                    parameters.put("seconds", 6.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
                 case 5:
                     parameters.put("speed", 0.5);
-                    parameters.put("meters", 0.14);
+                    parameters.put("meters", 0.135);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
                 case 6:
-                    spoolMotor.setRetractedDistance(ArmHeightPositions.HIGH_PLACEMENT-40);
+                    spoolMotor.setRetractedDistance(ArmHeightPositions.HIGH_PLACEMENT-43);
                     parameters.put("seconds", 0.5);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
@@ -177,7 +174,7 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
     public ConeStateFinder.ConeState getConePosition(){
         //return (int)Math.floor(r.nextDouble()*3.0);
         //return ConeStateFinder.getConeState(webcam);
-        return ConeStateFinder.getConeStateAprilTag();
+        return ConeStateFinder.getConeStateAprilTag(aprilWebcam);
     }
 
     @Override
