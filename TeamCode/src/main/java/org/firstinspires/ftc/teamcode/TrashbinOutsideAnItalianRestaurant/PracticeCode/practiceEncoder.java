@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.PracticeCode;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant.PracticeCode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 @Disabled
-//@Autonomous(name="Robot: Auto with encoder My Boy", group="Robot")
+@Autonomous(name="Robot: Auto with encoder My Boy", group="Robot")
 public class practiceEncoder extends OpMode{
     private int autoThingsCount = 0;
     public void motorSpeed(double speed){

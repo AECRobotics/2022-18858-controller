@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.CurrentRubySofeeCode;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,7 +15,7 @@ import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
-
+@Disabled
 @Autonomous(name="left red and blue auto <o/`", group="Robot")
 public class FirstTimedAutonomousCase extends OpMode{
     public void motorSpeed(double speed){

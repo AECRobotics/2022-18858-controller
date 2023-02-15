@@ -51,6 +51,7 @@ public class Motor {
     public void setPower(double power) {
         this.motor.setPower(power);
     }
+
     public void setTargetPosition(int target) {
         this.internalTarget = target;
         int internalExternalTargetPositionDifference = (target-this.internalRealPositionDifference)-this.motor.getCurrentPosition();
@@ -66,19 +67,28 @@ public class Motor {
             realTarget = (target-this.internalRealPositionDifference)-this.backlashCompensation;
             this.internalRealPositionDifference = -this.backlashCompensation;
         } else {
-            throw new Error("May God have mercy on you, for reality clearly will not");
+            throw new Error("May God have mercy on you, for reality clearly isn't willing to");
         }
-        this.previousInternalTargetCurrentPositionDifference =
+        this.previousInternalTargetCurrentPositionDifference = realTarget-this.getCurrentPosition();
         this.motor.setTargetPosition(realTarget);
     }
+
     public int getTargetPosition() {
         return this.motor.getTargetPosition()+this.internalRealPositionDifference;
     }
-    public int getCurrentPosition() { return this.motor.getCurrentPosition()+this.internalRealPositionDifference; }
+
+    public int getCurrentPosition() {
+        return this.motor.getCurrentPosition()+this.internalRealPositionDifference;
+    }
+
     public double getPower() {
         return this.motor.getPower();
     }
     public boolean isBusy() {
         return this.motor.isBusy();
+    }
+
+    public boolean reachedTarget() {
+        return this.motor.getTargetPosition()-this.getCurrentPosition() == 0;
     }
 }

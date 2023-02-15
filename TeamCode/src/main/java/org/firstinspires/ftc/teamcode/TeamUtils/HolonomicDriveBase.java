@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeamUtils;
 
+import static java.lang.Thread.sleep;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -96,6 +98,66 @@ public class HolonomicDriveBase extends DriveBase {
         }
     }
 
+    public void forward(double power, double distance) {
+        this.fl.setPower(power);
+        this.bl.setPower(power);
+        this.fr.setPower(power);
+        this.br.setPower(power);
+        this.fl.turnWheelDistance(distance, this.stateAtAssignmentOfTask.flTarget);
+        this.bl.turnWheelDistance(distance, this.stateAtAssignmentOfTask.blTarget);
+        this.fr.turnWheelDistance(distance, this.stateAtAssignmentOfTask.frTarget);
+        this.br.turnWheelDistance(distance, this.stateAtAssignmentOfTask.brTarget);
+        while(!this.allMotorsReachedTarget() && this.allMotorsNotBusy()) {
+            try {
+                sleep(2);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void strafe(double power, double distance) {
+        this.fl.setPower(power);
+        this.br.setPower(power);
+        this.fr.setPower(power);
+        this.bl.setPower(power);
+        this.fl.turnWheelDistance(distance, this.stateAtAssignmentOfTask.flTarget);
+        this.br.turnWheelDistance(distance, this.stateAtAssignmentOfTask.brTarget);
+        this.fr.turnWheelDistance(-distance, this.stateAtAssignmentOfTask.frTarget);
+        this.bl.turnWheelDistance(-distance, this.stateAtAssignmentOfTask.blTarget);
+        while(!this.allMotorsReachedTarget() && this.allMotorsNotBusy()) {
+            try {
+                sleep(2);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void turn(double power, double degrees) {
+        double startHeading = this.getHeading();
+        double diff = this.distanceToTurn(degrees);
+        if(Math.abs(diff) <= 5) {
+            power = 0.05;
+        } else if(Math.abs(diff) <= 15) {
+            power = 0.1;
+        }
+        power = Math.signum(diff)*power;
+        //telemetry.addData("debug",String.format("%.5f, %.5f, %.5f, %.5f", destination, diff, speed, current));
+        //telemetry.addData("debug2", String.format("%.5f, %.5f, %.5f", diff, DriveBase.PIDishThingMultiplier, this.task.getSpeed()));
+        this.fr.setPower(power);
+        this.br.setPower(power);
+        this.fl.setPower(-power);
+        this.bl.setPower(-power);
+        while(this.distanceToTurn(degrees) > 0.1) {
+            try {
+                sleep(2);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void forward() {
         double distanceInMeters = this.getTask().getParameters().get("meters");
         double power = this.getTask().getParameters().get("speed");
@@ -124,6 +186,16 @@ public class HolonomicDriveBase extends DriveBase {
     }
 
     public double distanceToTurn() { //this function has absolutely no error handling, if you call it when driving instead of turning it will absolutely return invalid information and especially if you call it without setting a task first
+        double current = this.getHeading();
+        double destination = (this.stateAtAssignmentOfTask.heading+(180-this.getTask().getParameters().get("degrees")));
+        return this.distanceToTurn(current, destination);
+    }
+
+    public double distanceToTurn(double degrees) {
+        return this.distanceToTurn(this.getHeading(), this.getHeading()+(180-degrees));
+    }
+
+    public double distanceToTurn(double cHeading, double nHeading) { //this function has absolutely no error handling, if you call it when driving instead of turning it will absolutely return invalid information and especially if you call it without setting a task first
         double current = this.getHeading();
         double destination = (this.stateAtAssignmentOfTask.heading+(180-this.getTask().getParameters().get("degrees")));
         destination%=(2*180);

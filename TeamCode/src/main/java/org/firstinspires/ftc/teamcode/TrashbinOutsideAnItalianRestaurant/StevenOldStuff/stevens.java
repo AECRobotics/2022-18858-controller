@@ -29,15 +29,23 @@
 
 //basically use this file as a template for autonomous and maybe teleop, only edit it if you are making changes to the template otherwise copy it.
 
-package org.firstinspires.ftc.teamcode.StevenOldStuff;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant.StevenOldStuff;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+//import org.firstinspires.ftc.teamcode.TeamUtils.CompassCalibration;
+
+import java.util.ArrayList;
 
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
@@ -53,9 +61,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 @Disabled
-@TeleOp(name="Autonomous Steven", group="")
+@TeleOp(name="Teleop Steven", group="")
 
-public class stevensauto extends OpMode
+public class stevens extends OpMode
 {
     DcMotor leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive;
 
@@ -88,52 +96,24 @@ public class stevensauto extends OpMode
     public void init_loop() {
     }
 
-    private long sTime;
-
     /*
      * Code to run ONCE when the driver hits PLAY
      */
     @Override
     public void start() {
-        sTime = System.nanoTime();
-
     }
 
 
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
-    void setAllMotors(double power) {
-        leftFrontDrive.setPower(power);
-        leftBackDrive.setPower(power);
-        rightFrontDrive.setPower(power);
-        rightBackDrive.setPower(power);
-    }
-
-    final long nanosecsPerSec = 1000000000L;
     @Override
     public void loop() {
-        if(sTime + nanosecsPerSec*5 >= System.nanoTime()) {
-            setAllMotors(1.0);
-        } else if(sTime + nanosecsPerSec*6.5 >= System.nanoTime()){
-            leftFrontDrive.setPower(1.0);
-            leftBackDrive.setPower(1.0);
-            rightFrontDrive.setPower(-1.0);
-            rightBackDrive.setPower(-1.0);
-        } else if(sTime + nanosecsPerSec*11.5 >= System.nanoTime()){
-            setAllMotors(1.0);
-        } else if(sTime + nanosecsPerSec*16.5 >= System.nanoTime()){
-            leftFrontDrive.setPower(-1.0);
-            leftBackDrive.setPower(1.0);
-            rightFrontDrive.setPower(1.0);
-            rightBackDrive.setPower(-1.0);
-        } else if(sTime + nanosecsPerSec*21.5 >= System.nanoTime()){
-            setAllMotors(-1.0);
-        } else {
-            setAllMotors(0.0);
-        }
+        double leftFrontPower;
 
-
+        double rightFrontPower;
+        double leftBackPower;
+        double rightBackPower;
 
         double drive = -gamepad1.left_stick_y;
         double strafe = gamepad1.left_stick_x;

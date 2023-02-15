@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CurrentRubySofeeCode;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name="spool ONLY", group="Robot")
 @Disabled
+@TeleOp(name="spool ONLY", group="Robot")
 public class SpoolMotorCheck extends OpMode{
     public DcMotor spoolMotor = null;
     public void init() {

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.PracticeCode;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant.PracticeCode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 //import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 //import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 @Disabled
-//@TeleOp(name="Robot: Auto with sensor My Boy", group="Robot")
+@TeleOp(name="Robot: Auto with sensor My Boy", group="Robot")
 public class sensorTestAutonomous extends OpMode{
     public int count = 0;
     int hasRun = 0;

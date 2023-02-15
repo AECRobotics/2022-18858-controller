@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.PracticeCode;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant.PracticeCode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
@@ -9,7 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import java.util.Random;
 
-//@Autonomous(name="Outdated My Boy", group="Robot")
+@Disabled
+@Autonomous(name="Outdated My Boy", group="Robot")
 public class firstTryAutonomous extends OpMode{
     private Random r = new Random();
     private int autoThingsCount = 0;

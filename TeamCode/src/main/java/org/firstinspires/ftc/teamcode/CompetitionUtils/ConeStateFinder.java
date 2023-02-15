@@ -49,6 +49,25 @@ public class ConeStateFinder {
 
     public static String debugOutput = "";
 
+    private AprilTagDetectionWebcam webcam;
+    private HashMap<Integer, ConeState> tagToStateMap;
+
+    public ConeStateFinder(AprilTagDetectionWebcam webcam, HashMap<Integer, ConeState> tagToStateMap) {
+        this.webcam = webcam;
+        this.tagToStateMap = tagToStateMap;
+    }
+
+    public ConeState getConeState() {
+        ArrayList<AprilTagDetection> currentDetections = webcam.getTags();
+
+        for(AprilTagDetection tag : currentDetections) {
+            if(this.tagToStateMap.containsKey(tag.id)) {
+                return this.tagToStateMap.get(tag.id);
+            }
+        }
+        return ConeState.UNKNOWN;
+    }
+
     public static ArrayList<Double> normalizeColor(int c) {
         double a = (c&0xff000000)>>24;
         double r = (c&0x00ff0000)>>16;

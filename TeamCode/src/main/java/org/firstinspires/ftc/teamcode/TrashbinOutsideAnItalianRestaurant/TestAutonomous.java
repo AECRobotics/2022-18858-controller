@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
 
 import java.util.HashMap;
 
+@Disabled
 @Autonomous(name="Test Autonomous", group="Robot")
 public class TestAutonomous extends OpMode {
     public CHubIMU imu = null;
