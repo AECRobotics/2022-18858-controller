@@ -12,7 +12,7 @@ public class Motor {
 
     private int previousInternalTargetCurrentPositionDifference = 0;
     private int internalTarget = 0;
-    private int internalRealPositionDifference = 0;
+    public int internalRealPositionDifference = 0;
 
     public Motor(DcMotor motor, double gearRatio, double ticksPerRawRev, double maximumBacklash) {
         this.motor = motor;
@@ -62,7 +62,7 @@ public class Motor {
             realTarget = target-this.internalRealPositionDifference;
         } else if(previousSign < currentSign) {
             realTarget = (target-this.internalRealPositionDifference)+this.backlashCompensation;
-            this.internalRealPositionDifference = this.backlashCompensation;
+            this.internalRealPositionDifference = 0;//this.backlashCompensation;
         } else if(previousSign > currentSign) {
             realTarget = (target-this.internalRealPositionDifference)-this.backlashCompensation;
             this.internalRealPositionDifference = -this.backlashCompensation;

@@ -21,6 +21,8 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     public Servo rightClaw = null;
     public Servo leftClaw = null;
 
+    public MyBoyAutonomous() {}
+
     public void openClaw() {
         leftClaw.setPosition(ClawPositions.leftServoOpen);
         rightClaw.setPosition(ClawPositions.rightServoOpen);
@@ -32,32 +34,27 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     }
 
     protected void internalInit() {
+        telemetry.addData("Status", "Ready to run");
+        telemetry.update();
         DcMotor leftBackDrive = hardwareMap.get(DcMotor.class, "backleft"); //1
         DcMotor leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft"); //0
         DcMotor rightBackDrive = hardwareMap.get(DcMotor.class, "backright"); //4
         DcMotor rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright"); //2
 
         //webcam = new RobotWebcam(hardwareMap.get(WebcamName.class, "webcam"));
-        AprilTagDetectionWebcam aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam"));
+        //AprilTagDetectionWebcam aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam"));
         HashMap<Integer, ConeStateFinder.ConeState> tagToStateMap = new HashMap<>();
         tagToStateMap.put(5, ConeStateFinder.ConeState.LEFT);
         tagToStateMap.put(10, ConeStateFinder.ConeState.MIDDLE);
         tagToStateMap.put(15, ConeStateFinder.ConeState.RIGHT);
-        stateFinder = new ConeStateFinder(aprilWebcam, tagToStateMap);
-        telemetry.addData("Status", "Ready to run");
-        telemetry.update();
+        //stateFinder = new ConeStateFinder(aprilWebcam, tagToStateMap);
 
         BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
         driveBase = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imub);
         //imu = drive.getImu();
-        this.externalInit();
     }
 
     protected void internalStart() {
-        this.externalStart();
+
     }
-
-    protected abstract void externalInit();
-    protected abstract void externalStart();
-
 }

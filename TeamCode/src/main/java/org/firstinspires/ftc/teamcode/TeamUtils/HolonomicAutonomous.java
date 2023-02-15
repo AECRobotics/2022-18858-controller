@@ -8,10 +8,5 @@ public abstract class HolonomicAutonomous extends LinearOpMode {
     protected abstract void internalInit();
     protected abstract void internalStart();
 
-    @Override
-    public void runOpMode() {
-        this.internalInit();
-        waitForStart();
-        this.internalStart();
-    }
+    public HolonomicAutonomous() {}
 }

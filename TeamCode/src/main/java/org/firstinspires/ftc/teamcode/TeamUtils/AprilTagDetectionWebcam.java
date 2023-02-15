@@ -16,12 +16,18 @@ public class AprilTagDetectionWebcam {
 
     // Lens intrinsics
     // UNITS ARE PIXELS because fucking why
-    // NOTE: this calibration is for the C270 webcam at idfk.
+    // NOTE: the following calibration is for the C270 webcam at idfk.
     // You will need to do your own calibration for other configurations!
-    double fx = 1430.0/2.0;
+    /*double fx = 1430.0/2.0;
     double fy = 1430.0/2.0;
     double cx = 620.0/2.0;
-    double cy = 480.0/2.0;
+    double cy = 480.0/2.0;*/
+
+    // NOTE: the following calibration is for the C920 webcam at 800x600.
+    double fx = 775.79;
+    double fy = 775.79;
+    double cx = 400.898;
+    double cy = 300.79;
 
     // UNITS ARE METERS
     double tagsize = 0.03675;//0.02775;//0.037; //in meters
@@ -36,7 +42,7 @@ public class AprilTagDetectionWebcam {
             @Override
             public void onOpened()
             {
-                camera.startStreaming(640,480, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(800,600, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
