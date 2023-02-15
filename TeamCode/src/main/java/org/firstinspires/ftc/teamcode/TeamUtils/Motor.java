@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeamUtils;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Motor {
     private final DcMotor motor;
@@ -11,7 +10,7 @@ public class Motor {
     private int backlashCompensation;
 
     private int previousInternalTargetCurrentPositionDifference = 0;
-    private int internalTarget = 0;
+    //private int internalTarget = 0;
     public int internalRealPositionDifference = 0;
 
     public Motor(DcMotor motor, double gearRatio, double ticksPerRawRev, double maximumBacklash) {
@@ -23,7 +22,7 @@ public class Motor {
         this.backlashCompensation = (int)(this.convertRadToEncoderTicks(maximumBacklash)+0.5);
         this.previousInternalTargetCurrentPositionDifference = this.backlashCompensation;
         this.motor.setTargetPosition(0);
-        this.internalTarget = 0;
+        //this.internalTarget = 0;
         this.internalRealPositionDifference = 0;
         this.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -53,7 +52,7 @@ public class Motor {
     }
 
     public void setTargetPosition(int target) {
-        this.internalTarget = target;
+        //this.internalTarget = target;
         int internalExternalTargetPositionDifference = (target-this.internalRealPositionDifference)-this.motor.getCurrentPosition();
         int previousSign = Integer.signum(this.previousInternalTargetCurrentPositionDifference);
         int currentSign = Integer.signum(internalExternalTargetPositionDifference);
