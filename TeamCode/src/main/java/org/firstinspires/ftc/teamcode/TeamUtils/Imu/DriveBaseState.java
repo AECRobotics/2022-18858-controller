@@ -1,7 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeamUtils;
-
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotor;
+package org.firstinspires.ftc.teamcode.TeamUtils.Imu;
 
 public class DriveBaseState {
     public int frTick, brTick, flTick, blTick;

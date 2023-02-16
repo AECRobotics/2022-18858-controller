@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeamUtils;
+package org.firstinspires.ftc.teamcode.TeamUtils.Camera.AprilTagRecognition;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.apriltag.AprilTagDetection;

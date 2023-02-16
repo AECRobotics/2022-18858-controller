@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.CompetitionUtils.MyBoyAutonomous;
 import org.firstinspires.ftc.teamcode.TeamUtils.UnitConversion;
-import org.firstinspires.ftc.teamcode.TeamUtils.Wheel;
+import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Wheel;
 
 @Autonomous(name="Test New Autonomous Framework", group="Robot")
 public class TestNewAutonomousFramework extends MyBoyAutonomous {

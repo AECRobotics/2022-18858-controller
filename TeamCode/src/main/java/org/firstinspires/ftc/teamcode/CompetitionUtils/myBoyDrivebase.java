@@ -5,9 +5,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
-import org.firstinspires.ftc.teamcode.TeamUtils.HolonomicDriveBase;
-import org.firstinspires.ftc.teamcode.TeamUtils.Wheel;
+import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
+import org.firstinspires.ftc.teamcode.TeamUtils.Imu.HolonomicDriveBase;
+import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Wheel;
 
 public class myBoyDrivebase extends HolonomicDriveBase {
     public static double WHEEL_RADIUS = 48; //mm

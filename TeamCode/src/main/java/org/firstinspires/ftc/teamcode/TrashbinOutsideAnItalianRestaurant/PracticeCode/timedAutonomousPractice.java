@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
-import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 
 @Disabled
 @Autonomous(name="Robot: Auto My Boy", group="Robot")

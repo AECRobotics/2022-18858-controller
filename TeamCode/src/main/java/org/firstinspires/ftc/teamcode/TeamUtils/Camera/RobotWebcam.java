@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeamUtils;
+package org.firstinspires.ftc.teamcode.TeamUtils.Camera;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XZY;

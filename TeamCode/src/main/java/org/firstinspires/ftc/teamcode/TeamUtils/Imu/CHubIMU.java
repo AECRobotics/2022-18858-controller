@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeamUtils;
+package org.firstinspires.ftc.teamcode.TeamUtils.Imu;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.util.ReadWriteFile;

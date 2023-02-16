@@ -1,16 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Bitmap;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
-import org.firstinspires.ftc.teamcode.TeamUtils.AprilTagDetectionWebcam;
-import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.AprilTagRecognition.AprilTagDetectionWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 
 @TeleOp(name="test webcam cone state finder ( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)", group = "Robot")
 public class webcamCheck extends OpMode{

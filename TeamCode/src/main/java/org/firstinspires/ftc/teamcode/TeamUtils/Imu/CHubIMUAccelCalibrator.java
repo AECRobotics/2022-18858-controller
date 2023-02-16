@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.TeamUtils;
+package org.firstinspires.ftc.teamcode.TeamUtils.Imu;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
-public class CHubIMUMagneCalibrator implements Runnable {
+public class CHubIMUAccelCalibrator implements Runnable {
     private static int calibrators = 0;
     public static int tries = Integer.MAX_VALUE;
     private Thread t;
@@ -10,7 +10,7 @@ public class CHubIMUMagneCalibrator implements Runnable {
     private boolean running = false;
 
     private BNO055IMU imu;
-    public CHubIMUMagneCalibrator(BNO055IMU imu) {
+    public CHubIMUAccelCalibrator(BNO055IMU imu) {
         this.imu = imu;
     }
 
@@ -18,7 +18,7 @@ public class CHubIMUMagneCalibrator implements Runnable {
         this.running = true;
         try {
 
-            for(int i = 0; i < CHubIMUMagneCalibrator.tries && !this.calibrated; i++) {
+            for(int i = 0; i < CHubIMUAccelCalibrator.tries && !this.calibrated; i++) {
                 Thread.sleep(1000);
                 this.calibrated = this.imu.isAccelerometerCalibrated();
             }
@@ -39,8 +39,8 @@ public class CHubIMUMagneCalibrator implements Runnable {
 
     public void start() {
         if(t == null) {
-            CHubIMUMagneCalibrator.calibrators++;
-            t = new Thread(this, "" + CHubIMUMagneCalibrator.calibrators);
+            CHubIMUAccelCalibrator.calibrators++;
+            t = new Thread(this, "" + CHubIMUAccelCalibrator.calibrators);
             t.start();
         }
     }

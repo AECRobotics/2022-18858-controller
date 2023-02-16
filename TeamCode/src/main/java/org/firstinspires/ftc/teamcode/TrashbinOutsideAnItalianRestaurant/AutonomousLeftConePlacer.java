@@ -10,16 +10,15 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.GoBildaSpoolConstants;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.myBoyDrivebase;
-import org.firstinspires.ftc.teamcode.TeamUtils.AprilTagDetectionWebcam;
-import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
-import org.firstinspires.ftc.teamcode.TeamUtils.DriveBaseTask;
-import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
-import org.firstinspires.ftc.teamcode.TeamUtils.Spool;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.AprilTagRecognition.AprilTagDetectionWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
+import org.firstinspires.ftc.teamcode.TeamUtils.Imu.DriveBaseTask;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Spool;
 
 import java.util.HashMap;
 

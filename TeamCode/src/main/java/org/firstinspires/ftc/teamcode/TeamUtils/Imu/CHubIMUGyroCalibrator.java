@@ -1,16 +1,16 @@
-package org.firstinspires.ftc.teamcode.TeamUtils;
+package org.firstinspires.ftc.teamcode.TeamUtils.Imu;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
-public class CHubIMUAccelCalibrator implements Runnable {
+public class CHubIMUGyroCalibrator implements Runnable {
     private static int calibrators = 0;
-    public static int tries = Integer.MAX_VALUE;
+    public static int tries = 15;
     private Thread t;
     private boolean calibrated = false;
     private boolean running = false;
 
     private BNO055IMU imu;
-    public CHubIMUAccelCalibrator(BNO055IMU imu) {
+    public CHubIMUGyroCalibrator(BNO055IMU imu) {
         this.imu = imu;
     }
 
@@ -18,9 +18,9 @@ public class CHubIMUAccelCalibrator implements Runnable {
         this.running = true;
         try {
 
-            for(int i = 0; i < CHubIMUAccelCalibrator.tries && !this.calibrated; i++) {
+            for(int i = 0; i < CHubIMUGyroCalibrator.tries && !this.calibrated; i++) {
                 Thread.sleep(1000);
-                this.calibrated = this.imu.isAccelerometerCalibrated();
+                this.calibrated = this.imu.isGyroCalibrated();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -39,8 +39,8 @@ public class CHubIMUAccelCalibrator implements Runnable {
 
     public void start() {
         if(t == null) {
-            CHubIMUAccelCalibrator.calibrators++;
-            t = new Thread(this, "" + CHubIMUAccelCalibrator.calibrators);
+            CHubIMUGyroCalibrator.calibrators++;
+            t = new Thread(this, "" + CHubIMUGyroCalibrator.calibrators);
             t.start();
         }
     }

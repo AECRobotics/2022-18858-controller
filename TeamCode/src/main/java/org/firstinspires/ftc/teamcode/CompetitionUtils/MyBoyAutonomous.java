@@ -4,12 +4,8 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.TeamUtils.AprilTagDetectionWebcam;
-import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
-import org.firstinspires.ftc.teamcode.TeamUtils.HolonomicAutonomous;
-import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
-import org.firstinspires.ftc.teamcode.TeamUtils.Spool;
+import org.firstinspires.ftc.teamcode.TeamUtils.Autonomous.HolonomicAutonomous;
+import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Spool;
 
 import java.util.HashMap;
 

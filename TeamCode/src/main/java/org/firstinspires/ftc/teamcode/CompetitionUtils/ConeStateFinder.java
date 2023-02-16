@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.CompetitionUtils;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 
 import androidx.annotation.ColorInt;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.TeamUtils.AprilTagDetectionWebcam;
-import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.AprilTagRecognition.AprilTagDetectionWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 import org.openftc.apriltag.AprilTagDetection;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 

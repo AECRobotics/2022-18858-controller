@@ -8,9 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ArmHeightPositions;
-import org.firstinspires.ftc.teamcode.CompetitionUtils.GoBildaSpoolConstants;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
-import org.firstinspires.ftc.teamcode.TeamUtils.Spool;
 
 
 @TeleOp(name="All Function Teleop", group="Robot")

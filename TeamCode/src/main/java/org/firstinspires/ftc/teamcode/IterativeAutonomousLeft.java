@@ -9,10 +9,10 @@ import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.myBoyDrivebase;
-import org.firstinspires.ftc.teamcode.TeamUtils.AprilTagDetectionWebcam;
-import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
-import org.firstinspires.ftc.teamcode.TeamUtils.DriveBaseTask;
-import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.AprilTagRecognition.AprilTagDetectionWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
+import org.firstinspires.ftc.teamcode.TeamUtils.Imu.DriveBaseTask;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 
 import java.util.HashMap;
 
