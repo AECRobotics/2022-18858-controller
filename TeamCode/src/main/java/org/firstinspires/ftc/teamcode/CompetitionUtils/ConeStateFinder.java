@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.CompetitionUtils;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 
 import androidx.annotation.ColorInt;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.TeamUtils.AprilTagDetectionWebcam;
-import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.AprilTagRecognition.AprilTagDetectionWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 import org.openftc.apriltag.AprilTagDetection;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,8 +21,6 @@ public class ConeStateFinder {
 
     //private static double checkAreaWidth = 0.5;
     //private static double checkAreaHeight = 0.5;
-    private static AprilTagDetectionWebcam aprilWebcam;
-    private static ConeStateFinderThread thread;
     private static int leftTagID = 5;
     private static int middleTagID = 10;
     private static int rightTagID = 15;
@@ -51,41 +46,23 @@ public class ConeStateFinder {
 
     public static String debugOutput = "";
 
-    public static AprilTagDetectionWebcam getWebcam() {
-        return ConeStateFinder.aprilWebcam;
+    private AprilTagDetectionWebcam webcam;
+    private HashMap<Integer, ConeState> tagToStateMap;
+
+    public ConeStateFinder(AprilTagDetectionWebcam webcam, HashMap<Integer, ConeState> tagToStateMap) {
+        this.webcam = webcam;
+        this.tagToStateMap = tagToStateMap;
     }
 
-    public static void setWebcam(AprilTagDetectionWebcam webcam) {
-        ConeStateFinder.aprilWebcam = webcam;
-        thread.running = false;
-        //stopCheckingState();
-        thread = new ConeStateFinderThread();
-    }
+    public ConeState getConeState() {
+        ArrayList<AprilTagDetection> currentDetections = webcam.getTags();
 
-    public static ConeState getConeStateAprilTag() {
-        if(thread != null) {
-            return thread.detectedState;
-        } else {
-            return ConeState.UNKNOWN;
+        for(AprilTagDetection tag : currentDetections) {
+            if(this.tagToStateMap.containsKey(tag.id)) {
+                return this.tagToStateMap.get(tag.id);
+            }
         }
-    }
-
-    public static boolean startCheckingState() {
-        if(thread == null) {
-            //thread.running = true;
-            thread.start();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static void stopCheckingState() {
-        if(thread != null) {
-            thread.running = false;
-            while(!thread.stopped) {}
-            //thread = null;
-        }
+        return ConeState.UNKNOWN;
     }
 
     public static ArrayList<Double> normalizeColor(int c) {

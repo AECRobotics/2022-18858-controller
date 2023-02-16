@@ -1,12 +1,14 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.myBoyDrivebase;
 import org.firstinspires.ftc.teamcode.TeamUtils.Camera.AprilTagRecognition.AprilTagDetectionWebcam;
@@ -16,8 +18,9 @@ import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 
 import java.util.HashMap;
 
-@Autonomous(name="Cone finder autonomous RIGHT", group="Robot")
-public class IterativeAutonomousRight extends OpMode {
+@Disabled
+@Autonomous(name="Test Autonomous", group="Robot")
+public class TestAutonomous extends OpMode {
     public CHubIMU imu = null;
     RobotWebcam webcam = null;
     myBoyDrivebase drive = null;
@@ -46,16 +49,12 @@ public class IterativeAutonomousRight extends OpMode {
         rightBackDrive.setMode(RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(RunMode.RUN_USING_ENCODER);
         BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
-        drive = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imub);
-        imu = drive.getImu();
-        ConeStateFinder.setWebcam(aprilWebcam);
-        ConeStateFinder.startCheckingState();
+        imu = new CHubIMU(imub, AxesOrder.XYZ);
+        drive = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imu);
     }
     @Override
     public void init_loop() {
         telemetry.addLine("Gyro: " + imu.getGyroCalibrationStatus());
-        telemetry.addLine("Cone State: " + getConePosition());
-
     }
 
     @Override
@@ -63,48 +62,50 @@ public class IterativeAutonomousRight extends OpMode {
 
     }
 
+    private boolean debug = false;
+
     @Override
     public void loop() {
-        if(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN) {
-            coneState = getConePosition();
-            if(!(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN)) {
-                ConeStateFinder.stopCheckingState();
-            }
-        }
+        telemetry.addLine("" + imu.getOrientation());
+        telemetry.addLine("" + drive.getHeading());
+        telemetry.addLine("" + drive.getTaskCount());
         //telemetry.addLine(ConeStateFinder.debugOutput);
-        //telemetry.addLine(drive.getTask().getTaskType().name());
-        //telemetry.addLine(drive.isTaskComplete() + "");
-        //telemetry.addLine(drive.getTask().getState() + "");
-        //telemetry.addLine(drive.allMotorsReachedTarget() + "");
+        telemetry.addLine(drive.getTask().getTaskType().name());
+        telemetry.addLine(drive.isTaskComplete() + "");
+        telemetry.addLine(drive.getTask().getState() + "");
+        telemetry.addLine(debug ? drive.distanceToTurn() + "" : "not right task");
         //telemetry.addLine(drive.allMotorsNotBusy() + "");
         //telemetry.addLine(drive.getFr().getCurrentPosition() + ", " + drive.getFr().getTargetPosition());
         //telemetry.addLine(drive.getBr().getCurrentPosition() + ", " + drive.getBr().getTargetPosition());
-        if(drive.isTaskComplete() && coneState != null) {
+        telemetry.addLine("" + drive.getTaskCount());
+
+        if(drive.isTaskComplete()) {
             HashMap<String, Double> parameters = new HashMap<String, Double>();
             switch(drive.getTaskCount()) {
                 case 0:
-                    if(coneState == ConeStateFinder.ConeState.UNKNOWN) {
-                        break;
-                    }
-                    parameters.put("speed", 0.5);
-                    parameters.put("meters", (coneState == ConeStateFinder.ConeState.MIDDLE) ? 0.0 : (coneState == ConeStateFinder.ConeState.LEFT) ? -0.60785 : (coneState == ConeStateFinder.ConeState.RIGHT ? 0.70055 : 0.0));
-                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
+                    debug = true;
+                    parameters.put("speed", 0.2);
+                    parameters.put("degrees", 45.0);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.TURN_DEGREES, parameters));
                     break;
                 case 1:
-                    parameters.put("speed", 0.5);
-                    parameters.put("meters", 0.75);
-                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
+                    debug = true;
+                    parameters.put("speed", 0.2);
+                    parameters.put("degrees", 90.0);
+                    drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.TURN_DEGREES, parameters));
                     break;
+                case 2:
+                    debug = false;
+                    drive.setMotorPower(0.0);
             }
         }
         drive.doTasks();
-        telemetry.addLine(coneState.name());
     }
 
     public ConeStateFinder.ConeState getConePosition(){
         //return (int)Math.floor(r.nextDouble()*3.0);
         //return ConeStateFinder.getConeState(webcam);
-        return ConeStateFinder.getConeStateAprilTag();
+        return ConeStateFinder.getConeStateAprilTag(aprilWebcam);
     }
 
     @Override
