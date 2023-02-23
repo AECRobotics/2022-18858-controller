@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
-import org.firstinspires.ftc.teamcode.TeamUtils.Imu.HolonomicDriveBase;
+import org.firstinspires.ftc.teamcode.TeamUtils.DriveBase.HolonomicDriveBase;
 import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Wheel;
 
 public class myBoyDrivebase extends HolonomicDriveBase {

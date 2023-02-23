@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.TeamUtils.Imu;
+package org.firstinspires.ftc.teamcode.TeamUtils.DriveBase;
 
 import static java.lang.Thread.sleep;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
 import org.firstinspires.ftc.teamcode.TeamUtils.UnitConversion;
 import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Wheel;
 
@@ -137,19 +138,46 @@ public class HolonomicDriveBase extends DriveBase {
     public void turn(double power, double degrees) {
         double startHeading = this.getHeading();
         double diff = this.distanceToTurn(degrees);
-        if(Math.abs(diff) <= 5) {
-            power = 0.05;
-        } else if(Math.abs(diff) <= 15) {
-            power = 0.1;
+        while(diff > 0.1) {
+            //double startHeading = this.getHeading();
+            diff = this.distanceToTurn(degrees);
+            if(Math.abs(diff) <= 5) {
+                power = 0.05;
+            } else if(Math.abs(diff) <= 15) {
+                power = 0.1;
+            }
+            power = Math.signum(diff)*power;
+            //telemetry.addData("debug",String.format("%.5f, %.5f, %.5f, %.5f", destination, diff, speed, current));
+            //telemetry.addData("debug2", String.format("%.5f, %.5f, %.5f", diff, DriveBase.PIDishThingMultiplier, this.task.getSpeed()));
+            this.fr.setPower(power);
+            this.br.setPower(power);
+            this.fl.setPower(-power);
+            this.bl.setPower(-power);
+            try {
+                sleep(2);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
-        power = Math.signum(diff)*power;
-        //telemetry.addData("debug",String.format("%.5f, %.5f, %.5f, %.5f", destination, diff, speed, current));
-        //telemetry.addData("debug2", String.format("%.5f, %.5f, %.5f", diff, DriveBase.PIDishThingMultiplier, this.task.getSpeed()));
-        this.fr.setPower(power);
-        this.br.setPower(power);
-        this.fl.setPower(-power);
-        this.bl.setPower(-power);
-        while(this.distanceToTurn(degrees) > 0.1) {
+    }
+
+    public void turnToHeading(double power, double heading) {
+        double diff = this.distanceToTurn(this.getHeading(), heading);
+        while(diff > 0.1) {
+            //double startHeading = this.getHeading();
+            diff = this.distanceToTurn(this.getHeading(), heading);
+            if(Math.abs(diff) <= 5) {
+                power = 0.05;
+            } else if(Math.abs(diff) <= 15) {
+                power = 0.1;
+            }
+            power = Math.signum(diff)*power;
+            //telemetry.addData("debug",String.format("%.5f, %.5f, %.5f, %.5f", destination, diff, speed, current));
+            //telemetry.addData("debug2", String.format("%.5f, %.5f, %.5f", diff, DriveBase.PIDishThingMultiplier, this.task.getSpeed()));
+            this.fr.setPower(power);
+            this.br.setPower(power);
+            this.fl.setPower(-power);
+            this.bl.setPower(-power);
             try {
                 sleep(2);
             } catch(Exception e) {
@@ -197,7 +225,7 @@ public class HolonomicDriveBase extends DriveBase {
 
     public double distanceToTurn(double cHeading, double nHeading) { //this function has absolutely no error handling, if you call it when driving instead of turning it will absolutely return invalid information and especially if you call it without setting a task first
         double current = this.getHeading();
-        double destination = (this.stateAtAssignmentOfTask.heading+(180-this.getTask().getParameters().get("degrees")));
+        double destination = nHeading;//(this.stateAtAssignmentOfTask.heading+(180-this.getTask().getParameters().get("degrees")));
         destination%=(2*180);
         destination-=180;
         destination-=current;
