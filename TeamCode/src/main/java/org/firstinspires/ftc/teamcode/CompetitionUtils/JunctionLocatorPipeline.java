@@ -13,9 +13,10 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.HashMap;
 
 public class JunctionLocatorPipeline extends OpenCvPipeline {
+    public static String debugOutput = "";
     private double desiredDistance = 20.0;
     private double desiredAngle = -20.0;
-    private int junctionColor = 0x00ffffff;
+    private int junctionColor = 0x00a56c15;
     private int position = 0;
     private int width = 0;
 
@@ -23,14 +24,17 @@ public class JunctionLocatorPipeline extends OpenCvPipeline {
     }
 
     public Mat processFrame(Mat input) {
+        debugOutput = "";
         Bitmap bmp = null;
         try {
             //Imgproc.cvtColor(seedsImage, tmp, Imgproc.COLOR_RGB2BGRA);
             //Imgproc.cvtColor(seedsImage, input, Imgproc.COLOR_GRAY2RGBA, 4);
-            //bmp = Bitmap.createBitmap(input.cols(), input.rows(), Bitmap.Config.ARGB_8888);
+            bmp = Bitmap.createBitmap(input.cols(), input.rows(), Bitmap.Config.ARGB_8888);
             Utils.matToBitmap(input, bmp);
+            //System.out.println(bmp);
         }
-        catch (CvException e){e.printStackTrace(); return input;}
+        catch (Exception e){e.printStackTrace(); return input;}
+        //System.out.println("FFFFFFFUUU");
         HashMap<Integer, Boolean> colorMatchMap = new HashMap<>();
         HashMap<Integer, Integer> colorMatchCountMap = new HashMap<>();
         for(int x = 0; x < bmp.getWidth(); x++) {
@@ -42,10 +46,14 @@ public class JunctionLocatorPipeline extends OpenCvPipeline {
                 if(colorMatchMap.get(color)) {
                     if(colorMatchCountMap.containsKey(x)) {
                         colorMatchCountMap.put(x,colorMatchCountMap.get(x)+1);
+                    } else {
+                        colorMatchCountMap.put(x, 1);
                     }
                 }
             }
         }
+        //debugOutput+=("" + colorMatchCountMap);
+        //System.out.println(colorMatchCountMap);
         /*int matchCount = 0;
         position = 0;
         //int minimum = Integer.MAX_VALUE;
@@ -96,8 +104,11 @@ public class JunctionLocatorPipeline extends OpenCvPipeline {
             }
         }
         //width = widestWidth;
-
-        position = widestPosition/=widestMatchCount;
+        try {
+            position = widestPosition/=widestMatchCount;
+        } catch (ArithmeticException e) {
+            position = 0;
+        }
         width = widestWidth;
         return input;
     }

@@ -100,6 +100,8 @@ public class HolonomicDriveBase extends DriveBase {
     }
 
     public void forward(double power, double distance) {
+        this.stateAtAssignmentOfTask = this.getDriveBaseState();
+        this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
         this.fl.setPower(power);
         this.bl.setPower(power);
         this.fr.setPower(power);
@@ -108,7 +110,7 @@ public class HolonomicDriveBase extends DriveBase {
         this.bl.turnWheelDistance(distance, this.stateAtAssignmentOfTask.blTarget);
         this.fr.turnWheelDistance(distance, this.stateAtAssignmentOfTask.frTarget);
         this.br.turnWheelDistance(distance, this.stateAtAssignmentOfTask.brTarget);
-        while(!this.allMotorsReachedTarget() && this.allMotorsNotBusy()) {
+        while(!this.allMotorsReachedTarget() && this.numberOfMotorsBusy() <= 2) {
             try {
                 sleep(2);
             } catch(Exception e) {
@@ -118,6 +120,8 @@ public class HolonomicDriveBase extends DriveBase {
     }
 
     public void strafe(double power, double distance) {
+        this.stateAtAssignmentOfTask = this.getDriveBaseState();
+        this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
         this.fl.setPower(power);
         this.br.setPower(power);
         this.fr.setPower(power);
@@ -126,7 +130,7 @@ public class HolonomicDriveBase extends DriveBase {
         this.br.turnWheelDistance(distance, this.stateAtAssignmentOfTask.brTarget);
         this.fr.turnWheelDistance(-distance, this.stateAtAssignmentOfTask.frTarget);
         this.bl.turnWheelDistance(-distance, this.stateAtAssignmentOfTask.blTarget);
-        while(!this.allMotorsReachedTarget() && this.allMotorsNotBusy()) {
+        while(!this.allMotorsReachedTarget() || this.numberOfMotorsBusy() >= 2) {
             try {
                 sleep(2);
             } catch(Exception e) {
@@ -136,6 +140,8 @@ public class HolonomicDriveBase extends DriveBase {
     }
 
     public void turn(double power, double degrees) {
+        this.stateAtAssignmentOfTask = this.getDriveBaseState();
+        this.setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
         double startHeading = this.getHeading();
         double diff = this.distanceToTurn(degrees);
         while(diff > 0.1) {
@@ -162,6 +168,7 @@ public class HolonomicDriveBase extends DriveBase {
     }
 
     public void turnToHeading(double power, double heading) {
+        this.stateAtAssignmentOfTask = this.getDriveBaseState();
         double diff = this.distanceToTurn(this.getHeading(), heading);
         while(diff > 0.1) {
             //double startHeading = this.getHeading();

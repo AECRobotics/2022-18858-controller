@@ -80,4 +80,11 @@ public class MyBoyWebcam {
         }
         return ConeStateFinder.ConeState.UNKNOWN;
     }
+
+    @Override
+    public void finalize() {
+        this.camera.closeCameraDevice();
+    }
+
+
 }

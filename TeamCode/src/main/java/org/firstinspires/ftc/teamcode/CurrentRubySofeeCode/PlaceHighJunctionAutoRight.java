@@ -14,11 +14,11 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.GoBildaSpoolConstants;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.myBoyDrivebase;
-import org.firstinspires.ftc.teamcode.TeamUtils.AprilTagDetectionWebcam;
-import org.firstinspires.ftc.teamcode.TeamUtils.CHubIMU;
-import org.firstinspires.ftc.teamcode.TeamUtils.DriveBaseTask;
-import org.firstinspires.ftc.teamcode.TeamUtils.RobotWebcam;
-import org.firstinspires.ftc.teamcode.TeamUtils.Spool;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.AprilTagRecognition.AprilTagDetectionWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
+import org.firstinspires.ftc.teamcode.TeamUtils.DriveBase.DriveBaseTask;
+import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
+import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Spool;
 
 import java.util.HashMap;
 
@@ -73,8 +73,8 @@ public class PlaceHighJunctionAutoRight extends OpMode {
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
         spoolMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         spoolMotor.setPower(0.3);
-        ConeStateFinder.setWebcam(aprilWebcam);
-        ConeStateFinder.startCheckingState();
+        ///ConeStateFinder.setWebcam(aprilWebcam);
+        //ConeStateFinder.startCheckingState();
     }
     @Override
     public void init_loop() {
@@ -94,7 +94,7 @@ public class PlaceHighJunctionAutoRight extends OpMode {
         if(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN) {
             coneState = getConePosition();
             if(!(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN)) {
-                ConeStateFinder.stopCheckingState();
+                //ConeStateFinder.stopCheckingState();
             }
         }
 
@@ -178,7 +178,7 @@ public class PlaceHighJunctionAutoRight extends OpMode {
     public ConeStateFinder.ConeState getConePosition(){
         //return (int)Math.floor(r.nextDouble()*3.0);
         //return ConeStateFinder.getConeState(webcam);
-        return ConeStateFinder.getConeStateAprilTag();
+        return ConeStateFinder.getConeStateAprilTag(aprilWebcam);
     }
 
     @Override

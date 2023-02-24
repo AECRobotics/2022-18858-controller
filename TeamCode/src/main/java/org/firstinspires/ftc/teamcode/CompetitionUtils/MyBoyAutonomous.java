@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.CompetitionUtils;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -39,7 +40,11 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
         DcMotor leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft"); //0
         DcMotor rightBackDrive = hardwareMap.get(DcMotor.class, "backright"); //4
         DcMotor rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright"); //2
-
+        spoolMotor = new Spool(hardwareMap.get(DcMotor.class, "spoolmotorgobilda"), 1.0, GoBildaSpoolConstants.TICKS_PER_REV, 0.0, GoBildaSpoolConstants.SPOOL_RADIUS, GoBildaSpoolConstants.SPOOL_WIDTH, 0.907, GoBildaSpoolConstants.THREAD_DIAMETER);
+        rightClaw = hardwareMap.get(Servo.class, "rightclaw");
+        leftClaw = hardwareMap.get(Servo.class, "leftclaw");
+        spoolMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        spoolMotor.setPower(1.0);
         //webcam = new RobotWebcam(hardwareMap.get(WebcamName.class, "webcam"));
         //AprilTagDetectionWebcam aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam"));
         HashMap<Integer, ConeStateFinder.ConeState> tagToStateMap = new HashMap<>();
