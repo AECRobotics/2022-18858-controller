@@ -16,7 +16,9 @@ public class JunctionLocatorPipeline extends OpenCvPipeline {
     public static String debugOutput = "";
     private double desiredDistance = 20.0;
     private double desiredAngle = -20.0;
-    private int junctionColor = 0x00a56c15;
+    int color1 = 0x00b28342;
+    int color2 = 0x007e4f1b;
+    int color3 = 0x00b2ae8f;
     private int position = 0;
     private int width = 0;
 
@@ -38,10 +40,10 @@ public class JunctionLocatorPipeline extends OpenCvPipeline {
         HashMap<Integer, Boolean> colorMatchMap = new HashMap<>();
         HashMap<Integer, Integer> colorMatchCountMap = new HashMap<>();
         for(int x = 0; x < bmp.getWidth(); x++) {
-            for(int y = 0; y < bmp.getHeight(); y+=20) {
+            for(int y = 0; y < bmp.getHeight(); y+=100) {
                 int color = bmp.getPixel(x,y);
                 if(!colorMatchMap.containsKey(color)) {
-                    colorMatchMap.put(color, ColorProcessing.matchesColor(color, junctionColor));
+                    colorMatchMap.put(color, ColorProcessing.matchesColor(color, color1) || ColorProcessing.matchesColor(color, color2) || ColorProcessing.matchesColor(color, color3));
                 }
                 if(colorMatchMap.get(color)) {
                     if(colorMatchCountMap.containsKey(x)) {

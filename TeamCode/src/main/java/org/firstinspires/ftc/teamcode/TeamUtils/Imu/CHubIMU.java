@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import java.io.File;
 
 public class CHubIMU {
-    enum CalibrationState {
+    public enum CalibrationState {
         CALIBRATING,
         CALIBRATED,
         FAILED

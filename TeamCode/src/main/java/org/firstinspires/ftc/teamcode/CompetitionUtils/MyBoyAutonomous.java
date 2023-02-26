@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.TeamUtils.Autonomous.HolonomicAutonomous;
 import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Spool;
+import org.firstinspires.ftc.teamcode.TeamUtils.Vector2;
 
 import java.util.HashMap;
 
@@ -20,6 +21,55 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     public Spool spoolMotor = null;
     public Servo rightClaw = null;
     public Servo leftClaw = null;
+
+    double angleTarget = 305;//90;
+    double widthTarget = 145;//152;
+    double alignmentSpeed = 0.2;
+    double webcamAngle = 46.225;//33.557;
+
+    private boolean withinTolerance(double value, double target, double tolerance) {
+        return Math.abs(value-target) <= tolerance;
+    }
+
+    private double clamp(double min, double value, double max) {
+        return Math.max(min, Math.min(value, max));
+    }
+
+    public void alignToJunction() {
+        if(this.webcam.mode != MyBoyWebcam.CameraMode.JUNCTION_LOCATOR) {
+            return;
+        }
+        driveBase.setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
+        double angle = 0.0;
+        double width = 0.0;
+        do {
+            angle = this.webcam.getAngle();
+            width = this.webcam.getWidth();
+            telemetry.addLine(angle + ", " + width);
+            double angleDiff = angle-angleTarget;
+            double widthDiff = width-widthTarget;
+            Vector2 diff = new Vector2(angleDiff, widthDiff);
+            double diffMag = diff.magnitude();
+            double diffAngle = diff.angle();
+            telemetry.addLine(diffAngle + ", " + diffMag);
+            diffAngle-=((90-webcamAngle)*Math.PI/180);
+            Vector2 rotated = new Vector2(diffAngle);
+            rotated = rotated.multiply(-Math.min(diffMag*alignmentSpeed/400, alignmentSpeed));
+            rotated.x*=(-1);
+            //diff = diff.normalized();
+            //Vector2 rotated = new Vector2(-webcamAngle*Math.PI/180);
+            //rotated = rotated.multiply(rotated.dot(diff)).multiply(Math.min(mag/10, alignmentSpeed));
+
+            //telemetry.addLine(rotated.x + ", " + rotated.y);
+
+            //angleDiff = clamp(-alignmentSpeed, rotated.x/10, alignmentSpeed);
+            //widthDiff = clamp(-alignmentSpeed, rotated.y/10, alignmentSpeed);
+            telemetry.addLine(rotated.y + ", " + rotated.x);
+            telemetry.update();
+            driveBase.drive(rotated.y, rotated.x, 0.0);
+        } while (!withinTolerance(angle, angleTarget, 10) || !withinTolerance(width, widthTarget, 5));
+        driveBase.setMotorPower(0.0);
+    }
 
     public MyBoyAutonomous() {}
 

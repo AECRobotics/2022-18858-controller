@@ -117,6 +117,9 @@ public class ColorProcessing {
                 //return true;
             }
         }
+        if(matchCount == 2) {
+            return true;
+        }
         double[] hc1 = getHSV(c1);
         double[] hc2 = getHSV(c2);
         boolean hueMatches = Math.abs(hc1[0]-hc2[0]) <= colorHueSimilarityThreshold;

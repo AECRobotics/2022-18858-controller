@@ -30,7 +30,7 @@ public class MyBoyWebcam {
         JUNCTION_LOCATOR
     }
 
-    private CameraMode mode = CameraMode.APRIL_TAG_RECOGNITION;
+    public CameraMode mode = CameraMode.APRIL_TAG_RECOGNITION;
 
     public MyBoyWebcam(int cameraMonitorViewId, WebcamName webcamName, HashMap<Integer, ConeStateFinder.ConeState> tagToStateMap) {
         this.camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
