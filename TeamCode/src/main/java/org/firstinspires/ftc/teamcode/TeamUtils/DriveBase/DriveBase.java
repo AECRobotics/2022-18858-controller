@@ -41,6 +41,13 @@ public abstract class DriveBase {
         return orientation.thirdAngle;
     }
 
+    public void resetCurrentToTarget() {
+        this.fl.setTargetPosition(this.fl.getCurrentPosition());
+        this.bl.setTargetPosition(this.bl.getCurrentPosition());
+        this.fr.setTargetPosition(this.fr.getCurrentPosition());
+        this.br.setTargetPosition(this.br.getCurrentPosition());
+    }
+
     public int getTaskCount() {
         return this.taskCount;
     }

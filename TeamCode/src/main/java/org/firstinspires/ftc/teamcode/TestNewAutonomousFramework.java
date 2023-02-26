@@ -20,10 +20,19 @@ public class TestNewAutonomousFramework extends MyBoyAutonomous {
         waitForStart();
 
         this.internalStart();
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setPower(0.2);
-        motor.setTargetPosition(1000);
-        long startedTime = System.nanoTime();
+        //motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //motor.setPower(0.2);
+        //motor.setTargetPosition(-1000);
+        telemetry.addLine("thing-1");
+        telemetry.update();
+        driveBase.strafe(0.5, 0.66);
+        telemetry.addLine("thing0");
+        telemetry.update();
+        driveBase.forward(0.5, 1.17);
+        telemetry.addLine("thing2");
+        telemetry.update();
+        driveBase.strafe(0.5, -0.3);
+/*        long startedTime = System.nanoTime();
         while(startedTime+UnitConversion.SECONDS_PER_NANOSECOND*5 > System.nanoTime()) {
             telemetry.addLine(motor.getTargetPosition() + "");
             telemetry.addLine(motor.getCurrentPosition() + "");

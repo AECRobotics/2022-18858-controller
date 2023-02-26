@@ -101,6 +101,7 @@ public class HolonomicDriveBase extends DriveBase {
 
     public void forward(double power, double distance) {
         this.stateAtAssignmentOfTask = this.getDriveBaseState();
+        this.resetCurrentToTarget();
         this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
         this.fl.setPower(power);
         this.bl.setPower(power);
@@ -111,6 +112,8 @@ public class HolonomicDriveBase extends DriveBase {
         this.fr.turnWheelDistance(distance, this.stateAtAssignmentOfTask.frTarget);
         this.br.turnWheelDistance(distance, this.stateAtAssignmentOfTask.brTarget);
         while(!this.allMotorsReachedTarget() && this.numberOfMotorsBusy() <= 2) {
+            System.out.println("fl" + this.fl.getTargetPosition() + ", " + this.fl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.flTarget);
+            System.out.println("bl" + this.bl.getTargetPosition() + ", " + this.bl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.blTarget);
             try {
                 sleep(2);
             } catch(Exception e) {
@@ -121,6 +124,7 @@ public class HolonomicDriveBase extends DriveBase {
 
     public void strafe(double power, double distance) {
         this.stateAtAssignmentOfTask = this.getDriveBaseState();
+        this.resetCurrentToTarget();
         this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
         this.fl.setPower(power);
         this.br.setPower(power);
@@ -131,6 +135,8 @@ public class HolonomicDriveBase extends DriveBase {
         this.fr.turnWheelDistance(-distance, this.stateAtAssignmentOfTask.frTarget);
         this.bl.turnWheelDistance(-distance, this.stateAtAssignmentOfTask.blTarget);
         while(!this.allMotorsReachedTarget() || this.numberOfMotorsBusy() >= 2) {
+            System.out.println("fl" + this.fl.getTargetPosition() + ", " + this.fl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.flTarget);
+            System.out.println("bl" + this.bl.getTargetPosition() + ", " + this.bl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.blTarget);
             try {
                 sleep(2);
             } catch(Exception e) {
@@ -165,14 +171,16 @@ public class HolonomicDriveBase extends DriveBase {
                 e.printStackTrace();
             }
         }
+        setMotorPower(0.0);
     }
 
     public void turnToHeading(double power, double heading) {
         this.stateAtAssignmentOfTask = this.getDriveBaseState();
         double diff = this.distanceToTurn(this.getHeading(), heading);
+        //System.out.println("==========================");
         while(Math.abs(diff) > 0.1) {
             //double startHeading = this.getHeading();
-            System.out.println("");
+            //System.out.println(diff + "");
             diff = this.distanceToTurn(this.getHeading(), heading);
             if(Math.abs(diff) <= 5) {
                 power = 0.05;
@@ -192,6 +200,7 @@ public class HolonomicDriveBase extends DriveBase {
                 e.printStackTrace();
             }
         }
+        setMotorPower(0.0);
     }
 
     public void forward() {
@@ -233,7 +242,7 @@ public class HolonomicDriveBase extends DriveBase {
 
     public double distanceToTurn(double cHeading, double nHeading) { //this function has absolutely no error handling, if you call it when driving instead of turning it will absolutely return invalid information and especially if you call it without setting a task first
         double current = this.getHeading();
-        double destination = nHeading;//(this.stateAtAssignmentOfTask.heading+(180-this.getTask().getParameters().get("degrees")));
+        double destination = 180-nHeading;//(this.stateAtAssignmentOfTask.heading+(180-this.getTask().getParameters().get("degrees")));
         destination%=(2*180);
         destination-=180;
         destination-=current;

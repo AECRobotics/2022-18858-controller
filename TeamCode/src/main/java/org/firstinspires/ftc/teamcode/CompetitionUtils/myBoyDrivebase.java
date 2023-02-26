@@ -15,10 +15,10 @@ public class myBoyDrivebase extends HolonomicDriveBase {
     public static int TICKS_PER_RAW_REV = 28;
     public myBoyDrivebase(DcMotor fr, DcMotor br, DcMotor fl, DcMotor bl, BNO055IMU imu) {
         super(
-                new Wheel(fr, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.0),
-                new Wheel(br, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.0),
-                new Wheel(fl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.0),
-                new Wheel(bl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, Math.PI/2.0),
+                new Wheel(fr, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.179534351376),
+                new Wheel(fl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.179534351376),
+                new Wheel(bl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.179534351376),
+                new Wheel(br, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.179534351376),
                 new CHubIMU(imu, AxesOrder.XYZ)
         );
         this.getBl().setDirection(DcMotorSimple.Direction.REVERSE);
@@ -31,7 +31,7 @@ public class myBoyDrivebase extends HolonomicDriveBase {
                 new Wheel(fr, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.0),
                 new Wheel(br, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.0),
                 new Wheel(fl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.0),
-                new Wheel(bl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, Math.PI/2),
+                new Wheel(bl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.0),
                 imu
         );
         this.getBl().setDirection(DcMotorSimple.Direction.REVERSE);

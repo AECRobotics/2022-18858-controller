@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.TeamUtils.Autonomous.HolonomicAutonomous;
 import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Spool;
+import org.firstinspires.ftc.teamcode.TeamUtils.UnitConversion;
 import org.firstinspires.ftc.teamcode.TeamUtils.Vector2;
 
 import java.util.HashMap;
@@ -27,11 +28,11 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     double alignmentSpeed = 0.2;
     double webcamAngle = 46.225;//33.557;
 
-    private boolean withinTolerance(double value, double target, double tolerance) {
+    public boolean withinTolerance(double value, double target, double tolerance) {
         return Math.abs(value-target) <= tolerance;
     }
 
-    private double clamp(double min, double value, double max) {
+    public double clamp(double min, double value, double max) {
         return Math.max(min, Math.min(value, max));
     }
 
@@ -42,16 +43,17 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
         driveBase.setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
         double angle = 0.0;
         double width = 0.0;
+        long start = System.nanoTime();
         do {
             angle = this.webcam.getAngle();
             width = this.webcam.getWidth();
-            telemetry.addLine(angle + ", " + width);
+            //telemetry.addLine(angle + ", " + width);
             double angleDiff = angle-angleTarget;
             double widthDiff = width-widthTarget;
             Vector2 diff = new Vector2(angleDiff, widthDiff);
             double diffMag = diff.magnitude();
             double diffAngle = diff.angle();
-            telemetry.addLine(diffAngle + ", " + diffMag);
+            //telemetry.addLine(diffAngle + ", " + diffMag);
             diffAngle-=((90-webcamAngle)*Math.PI/180);
             Vector2 rotated = new Vector2(diffAngle);
             rotated = rotated.multiply(-Math.min(diffMag*alignmentSpeed/400, alignmentSpeed));
@@ -60,14 +62,14 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
             //Vector2 rotated = new Vector2(-webcamAngle*Math.PI/180);
             //rotated = rotated.multiply(rotated.dot(diff)).multiply(Math.min(mag/10, alignmentSpeed));
 
-            //telemetry.addLine(rotated.x + ", " + rotated.y);
-
+            telemetry.addLine(angleDiff + ", " + widthDiff);
+            //System.out.println(angleDiff + ", " + widthDiff);
             //angleDiff = clamp(-alignmentSpeed, rotated.x/10, alignmentSpeed);
             //widthDiff = clamp(-alignmentSpeed, rotated.y/10, alignmentSpeed);
-            telemetry.addLine(rotated.y + ", " + rotated.x);
+            //telemetry.addLine(rotated.y + ", " + rotated.x);
             telemetry.update();
             driveBase.drive(rotated.y, rotated.x, 0.0);
-        } while (!withinTolerance(angle, angleTarget, 10) || !withinTolerance(width, widthTarget, 5));
+        } while ((!withinTolerance(angle, angleTarget, 20) || !withinTolerance(width, widthTarget, 10)) && System.nanoTime() > start+ UnitConversion.SECONDS_PER_NANOSECOND*5);
         driveBase.setMotorPower(0.0);
     }
 

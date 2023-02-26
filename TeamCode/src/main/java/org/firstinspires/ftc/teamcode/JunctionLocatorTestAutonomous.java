@@ -16,44 +16,6 @@ import org.firstinspires.ftc.teamcode.TeamUtils.Vector2;
 public class JunctionLocatorTestAutonomous extends MyBoyAutonomous {
     ConeStateFinder.ConeState coneState = ConeStateFinder.ConeState.UNKNOWN;
 
-    double angleTarget = 305;//90;
-    double widthTarget = 145;//152;
-    double alignmentSpeed = 0.2;
-    double webcamAngle = 46.225;//33.557;
-
-    private boolean withinTolerance(double value, double target, double tolerance) {
-        return Math.abs(value-target) <= tolerance;
-    }
-
-    private double clamp(double min, double value, double max) {
-        return Math.max(min, Math.min(value, max));
-    }
-
-    public void alignToJunction() {
-        driveBase.setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
-        double angle = 0.0;
-        double width = 0.0;
-        do {
-            angle = this.webcam.getAngle();
-            width = this.webcam.getWidth();
-            double angleDiff = angle-angleTarget;
-            double widthDiff = width-widthTarget;
-            Vector2 diff = new Vector2(angleDiff, widthDiff);
-            double diffMag = diff.magnitude();
-            double diffAngle = diff.angle();
-            diffAngle-=((90-webcamAngle)*Math.PI/180);
-            Vector2 rotated = new Vector2(diffAngle);
-            rotated = rotated.multiply(Math.min(diffMag*alignmentSpeed/400, alignmentSpeed));
-            //the /400 is because of reasons.
-            //
-
-            rotated.y*=(-1);
-            //frankly this wouldn't be here if I did the math properly but I clearly didn't and it works right now.
-            driveBase.drive(rotated.y, rotated.x, 0.0);
-        } while (!withinTolerance(angle, angleTarget, 10) || !withinTolerance(width, widthTarget, 5));
-        driveBase.setMotorPower(0.0);
-    }
-
     @Override
     public void runOpMode() {
         this.internalInit();
@@ -73,7 +35,7 @@ public class JunctionLocatorTestAutonomous extends MyBoyAutonomous {
         telemetry.addLine(coneState.name());
         telemetry.update();
 
-        /*closeClaw();
+        closeClaw();
         spoolMotor.setRetractedDistance(50);
         sleep(500);
         //telemetry.addLine("thing-1");
@@ -87,16 +49,17 @@ public class JunctionLocatorTestAutonomous extends MyBoyAutonomous {
         driveBase.strafe(0.5, -0.3);
         //telemetry.addLine("thing3");
         //telemetry.update();
-        spoolMotor.setRetractedDistance(ArmHeightPositions.HIGH_PLACEMENT);
+        spoolMotor.setRetractedDistance(ArmHeightPositions.LOW_PLACEMENT);
         sleep(1000);
         alignToJunction();
         openClaw();
-        driveBase.forward(0.5, -0.14);*/
+        sleep(500);
+        driveBase.forward(0.5, -0.14);
         driveBase.turnToHeading(0.5, 0.0);
-        /*driveBase.strafe(0.5,
+        driveBase.strafe(0.5,
                 (coneState == ConeStateFinder.ConeState.MIDDLE) ? -0.365 :
                         (coneState == ConeStateFinder.ConeState.LEFT) ? -1.0005 :
                                 (coneState == ConeStateFinder.ConeState.RIGHT ? 0.32285 : -0.365)
-        );*/
+        );
     }
 }
