@@ -19,7 +19,7 @@ public class webcamCheck extends OpMode{
         telemetry.addData("Status", "Initialized");
         WebcamName webcamn = hardwareMap.get(WebcamName.class, "webcam");
         webcam = new RobotWebcam(webcamn);
-        aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam"));
+        aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam1"));
     }
     public void init_loop(){
 

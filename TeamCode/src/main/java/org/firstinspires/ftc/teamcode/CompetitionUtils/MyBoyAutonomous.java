@@ -7,11 +7,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.TeamUtils.Autonomous.HolonomicAutonomous;
+import org.firstinspires.ftc.teamcode.TeamUtils.Camera.AprilTagRecognition.AprilTagDetectionWebcam;
 import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Spool;
 import org.firstinspires.ftc.teamcode.TeamUtils.UnitConversion;
 import org.firstinspires.ftc.teamcode.TeamUtils.Vector2;
+import org.openftc.apriltag.AprilTagDetection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class MyBoyAutonomous extends HolonomicAutonomous {
@@ -19,12 +22,15 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     //ConeStateFinder stateFinder = null;
     //AprilTagDetectionWebcam aprilWebcam = null;
     protected MyBoyWebcam webcam = null;
+    protected AprilTagDetectionWebcam aprilTagDetectionWebcam = null;
+    HashMap<Integer, ConeStateFinder.ConeState> tagToStateMap;
     public Spool spoolMotor = null;
-    ClawController clawController;
+    public ClawController clawController;
     double angleTarget = 305;//90;
     double widthTarget = 145;//152;
     double alignmentSpeed = 0.2;
     double webcamAngle = 46.225;//33.557;
+    public ConeStateFinder.ConeState coneState;
 
     public boolean withinTolerance(double value, double target, double tolerance) {
         return Math.abs(value-target) <= tolerance;
@@ -72,6 +78,17 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
         clawController.close();
     }
 
+    public ConeStateFinder.ConeState getConeState() {
+        ArrayList<AprilTagDetection> currentDetections = this.aprilTagDetectionWebcam.getTags();
+
+        for(AprilTagDetection tag : currentDetections) {
+            if(this.tagToStateMap.containsKey(tag.id)) {
+                return this.tagToStateMap.get(tag.id);
+            }
+        }
+        return ConeStateFinder.ConeState.UNKNOWN;
+    }
+
     protected void internalInit() {
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
@@ -85,19 +102,26 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
         spoolMotor.setPower(1.0);
         //webcam = new RobotWebcam(hardwareMap.get(WebcamName.class, "webcam"));
         //AprilTagDetectionWebcam aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam"));
-        HashMap<Integer, ConeStateFinder.ConeState> tagToStateMap = new HashMap<>();
+        tagToStateMap = new HashMap<>();
         tagToStateMap.put(5, ConeStateFinder.ConeState.LEFT);
         tagToStateMap.put(10, ConeStateFinder.ConeState.MIDDLE);
         tagToStateMap.put(15, ConeStateFinder.ConeState.RIGHT);
         //stateFinder = new ConeStateFinder(aprilWebcam, tagToStateMap);
-        this.webcam = new MyBoyWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam"), tagToStateMap);
+        this.webcam = new MyBoyWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam1"), tagToStateMap);
+        this.aprilTagDetectionWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam2"));
 
         BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
         driveBase = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imub);
         //imu = drive.getImu();
     }
 
-    protected void internalStart() {
+    protected void internalInitLoop() {
+        coneState = getConeState();
+        telemetry.addLine("Gyro status: " + this.driveBase.getImu().getGyroCalibrationStatus().name());
+        telemetry.addLine("Cone state:  " + coneState.name());
+    }
 
+    protected void internalStart() {
+        coneState = getConeState();
     }
 }

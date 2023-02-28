@@ -34,8 +34,11 @@ public class MyBoyWebcam {
 
     public MyBoyWebcam(int cameraMonitorViewId, WebcamName webcamName, HashMap<Integer, ConeStateFinder.ConeState> tagToStateMap) {
         this.camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        this.aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
-        this.camera.setPipeline(aprilTagDetectionPipeline);
+        //this.aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+        //this.camera.setPipeline(aprilTagDetectionPipeline);
+        this.junctionLocatorPipeline = new JunctionLocatorPipeline();
+        this.camera.setPipeline(junctionLocatorPipeline);
+        mode = CameraMode.JUNCTION_LOCATOR;
         this.camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override

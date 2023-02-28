@@ -1,20 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ArmHeightPositions;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
-import org.firstinspires.ftc.teamcode.CompetitionUtils.GoBildaSpoolConstants;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.MyBoyAutonomous;
 import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
-import org.firstinspires.ftc.teamcode.TeamUtils.Vector2;
 
-@TeleOp(name="Test junction locator Autonomous", group="Robot")
-public class JunctionLocatorTestAutonomous extends MyBoyAutonomous {
-    ConeStateFinder.ConeState coneState = ConeStateFinder.ConeState.UNKNOWN;
+public class PlaceConeParkLeft extends MyBoyAutonomous {
+    private ConeStateFinder.ConeState coneState = ConeStateFinder.ConeState.UNKNOWN;
 
     @Override
     public void runOpMode() {
