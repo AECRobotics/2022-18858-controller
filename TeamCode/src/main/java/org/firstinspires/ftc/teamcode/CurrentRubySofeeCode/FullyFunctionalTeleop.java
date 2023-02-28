@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.CurrentRubySofeeCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,21 +14,31 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 
 @TeleOp(name="All Function Teleop", group="Robot")
 public class FullyFunctionalTeleop extends OpMode{
-    public DcMotor leftBackDrive = null;
-    public DcMotor rightBackDrive = null;
-    public DcMotor leftFrontDrive = null;
-    public DcMotor rightFrontDrive = null;
-    public DcMotor spoolMotor = null;
-    public Servo rightClaw = null;
-    public Servo leftClaw = null;
+    DcMotor leftBackDrive = null;
+    DcMotor rightBackDrive = null;
+    DcMotor leftFrontDrive = null;
+    DcMotor rightFrontDrive = null;
+    DcMotor spoolMotor = null;
+    Servo rightClaw = null;
+    Servo leftClaw = null;
+    //CRServo leftCRServo;
+    //CRServo rightCRServo;
+    //boolean isNotGamepadRight;
+    //double leftPower;
+    //double rightPower;
+
     //static final double COUNTS_PER_MM = (GoBildaSpoolConstants.TICKS_PER_REV)/(112.0);
     boolean clawOpen = false;
     double spoolTarget;
 
-    boolean isLastGamepadDpadRight = false;
+    boolean isLastGamepadRightBumper = false;
+    boolean isLastGamepadLeftBumper = false;
+    /*
     boolean lastGamepadDpadLeft = false;
     boolean lastGamepadDpadUp = false;
     boolean lastGamepadDpadDown = false;
+
+     */
 //current target pos / spoolticks
     /*public double mmtoTicks(double mm){
         double ticks = mm*COUNTS_PER_MM;
@@ -51,6 +62,9 @@ public class FullyFunctionalTeleop extends OpMode{
         leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft");
         rightBackDrive = hardwareMap.get(DcMotor.class, "backright");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright");
+
+        //leftCRServo = hardwareMap.crservo.get("leftCRServo");
+        //rightCRServo = hardwareMap.crservo.get("rightCRServo");
 
         spoolMotor = hardwareMap.get(DcMotor.class, "spoolmotorgobilda");
         rightClaw = hardwareMap.get(Servo.class, "rightclaw");
@@ -107,11 +121,24 @@ public class FullyFunctionalTeleop extends OpMode{
             lfPow = turn;
             rfPow = -turn;
         }
+        /*
+        if(gamepad1.dpad_left && !isLastGamepadLeftBumper){
+            leftPower = -1.0;
+            rightPower = 1.0;
+        }
+        else{
+            leftPower = 0.0;
+            rightPower = 0.0;
+        }
 
-        if(gamepad1.left_bumper) {
+         */
+
+        if(gamepad1.right_bumper) {
             clawOpen = true;
-        } else if(gamepad1.right_bumper) {
+            //isLastGamepadRightBumper = true;
+        } else if(gamepad1.left_bumper) {
             clawOpen = false;
+            //isLastGamepadRightBumper = false;
         }
         if(clawOpen) {
             leftClaw.setPosition(ClawPositions.leftServoOpen);
@@ -122,31 +149,35 @@ public class FullyFunctionalTeleop extends OpMode{
         }
         if(gamepad1.a){
            //bottom
-           spoolTarget = ArmHeightPositions.GROUND_PLACEMENT; //mm
-           spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
+           spoolTarget = ArmHeightPositions.mmToTicks(0.0, spoolMotor); //mm
+           spoolMotor.setTargetPosition((int)spoolTarget);
+           //spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
            spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-           spoolMotor.setPower(0.75);
+           spoolMotor.setPower(0.5);
         }
         if(gamepad1.b){
             // low
-            spoolTarget = ArmHeightPositions.LOW_PLACEMENT; //mm
-                spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
+            spoolTarget = ArmHeightPositions.mmToTicks(470.0, spoolMotor); //mm
+            spoolMotor.setTargetPosition((int)spoolTarget);
+            // spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            spoolMotor.setPower(1.0);
+            spoolMotor.setPower(0.5);
         }
         if(gamepad1.x){
             //medium
-            spoolTarget  = ArmHeightPositions.MEDIUM_PLACEMENT; //mm
-            spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
+            spoolTarget = ArmHeightPositions.mmToTicks(725.0, spoolMotor); //mm
+            spoolMotor.setTargetPosition((int)spoolTarget);
+            //spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            spoolMotor.setPower(0.9);
+            spoolMotor.setPower(0.5);
         }
         if(gamepad1.y){
             //high
-            spoolTarget = ArmHeightPositions.HIGH_PLACEMENT; //mm
-            spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
+            spoolTarget = 3084.0; //mm
+            spoolMotor.setTargetPosition((int)spoolTarget);
+            //spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            spoolMotor.setPower(0.8);
+            spoolMotor.setPower(0.5);
         }
         /*
 
@@ -198,7 +229,8 @@ public class FullyFunctionalTeleop extends OpMode{
         }
 
          */
-
+        //leftCRServo.setPower(leftPower);
+        //rightCRServo.setPower(rightPower);
         leftFrontDrive.setPower(lfPow);
         leftBackDrive.setPower(lbPow);
         rightFrontDrive.setPower(rfPow);

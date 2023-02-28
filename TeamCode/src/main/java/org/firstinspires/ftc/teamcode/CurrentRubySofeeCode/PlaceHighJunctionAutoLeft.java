@@ -119,7 +119,7 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.STRAFE_DISTANCE, parameters));
                     break;
                 case 4:
-                    spoolMotor.setRetractedDistance(ArmHeightPositions.HIGH_PLACEMENT);
+                    spoolMotor.setRetractedDistance(3083.0);
                     parameters.put("seconds", 6.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
@@ -129,7 +129,7 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.DRIVE_DISTANCE, parameters));
                     break;
                 case 6:
-                    spoolMotor.setRetractedDistance(ArmHeightPositions.HIGH_PLACEMENT-43);
+                    spoolMotor.setRetractedDistance(3064.0);
                     parameters.put("seconds", 0.5);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
@@ -139,7 +139,7 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
                 case 8:
-                    spoolMotor.setRetractedDistance(ArmHeightPositions.HIGH_PLACEMENT);
+                    spoolMotor.setRetractedDistance(ArmHeightPositions.mmToTicksSpool(1000, spoolMotor));
                     parameters.put("seconds", 0.5);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;

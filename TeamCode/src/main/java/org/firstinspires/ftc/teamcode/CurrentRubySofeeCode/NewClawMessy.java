@@ -14,11 +14,12 @@ public class NewClawMessy extends OpMode {
     double leftPower;
     double rightPower;
     boolean clawOpen;
+    boolean isNotGamepadRight;
     Servo rightClaw = null;
     Servo leftClaw = null;
     public void init(){
-        leftCRServo = hardwareMap.crservo.get("leftCRservo");
-        rightCRServo = hardwareMap.crservo.get("rightCRservo");
+        leftCRServo = hardwareMap.crservo.get("leftCRServo");
+        rightCRServo = hardwareMap.crservo.get("rightCRServo");
         rightClaw = hardwareMap.get(Servo.class, "rightclaw");
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
     }
@@ -29,14 +30,15 @@ public class NewClawMessy extends OpMode {
 
     }
     public void loop(){
-        if(gamepad1.dpad_left){
-            leftPower = 0.6;
-            rightPower = -0.6;
+        if(gamepad1.dpad_right && !isNotGamepadRight){
+            leftPower = -1.0;
+            rightPower = 1.0;
         }
         else{
             leftPower = 0.0;
             rightPower = 0.0;
         }
+        /*
         if(gamepad1.left_bumper) {
             clawOpen = true;
         } else if(gamepad1.right_bumper) {
@@ -49,6 +51,8 @@ public class NewClawMessy extends OpMode {
             leftClaw.setPosition(ClawPositions.leftServoClosed);
             rightClaw.setPosition(ClawPositions.rightServoClosed);
         }
+
+         */
 
         leftCRServo.setPower(leftPower);
         rightCRServo.setPower(rightPower);
