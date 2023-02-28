@@ -20,9 +20,7 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     //AprilTagDetectionWebcam aprilWebcam = null;
     protected MyBoyWebcam webcam = null;
     public Spool spoolMotor = null;
-    public Servo rightClaw = null;
-    public Servo leftClaw = null;
-
+    ClawController clawController;
     double angleTarget = 305;//90;
     double widthTarget = 145;//152;
     double alignmentSpeed = 0.2;
@@ -47,27 +45,18 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
         do {
             angle = this.webcam.getAngle();
             width = this.webcam.getWidth();
-            //telemetry.addLine(angle + ", " + width);
             double angleDiff = angle-angleTarget;
             double widthDiff = width-widthTarget;
             Vector2 diff = new Vector2(angleDiff, widthDiff);
             double diffMag = diff.magnitude();
             double diffAngle = diff.angle();
-            //telemetry.addLine(diffAngle + ", " + diffMag);
             diffAngle-=((90-webcamAngle)*Math.PI/180);
             Vector2 rotated = new Vector2(diffAngle);
             rotated = rotated.multiply(-Math.min(diffMag*alignmentSpeed/400, alignmentSpeed));
             rotated.x*=(-1);
-            //diff = diff.normalized();
-            //Vector2 rotated = new Vector2(-webcamAngle*Math.PI/180);
-            //rotated = rotated.multiply(rotated.dot(diff)).multiply(Math.min(mag/10, alignmentSpeed));
 
-            telemetry.addLine(angleDiff + ", " + widthDiff);
-            //System.out.println(angleDiff + ", " + widthDiff);
-            //angleDiff = clamp(-alignmentSpeed, rotated.x/10, alignmentSpeed);
-            //widthDiff = clamp(-alignmentSpeed, rotated.y/10, alignmentSpeed);
-            //telemetry.addLine(rotated.y + ", " + rotated.x);
-            telemetry.update();
+            //telemetry.addLine(angleDiff + ", " + widthDiff);
+            //telemetry.update();
             driveBase.drive(rotated.y, rotated.x, 0.0);
         } while ((!withinTolerance(angle, angleTarget, 20) || !withinTolerance(width, widthTarget, 10)) && System.nanoTime() > start+ UnitConversion.SECONDS_PER_NANOSECOND*5);
         driveBase.setMotorPower(0.0);
@@ -76,13 +65,11 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     public MyBoyAutonomous() {}
 
     public void openClaw() {
-        leftClaw.setPosition(ClawPositions.leftServoOpen);
-        rightClaw.setPosition(ClawPositions.rightServoOpen);
+        clawController.open();
     }
 
     public void closeClaw() {
-        leftClaw.setPosition(ClawPositions.rightServoClosed);
-        rightClaw.setPosition(ClawPositions.rightServoClosed);
+        clawController.close();
     }
 
     protected void internalInit() {
@@ -93,8 +80,7 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
         DcMotor rightBackDrive = hardwareMap.get(DcMotor.class, "backright"); //4
         DcMotor rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright"); //2
         spoolMotor = new Spool(hardwareMap.get(DcMotor.class, "spoolmotorgobilda"), 1.0, GoBildaSpoolConstants.TICKS_PER_REV, 0.0, GoBildaSpoolConstants.SPOOL_RADIUS, GoBildaSpoolConstants.SPOOL_WIDTH, 0.907, GoBildaSpoolConstants.THREAD_DIAMETER);
-        rightClaw = hardwareMap.get(Servo.class, "rightclaw");
-        leftClaw = hardwareMap.get(Servo.class, "leftclaw");
+        clawController = new ClawController(hardwareMap);
         spoolMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         spoolMotor.setPower(1.0);
         //webcam = new RobotWebcam(hardwareMap.get(WebcamName.class, "webcam"));
