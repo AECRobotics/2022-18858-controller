@@ -47,17 +47,17 @@ public class PlaceConeParkLeft extends MyBoyAutonomous {
         closeClaw();
         spoolMotor.setRetractedDistance(50);
         sleep(500);
-        driveBase.strafe(0.5, 0.66);
-        driveBase.forward(0.5, 1.17);
-        driveBase.strafe(0.5, -0.3);
+        driveBase.strafe(0.1, 0.66);
+        driveBase.forward(0.1, 1.17);
+        driveBase.strafe(0.1, -0.3);
         spoolMotor.setRetractedDistance(ArmHeightPositions.LOW_PLACEMENT);
         sleep(1000);
         alignToJunction();
         openClaw();
         sleep(500);
-        driveBase.forward(0.5, -0.14);
-        driveBase.turnToHeading(0.5, 0.0);
-        driveBase.strafe(0.5,
+        driveBase.forward(0.1, -0.14);
+        driveBase.turnToHeading(0.1, 0.0);
+        driveBase.strafe(0.1,
                 (coneState == ConeStateFinder.ConeState.MIDDLE) ? -0.365 :
                         (coneState == ConeStateFinder.ConeState.LEFT) ? -1.0005 :
                                 (coneState == ConeStateFinder.ConeState.RIGHT ? 0.32285 : -0.365)
