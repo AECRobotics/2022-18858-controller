@@ -29,7 +29,7 @@
 
 //basically use this file as a template for autonomous and maybe teleop, only edit it if you are making changes to the template otherwise copy it.
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 

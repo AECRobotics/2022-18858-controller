@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,7 +12,8 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.MyBoyWebcam;
 
 import java.util.HashMap;
 
-@TeleOp(name="Junction Locator Test", group="Robot")
+@TeleOp(name="Junction Locator Test", group="Debug")
+@Disabled
 public class JunctionLocatorTest extends OpMode {
     public MyBoyWebcam webcam = null;
 

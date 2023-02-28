@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
 
 
-@TeleOp(name="Test Calibration Data", group="Calibration")
+@TeleOp(name="Test Calibration Data", group="Debug")
 @Disabled
 public class TestCalibrationData extends OpMode
 {

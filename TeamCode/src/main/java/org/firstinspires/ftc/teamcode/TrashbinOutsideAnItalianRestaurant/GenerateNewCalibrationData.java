@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TrashbinOutsideAnItalianRestaurant;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ReadWriteFile;
@@ -13,7 +14,8 @@ import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
 import java.io.File;
 
 //@Disabled
-@TeleOp(name="Generate New Calibration Data", group="Calibration")
+@TeleOp(name="Generate New Calibration Data", group="Debug")
+@Disabled
 public class GenerateNewCalibrationData extends OpMode
 {
 

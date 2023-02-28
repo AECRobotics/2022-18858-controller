@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.CurrentRubySofeeCode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name="GoBilda Arm Check", group="Robot")
-
+@TeleOp(name="GoBilda Arm Check", group="Debug")
+@Disabled
 public class SpoolMotorCheckGoBilda extends OpMode{
     public DcMotor spoolMotor = null;
     static final double PULSES_PER_REVOLUTION = ((((1+(46.0/17.0))) * (1+(46.0/17.0))) * 28);

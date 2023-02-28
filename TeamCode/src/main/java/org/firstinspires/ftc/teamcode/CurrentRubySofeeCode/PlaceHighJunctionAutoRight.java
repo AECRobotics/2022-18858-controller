@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Spool;
 
 import java.util.HashMap;
 
-@Autonomous(name="WIP RIGHT", group="Robot")
+@Autonomous(name="WIP RIGHT", group="Deprecated")
 public class PlaceHighJunctionAutoRight extends OpMode {
     public CHubIMU imu = null;
     RobotWebcam webcam = null;

@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-@TeleOp(name="check spool motor and servo testing", group = "Robot")
+@TeleOp(name="check spool motor and servo testing", group = "Debug")
 public class servoCheck extends OpMode{
     public Servo rightClaw = null; //closed +0.36 open +0.45
     public Servo leftClaw = null; //open and closed because weird crap +1.0

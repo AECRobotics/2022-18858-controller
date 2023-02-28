@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.MyBoyAutonomous;
 import org.firstinspires.ftc.teamcode.TeamUtils.UnitConversion;
 import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Wheel;
 
-@Autonomous(name="Test New Autonomous Framework", group="Robot")
+@Autonomous(name="Test New Autonomous Framework", group="Debug")
 public class TestNewAutonomousFramework extends MyBoyAutonomous {
     public Wheel motor = null;
 

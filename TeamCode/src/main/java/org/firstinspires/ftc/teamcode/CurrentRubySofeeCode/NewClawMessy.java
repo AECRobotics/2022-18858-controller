@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ClawPositions;
 
-@TeleOp(name="messy new claw", group="Robot")
+@TeleOp(name="messy new claw", group="Debug")
 public class NewClawMessy extends OpMode {
     CRServo leftCRServo;
     CRServo rightCRServo;

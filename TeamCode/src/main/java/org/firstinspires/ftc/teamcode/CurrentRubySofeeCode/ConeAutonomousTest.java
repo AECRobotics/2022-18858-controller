@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.CurrentRubySofeeCode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
@@ -18,7 +19,8 @@ import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 
 import java.util.HashMap;
 
-@Autonomous(name="LEFT WITH CONE", group="Robot")
+@Autonomous(name="LEFT WITH CONE", group="Debug")
+@Disabled
 public class ConeAutonomousTest extends OpMode {
     public CHubIMU imu = null;
     RobotWebcam webcam = null;

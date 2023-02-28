@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
@@ -16,7 +17,8 @@ import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 
 import java.util.HashMap;
 
-@Autonomous(name="Cone finder autonomous RIGHT", group="Robot")
+@Autonomous(name="Cone finder autonomous RIGHT", group="Deprecated")
+@Disabled
 public class IterativeAutonomousRight extends OpMode {
     public CHubIMU imu = null;
     RobotWebcam webcam = null;

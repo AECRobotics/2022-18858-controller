@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.TeamUtils.Camera.AprilTagRecognition.AprilTagDetectionWebcam;
 import org.firstinspires.ftc.teamcode.TeamUtils.Camera.RobotWebcam;
 
-@TeleOp(name="test webcam cone state finder ( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)", group = "Robot")
+@TeleOp(name="test webcam cone state finder ( ͡°( ͡° ͜ʖ( ͡° ͜ʖ ͡°)ʖ ͡°) ͡°)", group = "Debug")
 public class webcamCheck extends OpMode{
     boolean lastGamepadB = false;
     ConeStateFinder.ConeState state = null;
