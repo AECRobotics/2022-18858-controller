@@ -1,15 +1,34 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.CompetitionUtils;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ArmHeightPositions;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.MyBoyAutonomous;
 import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
 
+@TeleOp(name="New Autonomous Template", group="Robot")
+@Disabled
 public class PlaceConeParkLeft extends MyBoyAutonomous {
-    private ConeStateFinder.ConeState coneState = ConeStateFinder.ConeState.UNKNOWN;
+    ConeStateFinder.ConeState coneState = ConeStateFinder.ConeState.UNKNOWN;
 
     @Override
     public void runOpMode() {
+        this.internalInit();
+
+        while(!opModeIsActive()) {
+            this.internalInitLoop(); //MyBoyAutonomous.internalInitLoop() does not call telemetry.update()
+
+            telemetry.update(); //hence why it is here
+        }
+
+        waitForStart();
+        this.internalStart(); //sets coneState variable
+
+        telemetry.addLine(coneState.name());
+        telemetry.update();
+
         this.internalInit();
         CHubIMU imu = driveBase.getImu();
         while(!opModeIsActive()) {
@@ -22,25 +41,15 @@ public class PlaceConeParkLeft extends MyBoyAutonomous {
         waitForStart();
         this.internalStart();
 
-        coneState = this.webcam.getConeState();
-        this.webcam.switchToJunctionLocatorMode();
         telemetry.addLine(coneState.name());
         telemetry.update();
 
         closeClaw();
         spoolMotor.setRetractedDistance(50);
         sleep(500);
-        //telemetry.addLine("thing-1");
-        //telemetry.update();
         driveBase.strafe(0.5, 0.66);
-        //telemetry.addLine("thing");
-        //telemetry.update();
         driveBase.forward(0.5, 1.17);
-        //telemetry.addLine("thing2");
-        //telemetry.update();
         driveBase.strafe(0.5, -0.3);
-        //telemetry.addLine("thing3");
-        //telemetry.update();
         spoolMotor.setRetractedDistance(ArmHeightPositions.LOW_PLACEMENT);
         sleep(1000);
         alignToJunction();

@@ -35,5 +35,28 @@ public class NewAutonomousTemplate extends MyBoyAutonomous {
         telemetry.update();
 
         //autonomous code goes here
+
+        /*
+        built in functions and variables that may be useful:
+
+        MyBoyAutonomous.spoolMotor
+        MyBoyAutonomous.webcam
+        MyBoyAutonomous.aprilTagRecognitionWebcam
+
+        MyBoyAutonomous.openClaw()
+        MyBoyAutonomous.closeClaw()
+        MyBoyAutonomous.alignToJunction()
+        MyBoyAutonomous.getConeState()
+        MyBoyAutonomous.clamp()
+        MyBoyAutonomous.within()
+
+        HolonomicAutonomous.driveBase
+
+        HolonomicAutonomous.driveBase.forward()
+        HolonomicAutonomous.driveBase.strafe()
+        HolonomicAutonomous.driveBase.turn()
+        HolonomicAutonomous.driveBase.turnToHeading()
+        sleep()
+        */
     }
 }
