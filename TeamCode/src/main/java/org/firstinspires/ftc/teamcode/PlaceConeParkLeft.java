@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CompetitionUtils;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -8,8 +8,7 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.MyBoyAutonomous;
 import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
 
-@TeleOp(name="New Autonomous Template", group="Robot")
-@Disabled
+@TeleOp(name="Place Cone and Park,  LEFT", group="Robot")
 public class PlaceConeParkLeft extends MyBoyAutonomous {
     ConeStateFinder.ConeState coneState = ConeStateFinder.ConeState.UNKNOWN;
 
@@ -17,29 +16,15 @@ public class PlaceConeParkLeft extends MyBoyAutonomous {
     public void runOpMode() {
         this.internalInit();
 
-        while(!opModeIsActive()) {
+        while(opModeInInit()) {
             this.internalInitLoop(); //MyBoyAutonomous.internalInitLoop() does not call telemetry.update()
 
-            telemetry.update(); //hence why it is here
+
+            telemetry.update();
         }
 
         waitForStart();
         this.internalStart(); //sets coneState variable
-
-        telemetry.addLine(coneState.name());
-        telemetry.update();
-
-        this.internalInit();
-        CHubIMU imu = driveBase.getImu();
-        while(!opModeIsActive()) {
-            telemetry.addLine("" + imu.getGyroCalibrationStatus().name());
-            telemetry.update();
-        }
-        telemetry.addLine("thing");
-        telemetry.update();
-
-        waitForStart();
-        this.internalStart();
 
         telemetry.addLine(coneState.name());
         telemetry.update();

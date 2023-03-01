@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.CompetitionUtils.MyBoyAutonomous;
 import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
 
 @TeleOp(name="New Autonomous Template", group="Robot")
-@Disabled
+//@Disabled
 public class NewAutonomousTemplate extends MyBoyAutonomous {
     ConeStateFinder.ConeState coneState = ConeStateFinder.ConeState.UNKNOWN;
 
@@ -36,6 +36,7 @@ public class NewAutonomousTemplate extends MyBoyAutonomous {
 
         //autonomous code goes here
 
+        this.internalStop();
         /*
         built in functions and variables that may be useful:
 
@@ -43,6 +44,7 @@ public class NewAutonomousTemplate extends MyBoyAutonomous {
         MyBoyAutonomous.webcam
         MyBoyAutonomous.aprilTagRecognitionWebcam
 
+        MyBoyAutonomous.switchToJunctionLocatorMode()
         MyBoyAutonomous.openClaw()
         MyBoyAutonomous.closeClaw()
         MyBoyAutonomous.alignToJunction()

@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Spool;
 import org.firstinspires.ftc.teamcode.TeamUtils.UnitConversion;
 import org.firstinspires.ftc.teamcode.TeamUtils.Vector2;
 import org.openftc.apriltag.AprilTagDetection;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,8 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     double webcamAngle = 46.225;//33.557;
     public ConeStateFinder.ConeState coneState;
 
+    int[] viewportContainerIds = null;
+
     public boolean withinTolerance(double value, double target, double tolerance) {
         return Math.abs(value-target) <= tolerance;
     }
@@ -40,8 +43,20 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
         return Math.max(min, Math.min(value, max));
     }
 
+    public void switchToJunctionLocatorMode() {
+        if(this.webcam == null) {
+            //telemetry.addLine("pre nulling");
+            //telemetry.update();
+            this.aprilTagDetectionWebcam.close();
+            this.aprilTagDetectionWebcam = null;
+            telemetry.addLine("pre new camera");
+            telemetry.update();
+            this.webcam = new MyBoyWebcam(viewportContainerIds[0], hardwareMap.get(WebcamName.class, "webcam1"), tagToStateMap);
+        }
+    }
+
     public void alignToJunction() {
-        if(this.webcam.mode != MyBoyWebcam.CameraMode.JUNCTION_LOCATOR) {
+        if(this.webcam != null && this.webcam.mode != MyBoyWebcam.CameraMode.JUNCTION_LOCATOR) {
             return;
         }
         driveBase.setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -90,8 +105,6 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     }
 
     protected void internalInit() {
-        telemetry.addData("Status", "Ready to run");
-        telemetry.update();
         DcMotor leftBackDrive = hardwareMap.get(DcMotor.class, "backleft"); //1
         DcMotor leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft"); //0
         DcMotor rightBackDrive = hardwareMap.get(DcMotor.class, "backright"); //4
@@ -107,8 +120,25 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
         tagToStateMap.put(10, ConeStateFinder.ConeState.MIDDLE);
         tagToStateMap.put(15, ConeStateFinder.ConeState.RIGHT);
         //stateFinder = new ConeStateFinder(aprilWebcam, tagToStateMap);
-        this.webcam = new MyBoyWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam1"), tagToStateMap);
-        this.aprilTagDetectionWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam2"));
+        //
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+        /**
+         * This is the only thing you need to do differently when using multiple cameras.
+         * Instead of obtaining the camera monitor view and directly passing that to the
+         * camera constructor, we invoke {@link OpenCvCameraFactory#splitLayoutForMultipleViewports(int, int, OpenCvCameraFactory.ViewportSplitMethod)}
+         * on that view in order to split that view into multiple equal-sized child views,
+         * and then pass those child views to the constructor.
+         */
+        viewportContainerIds = OpenCvCameraFactory.getInstance()
+                .splitLayoutForMultipleViewports(
+                        cameraMonitorViewId, //The container we're splitting
+                        2, //The number of sub-containers to create
+                        OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY); //Whether to split the container vertically or horizontally
+
+        this.aprilTagDetectionWebcam = new AprilTagDetectionWebcam(viewportContainerIds[0], hardwareMap.get(WebcamName.class, "webcam2"));
+        telemetry.addData("Status", "Ready to run");
+        telemetry.update();
 
         BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
         driveBase = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imub);
@@ -123,5 +153,12 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
 
     protected void internalStart() {
         coneState = getConeState();
+        //telemetry.addLine("internal start");
+        //telemetry.update();
+        this.switchToJunctionLocatorMode();
+    }
+
+    protected void internalStop() {
+        this.webcam.close();
     }
 }

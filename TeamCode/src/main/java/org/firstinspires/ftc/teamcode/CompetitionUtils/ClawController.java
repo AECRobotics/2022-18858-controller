@@ -13,8 +13,8 @@ public class ClawController {
     //private CRServo leftCRServo;
 
     public ClawController(HardwareMap hardwareMap) {
-        rightServo = hardwareMap.get(Servo.class, "rightClaw");
-        leftServo = hardwareMap.get(Servo.class, "leftClaw");
+        rightServo = hardwareMap.get(Servo.class, "rightclaw");
+        leftServo = hardwareMap.get(Servo.class, "leftclaw");
         //rightCRServo = hardwareMap.get(CRServo.class, "rightCRClaw");
         //leftCRServo = hardwareMap.get(CRServo.class, "leftCRClaw");
         //rightCRServo.setDirection(DcMotorSimple.Direction.REVERSE);

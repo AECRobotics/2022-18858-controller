@@ -53,7 +53,16 @@ public class AprilTagDetectionWebcam {
         });
     }
 
+    public void close() {
+        this.camera.closeCameraDevice();
+    }
+
     public ArrayList<AprilTagDetection> getTags() {
         return this.aprilTagDetectionPipeline.getLatestDetections();
+    }
+
+    @Override
+    public void finalize() {
+        this.camera.closeCameraDevice();
     }
 }

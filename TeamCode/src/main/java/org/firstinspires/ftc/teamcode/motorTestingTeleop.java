@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 @TeleOp(name="Motor Testing Teleop", group="Debug")
-@Disabled
+//@Disabled
 public class motorTestingTeleop extends OpMode{
     public DcMotor leftBackDrive = null;
     public DcMotor rightBackDrive = null;
@@ -28,7 +28,7 @@ public class motorTestingTeleop extends OpMode{
         leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft");
         rightBackDrive = hardwareMap.get(DcMotor.class, "backright");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright");
-        spoolMotor = hardwareMap.get(DcMotor.class, "spoolmotor");
+        //spoolMotor = hardwareMap.get(DcMotor.class, "spoolmotor");
         rightClaw = hardwareMap.get(Servo.class, "rightclaw");
         leftClaw = hardwareMap.get(Servo.class, "leftclaw");
         leftBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -36,10 +36,10 @@ public class motorTestingTeleop extends OpMode{
         rightBackDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        spoolMotor.setTargetPosition(0);
+        //spoolMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //spoolMotor.setTargetPosition(0);
         //spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //spoolMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
@@ -60,7 +60,7 @@ public class motorTestingTeleop extends OpMode{
 
     Motors curMotor = Motors.LF;
 
-    public boolean testingPower = false;
+    public boolean testingPower = true;
     public boolean testingTarget = false;
     public boolean hasRun = false;
     @Override
@@ -106,7 +106,7 @@ public class motorTestingTeleop extends OpMode{
             getCurMotor().setPower(0.1);
             hasRun = true;
         }
-        spoolMotor.setPower(gamepad1.left_stick_y);
+        //spoolMotor.setPower(gamepad1.left_stick_y);
 
     }
 
