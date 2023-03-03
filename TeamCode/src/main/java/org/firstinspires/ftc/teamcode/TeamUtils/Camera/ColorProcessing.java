@@ -13,10 +13,10 @@ public class ColorProcessing {
     private static double colorValSimilarityThreshold = 36.0;
 
     public static ArrayList<Double> normalizeColor(int c) {
-        double a = (c>>24)&0xff;
-        double r = (c>>16)&0xff;
-        double g = (c>>8)&0xff;
-        double b = (c)&0xff;
+        double a = (c&0xff000000)>>24;
+        double r = (c&0x00ff0000)>>16;
+        double g = (c&0x0000ff00)>>8;
+        double b = (c&0x000000ff);
         double magnitude = Math.sqrt(a*a+r*r+g*g+b*b);
         ArrayList<Double> normalized = new ArrayList<Double>();
         normalized.add(a/magnitude);
@@ -29,17 +29,17 @@ public class ColorProcessing {
     public static double sqrdColorDistance(int c1, int c2) {
         //4 dimensional euclidean distance formula without square root because square root is slow and comparisons between distances remain true even without square root
         //find differences
-        int da = ((c1>>24)&0xff)-((c2>>24)&0xff);
-        int dr = ((c1>>16)&0xff)-((c2>>16)&0xff);
-        int dg = ((c1>>8)&0xff)-((c2>>8)&0xff);
-        int db = ((c1)&0xff)-((c2)&0xff);
+        int ad = ((c1&0xff000000)>>24)-((c2&0xff000000)>>24);
+        int ar = ((c1&0x00ff0000)>>16)-((c2&0x00ff0000)>>16);
+        int ag = ((c1&0x0000ff00)>>8)-((c2&0x0000ff00)>>8);
+        int ab = ((c1&0x000000ff))-((c2&0x000000ff));
         //square
-        da*=da;
-        dr*=dr;
-        dg*=dg;
-        db*=db;
+        ad*=ad;
+        ar*=ar;
+        ag*=ag;
+        ab*=ab;
         //return sum
-        return (double)(da+dr+dg+db);
+        return (double)(ad+ar+ag+ab);
     }
     public static double colorDistance(int c1, int c2) {
         return Math.sqrt(sqrdColorDistance(c1, c2));
@@ -54,17 +54,17 @@ public class ColorProcessing {
     }
 
     public static double getColorMagnitudeSqrd(int c) {
-        double a = (c>>24)&0xff;
-        double r = (c>>16)&0xff;
-        double g = (c>>8)&0xff;
-        double b = (c)&0xff;
+        double a = (c&0xff000000)>>24;
+        double r = (c&0x00ff0000)>>16;
+        double g = (c&0x0000ff00)>>8;
+        double b = (c&0x000000ff);
         return a*a+r*r+g*g+b*b;
     }
 
     public static double[] getHSV(int c) {
-        double r = (c>>16)&0xff;
-        double g = (c>>8)&0xff;
-        double b = (c)&0xff;
+        double r = (c&0x00ff0000)>>16;
+        double g = (c&0x0000ff00)>>8;
+        double b = (c&0x000000ff);
         r/=255;
         g/=255;
         b/=255;
@@ -99,15 +99,22 @@ public class ColorProcessing {
     public static boolean matchesColor(int c1, int c2) {
         int matchCount = 0;
         boolean sqrtDistMatches = sqrdColorDistance(c1, c2) <= colorDistSimilarityThreshold;
+        //debugOutput+=("dist: " + sqrdColorDistance(c1, c2) + ", ");
         if(sqrtDistMatches) {
             matchCount++;
+            //return true;
+        } else {
+            //return false;
         }
         ArrayList<Double> nc1 = ConeStateFinder.normalizeColor(c1);
         ArrayList<Double> nc2 = ConeStateFinder.normalizeColor(c2);
+        //debugOutput+=("dot: " + dotProduct(nc1, nc2) + ", ");
+        //debugOutput+=("mag: " + getColorMagnitude(c1) + "," + getColorMagnitude(c2) + ",");
         boolean dotProductMatches = dotProduct(nc1, nc2) >= colorDotProdSimilarityThreshold;
         if(dotProductMatches) {
             if(Math.abs(getColorMagnitudeSqrd(c1) - getColorMagnitudeSqrd(c2)) < colorMagnitudeSimilarityThreshold) {
                 matchCount++;
+                //return true;
             }
         }
         if(matchCount == 2) {
@@ -118,10 +125,12 @@ public class ColorProcessing {
         boolean hueMatches = Math.abs(hc1[0]-hc2[0]) <= colorHueSimilarityThreshold;
         boolean satMatches = Math.abs(hc1[1]-hc2[1]) <= colorSatSimilarityThreshold;
         boolean valMatches = Math.abs(hc1[2]-hc2[2]) <= colorValSimilarityThreshold;
+        //console.log(h1 + ", " + h2);
         if(hueMatches) {
             if(satMatches) {
                 if(valMatches) {
                     matchCount++;
+                    //return true;
                 }
             }
         }
