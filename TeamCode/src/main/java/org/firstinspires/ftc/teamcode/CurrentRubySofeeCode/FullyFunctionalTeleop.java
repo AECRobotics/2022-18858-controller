@@ -149,7 +149,7 @@ public class FullyFunctionalTeleop extends OpMode{
         }
         if(gamepad1.a){
            //bottom
-           spoolTarget = ArmHeightPositions.mmToTicks(0.0, spoolMotor); //mm
+           spoolTarget = ArmHeightPositions.mmToTicks(ArmHeightPositions.GROUND_PLACEMENT, spoolMotor); //mm
            spoolMotor.setTargetPosition((int)spoolTarget);
            //spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
            spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -157,7 +157,7 @@ public class FullyFunctionalTeleop extends OpMode{
         }
         if(gamepad1.b){
             // low
-            spoolTarget = ArmHeightPositions.mmToTicks(470.0, spoolMotor); //mm
+            spoolTarget = ArmHeightPositions.mmToTicks(ArmHeightPositions.LOW_PLACEMENT, spoolMotor); //mm
             spoolMotor.setTargetPosition((int)spoolTarget);
             // spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -165,7 +165,7 @@ public class FullyFunctionalTeleop extends OpMode{
         }
         if(gamepad1.x){
             //medium
-            spoolTarget = ArmHeightPositions.mmToTicks(725.0, spoolMotor); //mm
+            spoolTarget = ArmHeightPositions.mmToTicks(ArmHeightPositions.MEDIUM_PLACEMENT, spoolMotor); //mm
             spoolMotor.setTargetPosition((int)spoolTarget);
             //spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -173,7 +173,7 @@ public class FullyFunctionalTeleop extends OpMode{
         }
         if(gamepad1.y){
             //high
-            spoolTarget = 3084.0; //mm
+            spoolTarget = ArmHeightPositions.mmToTicks(ArmHeightPositions.HIGH_PLACEMENT, spoolMotor);; //mm
             spoolMotor.setTargetPosition((int)spoolTarget);
             //spoolMotor.setTargetPosition((int)ArmHeightPositions.mmToTicks(spoolTarget, spoolMotor)); //sets new target pos to height (mm) in ticks
             spoolMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

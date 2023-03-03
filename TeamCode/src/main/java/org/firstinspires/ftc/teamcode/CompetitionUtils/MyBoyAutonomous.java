@@ -56,7 +56,9 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     }
 
     public void alignToJunction() {
-        if(this.webcam != null && this.webcam.mode != MyBoyWebcam.CameraMode.JUNCTION_LOCATOR) {
+        System.out.println((System.nanoTime()/UnitConversion.SECONDS_PER_NANOSECOND) + " starting alignment");
+        if(this.webcam == null || this.webcam.mode != MyBoyWebcam.CameraMode.JUNCTION_LOCATOR) {
+            System.out.println("invalid webcam, terminating");
             return;
         }
         driveBase.setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -64,6 +66,7 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
         double width = 0.0;
         long start = System.nanoTime();
         do {
+            System.out.println((System.nanoTime()/UnitConversion.SECONDS_PER_NANOSECOND) + " looping");
             angle = this.webcam.getAngle();
             width = this.webcam.getWidth();
             double angleDiff = angle-angleTarget;
@@ -76,10 +79,16 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
             rotated = rotated.multiply(-Math.min(diffMag*alignmentSpeed/400, alignmentSpeed));
             rotated.x*=(-1);
 
-            //telemetry.addLine(angleDiff + ", " + widthDiff);
-            //telemetry.update();
+            telemetry.addLine(angle + ", " + width);
+            telemetry.addLine(angleDiff + ", " + widthDiff);
+            telemetry.update();
             driveBase.drive(rotated.y, rotated.x, 0.0);
-        } while ((!withinTolerance(angle, angleTarget, 20) || !withinTolerance(width, widthTarget, 10)) && System.nanoTime() > start+ UnitConversion.SECONDS_PER_NANOSECOND*5);
+            /*if(System.nanoTime() > start+(UnitConversion.SECONDS_PER_NANOSECOND*10)) {
+                System.out.println("timed out");
+                break;
+            }*/
+        } while ((!withinTolerance(angle, angleTarget, 20) || !withinTolerance(width, widthTarget, 10)));
+        System.out.println((System.nanoTime()/UnitConversion.SECONDS_PER_NANOSECOND) + " while done, terminating");
         driveBase.setMotorPower(0.0);
     }
 
@@ -105,10 +114,10 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     }
 
     protected void internalInit() {
-        DcMotor leftBackDrive = hardwareMap.get(DcMotor.class, "backleft"); //1
-        DcMotor leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft"); //0
-        DcMotor rightBackDrive = hardwareMap.get(DcMotor.class, "backright"); //4
-        DcMotor rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright"); //2
+        DcMotor backLeft = hardwareMap.get(DcMotor.class, "backleft"); //1
+        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "frontleft"); //0
+        DcMotor backRight = hardwareMap.get(DcMotor.class, "backright"); //4
+        DcMotor frontRight = hardwareMap.get(DcMotor.class, "frontright"); //2
         spoolMotor = new Spool(hardwareMap.get(DcMotor.class, "spoolmotorgobilda"), 1.0, GoBildaSpoolConstants.TICKS_PER_REV, 0.0, GoBildaSpoolConstants.SPOOL_RADIUS, GoBildaSpoolConstants.SPOOL_WIDTH, 0.907, GoBildaSpoolConstants.THREAD_DIAMETER);
         clawController = new ClawController(hardwareMap);
         spoolMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -141,7 +150,7 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
         telemetry.update();
 
         BNO055IMU imub = hardwareMap.get(BNO055IMU.class, "imu");
-        driveBase = new myBoyDrivebase(rightFrontDrive, rightBackDrive, leftFrontDrive, leftBackDrive, imub);
+        driveBase = new myBoyDrivebase(frontRight, backRight, frontLeft, backLeft, imub);
         //imu = drive.getImu();
     }
 
@@ -152,13 +161,15 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     }
 
     protected void internalStart() {
-        coneState = getConeState();
+        //coneState = getConeState();
         //telemetry.addLine("internal start");
         //telemetry.update();
         this.switchToJunctionLocatorMode();
     }
 
     protected void internalStop() {
+        driveBase.setMotorModes(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveBase.setMotorPower(0.0);
         this.webcam.close();
     }
 }

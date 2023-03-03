@@ -35,9 +35,13 @@ public class PlaceConeParkLeft extends MyBoyAutonomous {
         driveBase.strafe(0.1, 0.66);
         driveBase.forward(0.1, 1.17);
         driveBase.strafe(0.1, -0.3);
+        System.out.println("spoolMotor");
         spoolMotor.setRetractedDistance(ArmHeightPositions.LOW_PLACEMENT);
+        System.out.println("sleep");
         sleep(1000);
-        alignToJunction();
+        System.out.println("align");
+        this.alignToJunction();
+        System.out.println("open");
         openClaw();
         sleep(500);
         driveBase.forward(0.1, -0.14);

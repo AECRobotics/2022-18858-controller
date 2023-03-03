@@ -40,7 +40,7 @@ public class JunctionLocatorPipeline extends OpenCvPipeline {
         HashMap<Integer, Boolean> colorMatchMap = new HashMap<>();
         HashMap<Integer, Integer> colorMatchCountMap = new HashMap<>();
         for(int x = 0; x < bmp.getWidth(); x++) {
-            for(int y = 0; y < bmp.getHeight(); y+=100) {
+            for(int y = 0; y < bmp.getHeight(); y+=25) {
                 int color = bmp.getPixel(x,y);
                 if(!colorMatchMap.containsKey(color)) {
                     colorMatchMap.put(color, ColorProcessing.matchesColor(color, color1) || ColorProcessing.matchesColor(color, color2) || ColorProcessing.matchesColor(color, color3));

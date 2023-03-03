@@ -16,9 +16,9 @@ public class myBoyDrivebase extends HolonomicDriveBase {
     public myBoyDrivebase(DcMotor fr, DcMotor br, DcMotor fl, DcMotor bl, BNO055IMU imu) {
         super(
                 new Wheel(fr, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.179534351376),
+                new Wheel(br, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.179534351376),
                 new Wheel(fl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.179534351376),
                 new Wheel(bl, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.179534351376),
-                new Wheel(br, WHEEL_RADIUS, GEAR_RATIO, TICKS_PER_RAW_REV, 0.179534351376),
                 new CHubIMU(imu, AxesOrder.XYZ)
         );
         this.getBl().setDirection(DcMotorSimple.Direction.REVERSE);

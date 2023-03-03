@@ -100,8 +100,9 @@ public class HolonomicDriveBase extends DriveBase {
     }
 
     public void forward(double power, double distance) {
-        this.stateAtAssignmentOfTask = this.getDriveBaseState();
+        //System.out.println("debug2");
         this.resetCurrentToTarget();
+        this.stateAtAssignmentOfTask = this.getDriveBaseState();
         this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
         this.fl.setPower(power);
         this.bl.setPower(power);
@@ -111,9 +112,12 @@ public class HolonomicDriveBase extends DriveBase {
         this.bl.turnWheelDistance(distance, this.stateAtAssignmentOfTask.blTarget);
         this.fr.turnWheelDistance(distance, this.stateAtAssignmentOfTask.frTarget);
         this.br.turnWheelDistance(distance, this.stateAtAssignmentOfTask.brTarget);
-        while(!this.allMotorsReachedTarget() && this.numberOfMotorsBusy() <= 2) {
-            System.out.println("fl" + this.fl.getTargetPosition() + ", " + this.fl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.flTarget);
-            System.out.println("bl" + this.bl.getTargetPosition() + ", " + this.bl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.blTarget);
+        //System.out.println("debug3");
+        while(!this.allMotorsReachedTarget() || this.numberOfMotorsBusy() >= 2) {
+            //System.out.println("fl" + this.fl.getTargetPosition() + ", " + this.fl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.flTarget);
+            //System.out.println("bl" + this.bl.getTargetPosition() + ", " + this.bl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.blTarget);
+            //System.out.println((this.allMotorsReachedTarget() ? "true" : "false") + " " + this.numberOfMotorsBusy());
+            //System.out.println("debug4");
             try {
                 sleep(2);
             } catch(Exception e) {
@@ -123,8 +127,8 @@ public class HolonomicDriveBase extends DriveBase {
     }
 
     public void strafe(double power, double distance) {
-        this.stateAtAssignmentOfTask = this.getDriveBaseState();
         this.resetCurrentToTarget();
+        this.stateAtAssignmentOfTask = this.getDriveBaseState();
         this.setMotorModes(DcMotor.RunMode.RUN_TO_POSITION);
         this.fl.setPower(power);
         this.br.setPower(power);
@@ -135,8 +139,8 @@ public class HolonomicDriveBase extends DriveBase {
         this.fr.turnWheelDistance(-distance, this.stateAtAssignmentOfTask.frTarget);
         this.bl.turnWheelDistance(-distance, this.stateAtAssignmentOfTask.blTarget);
         while(!this.allMotorsReachedTarget() || this.numberOfMotorsBusy() >= 2) {
-            System.out.println("fl" + this.fl.getTargetPosition() + ", " + this.fl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.flTarget);
-            System.out.println("bl" + this.bl.getTargetPosition() + ", " + this.bl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.blTarget);
+            //System.out.println("fl" + this.fl.getTargetPosition() + ", " + this.fl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.flTarget);
+            //System.out.println("bl" + this.bl.getTargetPosition() + ", " + this.bl.getCurrentPosition() + "," + this.stateAtAssignmentOfTask.blTarget);
             try {
                 sleep(2);
             } catch(Exception e) {

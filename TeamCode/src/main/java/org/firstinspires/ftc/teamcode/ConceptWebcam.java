@@ -115,7 +115,7 @@ public class ConceptWebcam extends LinearOpMode {
         callbackHandler = CallbackLooper.getDefault().getHandler();
 
         cameraManager = ClassFactory.getInstance().getCameraManager();
-        cameraName = hardwareMap.get(WebcamName.class, "webcam");
+        cameraName = hardwareMap.get(WebcamName.class, "webcam1");
 
         initializeFrameQueue(2);
         AppUtil.getInstance().ensureDirectoryExists(captureDirectory);

@@ -1,83 +1,43 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.CompetitionUtils.ArmHeightPositions;
+import org.firstinspires.ftc.teamcode.CompetitionUtils.ConeStateFinder;
 import org.firstinspires.ftc.teamcode.CompetitionUtils.MyBoyAutonomous;
-import org.firstinspires.ftc.teamcode.TeamUtils.UnitConversion;
-import org.firstinspires.ftc.teamcode.TeamUtils.Motor.Wheel;
+import org.firstinspires.ftc.teamcode.TeamUtils.Imu.CHubIMU;
 
-@Autonomous(name="Test New Autonomous Framework", group="Debug")
+@TeleOp(name="Testing Autonomous", group="Robot")
+//@Disabled
 public class TestNewAutonomousFramework extends MyBoyAutonomous {
-    public Wheel motor = null;
+    ConeStateFinder.ConeState coneState = ConeStateFinder.ConeState.UNKNOWN;
 
     @Override
     public void runOpMode() {
         this.internalInit();
 
-        motor = driveBase.getBl();
+        //put per autonomous init stuff here
 
-        waitForStart();
+        while(opModeInInit()) {
+            this.internalInitLoop(); //MyBoyAutonomous.internalInitLoop() does not call telemetry.update()
 
-        this.internalStart();
-        //motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //motor.setPower(0.2);
-        //motor.setTargetPosition(-1000);
-        telemetry.addLine("thing-1");
+            //put per autonomous init loop stuff here
+
+            telemetry.update(); //hence why it is here
+        }
+
+        //waitForStart();
+        this.internalStart(); //sets coneState variable
+
+        //this.webcam.switchToJunctionLocatorMode(); //doesn't get used because MyBoyWebcam is for webcam1 which was originally intended for both junction locating and cone state finding and it is now only for junction locating and is already in MyBoyWebcam.JunctionLocator mode
+        telemetry.addLine(coneState.name());
         telemetry.update();
-        driveBase.strafe(0.5, 0.66);
-        telemetry.addLine("thing0");
+
+        telemetry.addLine("debug1");
         telemetry.update();
-        driveBase.forward(0.5, 1.17);
-        telemetry.addLine("thing2");
-        telemetry.update();
-        driveBase.strafe(0.5, -0.3);
-/*        long startedTime = System.nanoTime();
-        while(startedTime+UnitConversion.SECONDS_PER_NANOSECOND*5 > System.nanoTime()) {
-            telemetry.addLine(motor.getTargetPosition() + "");
-            telemetry.addLine(motor.getCurrentPosition() + "");
-            telemetry.addLine(motor.getMotor().getTargetPosition() + "");
-            telemetry.addLine(motor.getMotor().getCurrentPosition() + "");
-            telemetry.addLine(motor.internalRealPositionDifference+"");
-            telemetry.update();
-        }
-        motor.setTargetPosition(500);
-        startedTime = System.nanoTime();
-        while(startedTime+ UnitConversion.SECONDS_PER_NANOSECOND*5 > System.nanoTime()) {
-            telemetry.addLine(motor.getTargetPosition() + "");
-            telemetry.addLine(motor.getCurrentPosition() + "");
-            telemetry.addLine(motor.getMotor().getTargetPosition() + "");
-            telemetry.addLine(motor.getMotor().getCurrentPosition() + "");
-            telemetry.addLine(motor.internalRealPositionDifference+"");
-            telemetry.update();
-        }
-        motor.setTargetPosition(0);
-        startedTime = System.nanoTime();
-        while(startedTime+ UnitConversion.SECONDS_PER_NANOSECOND*5 > System.nanoTime()) {
-            telemetry.addLine(motor.getTargetPosition() + "");
-            telemetry.addLine(motor.getCurrentPosition() + "");
-            telemetry.addLine(motor.getMotor().getTargetPosition() + "");
-            telemetry.addLine(motor.getMotor().getCurrentPosition() + "");
-            telemetry.addLine(motor.internalRealPositionDifference+"");
-            telemetry.update();
-        }
-        motor.setTargetPosition(500);
-        startedTime = System.nanoTime();
-        while(startedTime+ UnitConversion.SECONDS_PER_NANOSECOND*5 > System.nanoTime()) {
-            telemetry.addLine(motor.getTargetPosition() + "");
-            telemetry.addLine(motor.getCurrentPosition() + "");
-            telemetry.addLine(motor.getMotor().getTargetPosition() + "");
-            telemetry.addLine(motor.getMotor().getCurrentPosition() + "");
-            telemetry.addLine(motor.internalRealPositionDifference+"");
-            telemetry.update();
-        }
-        /*driveBase.strafe(0.5, 0.5);
-        driveBase.forward(0.5, 0.5);
-        driveBase.strafe(0.5, -0.5);
-        spoolMotor.setRetractedDistance(5.0);
-        while(!spoolMotor.reachedTarget()) {
-            sleep(2);
-        }*/
-        while(opModeIsActive()) {}
+        this.alignToJunction();
+        //sleep(10000);
+        this.internalStop();
     }
 }

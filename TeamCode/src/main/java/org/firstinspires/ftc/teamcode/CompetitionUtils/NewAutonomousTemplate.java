@@ -19,7 +19,7 @@ public class NewAutonomousTemplate extends MyBoyAutonomous {
 
         //put per autonomous init stuff here
 
-        while(!opModeIsActive()) {
+        while(opModeInInit()) {
             this.internalInitLoop(); //MyBoyAutonomous.internalInitLoop() does not call telemetry.update()
 
             //put per autonomous init loop stuff here
@@ -27,7 +27,7 @@ public class NewAutonomousTemplate extends MyBoyAutonomous {
             telemetry.update(); //hence why it is here
         }
 
-        waitForStart();
+        //waitForStart();
         this.internalStart(); //sets coneState variable
 
         //this.webcam.switchToJunctionLocatorMode(); //doesn't get used because MyBoyWebcam is for webcam1 which was originally intended for both junction locating and cone state finding and it is now only for junction locating and is already in MyBoyWebcam.JunctionLocator mode
