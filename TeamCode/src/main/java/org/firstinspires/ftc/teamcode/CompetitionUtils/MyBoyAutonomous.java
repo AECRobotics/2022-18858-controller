@@ -29,7 +29,7 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     public ClawController clawController;
     double angleTarget = 305;//90;
     double widthTarget = 145;//152;
-    double alignmentSpeed = 0.5;
+    double alignmentSpeed = 0.0;
     double webcamAngle = 46.225;//33.557;
     public ConeStateFinder.ConeState coneState;
 
@@ -66,8 +66,9 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
         double width = 0.0;
         long start = System.nanoTime();
         do {
-            System.out.println((System.nanoTime()/UnitConversion.SECONDS_PER_NANOSECOND) + " looping");
-            angle = this.webcam.getAngle();
+
+            System.out.println(System.currentTimeMillis() + " looping");
+            angle = this.webcam.getAngle(); //8r[ec]xyi6%
             width = this.webcam.getWidth();
             double angleDiff = angle-angleTarget;
             double widthDiff = width-widthTarget;
@@ -76,8 +77,8 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
             double diffAngle = diff.angle();
             diffAngle-=((90-webcamAngle)*Math.PI/180);
             Vector2 rotated = new Vector2(diffAngle);
-            rotated = rotated.multiply(-Math.min(diffMag*alignmentSpeed/400, alignmentSpeed));
-            rotated.x*=(-1);
+            rotated = rotated.multiply(Math.min(diffMag*alignmentSpeed/400, alignmentSpeed));
+            //rotated.x*=(-1);
 
             telemetry.addLine(angle + ", " + width);
             telemetry.addLine(angleDiff + ", " + widthDiff);
@@ -87,9 +88,9 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
                 System.out.println("timed out");
                 break;
             }*/
-        } while ((!withinTolerance(angle, angleTarget, 20) || !withinTolerance(width, widthTarget, 10)));
-        System.out.println((System.nanoTime()/UnitConversion.SECONDS_PER_NANOSECOND) + " while done, terminating");
+        } while ((!withinTolerance(angle, angleTarget, 20) || !withinTolerance(width, widthTarget, 10)) && !isStopRequested());
         driveBase.setMotorPower(0.0);
+        System.out.println(System.currentTimeMillis() + " while done, terminating");
     }
 
     public MyBoyAutonomous() {}

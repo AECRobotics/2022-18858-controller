@@ -73,6 +73,9 @@ public class JunctionLocatorPipeline extends OpenCvPipeline {
             }
         }*/
         width = 0;
+
+        int countLimit = 12;
+
         int widestStart = 0;
         int widestWidth = 0;
         int widestPosition = 0;
@@ -86,7 +89,7 @@ public class JunctionLocatorPipeline extends OpenCvPipeline {
             if(colorMatchCountMap.containsKey(x)) {
                 count = colorMatchCountMap.get(x);
             }
-            if(count > 3) {
+            if(count > countLimit) {
                 if(currentWidth == 0) {
                     currentStart = x;
                     currentMatchCount+=count;

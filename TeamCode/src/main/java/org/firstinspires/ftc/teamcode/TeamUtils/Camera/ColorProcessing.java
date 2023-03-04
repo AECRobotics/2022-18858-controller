@@ -6,20 +6,20 @@ import java.util.ArrayList;
 
 public class ColorProcessing {
     private static double colorDistSimilarityThreshold = 45.0*45.0;
-    private static double colorDotProdSimilarityThreshold = 0.99;
+    private static double colorDotProdSimilarityThreshold = 0.98;
     private static double colorMagnitudeSimilarityThreshold = 249.0*249.0;
     private static double colorHueSimilarityThreshold = 21.0;
     private static double colorSatSimilarityThreshold = 26.0;
     private static double colorValSimilarityThreshold = 36.0;
 
     public static ArrayList<Double> normalizeColor(int c) {
-        double a = (c&0xff000000)>>24;
+        //double a = (c&0xff000000)>>24;
         double r = (c&0x00ff0000)>>16;
         double g = (c&0x0000ff00)>>8;
         double b = (c&0x000000ff);
-        double magnitude = Math.sqrt(a*a+r*r+g*g+b*b);
+        double magnitude = Math.sqrt(r*r+g*g+b*b);
         ArrayList<Double> normalized = new ArrayList<Double>();
-        normalized.add(a/magnitude);
+        //normalized.add(a/magnitude);
         normalized.add(r/magnitude);
         normalized.add(g/magnitude);
         normalized.add(b/magnitude);
@@ -29,17 +29,17 @@ public class ColorProcessing {
     public static double sqrdColorDistance(int c1, int c2) {
         //4 dimensional euclidean distance formula without square root because square root is slow and comparisons between distances remain true even without square root
         //find differences
-        int ad = ((c1&0xff000000)>>24)-((c2&0xff000000)>>24);
+        //int ad = ((c1&0xff000000)>>24)-((c2&0xff000000)>>24);
         int ar = ((c1&0x00ff0000)>>16)-((c2&0x00ff0000)>>16);
         int ag = ((c1&0x0000ff00)>>8)-((c2&0x0000ff00)>>8);
         int ab = ((c1&0x000000ff))-((c2&0x000000ff));
         //square
-        ad*=ad;
+        //ad*=ad;
         ar*=ar;
         ag*=ag;
         ab*=ab;
         //return sum
-        return (double)(ad+ar+ag+ab);
+        return (double)(ar+ag+ab);
     }
     public static double colorDistance(int c1, int c2) {
         return Math.sqrt(sqrdColorDistance(c1, c2));
@@ -54,11 +54,11 @@ public class ColorProcessing {
     }
 
     public static double getColorMagnitudeSqrd(int c) {
-        double a = (c&0xff000000)>>24;
+        //double a = (c&0xff000000)>>24;
         double r = (c&0x00ff0000)>>16;
         double g = (c&0x0000ff00)>>8;
         double b = (c&0x000000ff);
-        return a*a+r*r+g*g+b*b;
+        return r*r+g*g+b*b;
     }
 
     public static double[] getHSV(int c) {
