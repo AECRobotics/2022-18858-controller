@@ -52,7 +52,7 @@ public class PlaceHighJunctionAutoLeft extends OpMode {
         DcMotor rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright"); //2
 
         //webcam = new RobotWebcam(hardwareMap.get(WebcamName.class, "webcam"));
-        aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam1"));
+        aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam2"));
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
 

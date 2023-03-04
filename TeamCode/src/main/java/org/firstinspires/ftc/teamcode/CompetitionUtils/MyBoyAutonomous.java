@@ -29,7 +29,7 @@ public abstract class MyBoyAutonomous extends HolonomicAutonomous {
     public ClawController clawController;
     double angleTarget = 305;//90;
     double widthTarget = 145;//152;
-    double alignmentSpeed = 0.1;
+    double alignmentSpeed = 0.5;
     double webcamAngle = 46.225;//33.557;
     public ConeStateFinder.ConeState coneState;
 
