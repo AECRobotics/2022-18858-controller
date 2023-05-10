@@ -17,7 +17,7 @@ public class webcamCheck extends OpMode{
     long time = 0;
     public void init() {
         telemetry.addData("Status", "Initialized");
-        WebcamName webcamn = hardwareMap.get(WebcamName.class, "webcam");
+        WebcamName webcamn = hardwareMap.get(WebcamName.class, "webcam2");
         webcam = new RobotWebcam(webcamn);
         aprilWebcam = new AprilTagDetectionWebcam(hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()), hardwareMap.get(WebcamName.class, "webcam1"));
     }
@@ -30,9 +30,9 @@ public class webcamCheck extends OpMode{
     int n = 0;
     public void loop(){
         if(n == 0) {
-            telemetry.addLine(ConeStateFinder.matchesColor(0,0) + "");
+            //telemetry.addLine(matchesColor(0,0) + "");
         }
-        telemetry.addLine("dist: " + ConeStateFinder.sqrdColorDistance(0x00000000, 0xff65a7bd));
+        //telemetry.addLine("dist: " + sqrdColorDistance(0x00000000, 0xff65a7bd));
         n++;
         if(gamepad1.b && !lastGamepadB) {
             /*Bitmap thing2 = webcam.getWebcamFrame();

@@ -79,8 +79,8 @@ public class PlaceHighJunctionAutoRight extends OpMode {
     @Override
     public void init_loop() {
         telemetry.addLine("Gyro: " + imu.getGyroCalibrationStatus());
+        coneState = getConePosition();
         telemetry.addLine("Cone State: " + getConePosition());
-
     }
 
     @Override
@@ -93,9 +93,6 @@ public class PlaceHighJunctionAutoRight extends OpMode {
     public void loop() {
         if(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN) {
             coneState = getConePosition();
-            if(!(coneState == null || coneState == ConeStateFinder.ConeState.UNKNOWN)) {
-                //ConeStateFinder.stopCheckingState();
-            }
         }
 
         if(drive.isTaskComplete() && coneState != null) {
@@ -124,7 +121,7 @@ public class PlaceHighJunctionAutoRight extends OpMode {
                     break;
                 case 4:
                     spoolMotor.setRetractedDistance(ArmHeightPositions.HIGH_PLACEMENT);
-                    parameters.put("seconds", 5.0);
+                    parameters.put("seconds", 3.0);
                     drive.setTask(new DriveBaseTask(DriveBaseTask.TaskType.WAIT_FOR, parameters));
                     break;
                 case 5:

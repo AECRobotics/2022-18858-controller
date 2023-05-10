@@ -8,7 +8,7 @@ public class ColorProcessing {
     private static double colorDistSimilarityThreshold = 45.0*45.0;
     private static double colorDotProdSimilarityThreshold = 0.98;
     private static double colorMagnitudeSimilarityThreshold = 249.0*249.0;
-    private static double colorHueSimilarityThreshold = 21.0;
+    private static double colorHueSimilarityThreshold = 7.0; //21.0
     private static double colorSatSimilarityThreshold = 26.0;
     private static double colorValSimilarityThreshold = 36.0;
 
@@ -106,8 +106,8 @@ public class ColorProcessing {
         } else {
             //return false;
         }
-        ArrayList<Double> nc1 = ConeStateFinder.normalizeColor(c1);
-        ArrayList<Double> nc2 = ConeStateFinder.normalizeColor(c2);
+        ArrayList<Double> nc1 = normalizeColor(c1);
+        ArrayList<Double> nc2 = normalizeColor(c2);
         //debugOutput+=("dot: " + dotProduct(nc1, nc2) + ", ");
         //debugOutput+=("mag: " + getColorMagnitude(c1) + "," + getColorMagnitude(c2) + ",");
         boolean dotProductMatches = dotProduct(nc1, nc2) >= colorDotProdSimilarityThreshold;

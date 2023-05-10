@@ -92,9 +92,9 @@ public class JunctionLocatorPipeline extends OpenCvPipeline {
             if(count > countLimit) {
                 if(currentWidth == 0) {
                     currentStart = x;
-                    currentMatchCount+=count;
-                    currentPosition+=(count*x);
                 }
+                currentMatchCount+=count;
+                currentPosition+=(count*x);
                 currentWidth++;
             } else {
                 currentWidth = 0;
